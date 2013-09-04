@@ -1,0 +1,210 @@
+#graph {
+	height: 420px;
+	box-shadow: 0px 0px 1px -4px;
+}
+
+#graph-container .row {
+	margin-left: 0px;
+}
+
+.graphTypeButton {
+	margin: 2px 0;
+}
+#graphTitle {
+	border: 1px solid transparent;
+	margin-left: -24px;
+	margin-top: 0px;
+	padding-left: 30px;
+}
+
+/*AXIS*/
+
+.ySettings {
+	border-left: 1px solid #eee;
+}
+
+.oppositeYSettings {
+	border-right: 1px solid #eee;
+}
+
+.xSettings {
+	border-bottom: 1px solid #eee;
+	float: left;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #eee;
+	height: 32px;
+	width: calc(91.666666% - 16px);
+}
+
+.ySettings, .oppositeYSettings {
+	height: 400px;
+	width: 32px;
+	padding: 0;
+}
+
+.xSettings .popoverToggle {
+	display: none !important;
+}
+
+.xSettings .control-group, .graph > .control-group {
+	width: 31%;
+	float: left;
+	padding: 1%;
+}
+
+
+.axisDroppableContainer.xSettings .btn.disabled {
+	width: 200px;
+	position: relative;
+}
+
+.axisDroppableContainer.ySettings .btn.disabled,
+.axisDroppableContainer.oppositeYSettings .btn.disabled {
+	width: 200px;
+	-webkit-transform: translate(-100px)rotate(-90deg)translate(-100px,10px);
+}
+
+.axisDroppableContainer.xSettings .drop-hint {
+	color: #333;
+	writing-mode: tb-rl;
+	-webkit-transform: translate(-280px,-10px);
+	-moz-transform: translate(-280px,-10px);
+	-o-transform: translate(-280px,-10px);
+	white-space: nowrap;
+	display: inline-block;
+	width: 180px;
+	height: 1px;
+	font-size: 24px;
+	font-weight: 100;
+	margin: 0;
+	position: absolute;
+	right: 0;
+}
+
+.axisDroppableContainer.ySettings .drop-hint,
+.axisDroppableContainer.ySettings .list-group-item,
+.axisDroppableContainer.xSettings .drop-hint,
+.axisDroppableContainer.xSettings .list-group-item,
+.axisDroppableContainer.oppositeYSettings .drop-hint,
+.axisDroppableContainer.oppositeYSettings .list-group-item {
+	color: #333;
+	writing-mode: tb-rl;
+	white-space: nowrap;
+	display: inline-block;
+	width: 180px;
+	height: 1px;
+	font-size: 24px;
+	font-weight: 100;
+	margin: 0;
+	pointer-events: none;
+}
+
+.axisDroppableContainer.ySettings .drop-hint,
+.axisDroppableContainer.ySettings .list-group-item {
+	-webkit-transform: translate(-180px)rotate(90deg)translate(100px,-130px);
+	-moz-transform: translate(-180px)rotate(90deg)translate(100px,-130px);
+	-o-transform: translate(-180px)rotate(90deg)translate(100px,-130px);
+}
+
+.axisDroppableContainer.xSettings .drop-hint,
+.axisDroppableContainer.xSettings .list-group-item {
+	-webkit-transform: translate(-250px,-10px);
+	-moz-transform: translate(-250px,-10px);
+	-o-transform: translate(-250px,-10px);
+	text-align: right;
+}
+
+.axisDroppableContainer.oppositeYSettings .drop-hint,
+.axisDroppableContainer.oppositeYSettings .list-group-item {
+	-webkit-transform: translate(-180px)rotate(90deg)translate(100px,-120px);
+	-moz-transform: translate(-180px)rotate(90deg)translate(100px,-120px);
+	-o-transform: translate(-180px)rotate(90deg)translate(100px,-120px);
+}
+
+.axisDroppableContainer .drop-hint.zone {
+	display: none;
+	border: 1px solid transparent;
+}
+
+.axisDroppableContainer .drop-hint.zone.over {
+	border: 1px solid #010626;
+}
+
+.axisDroppableContainer.ySettings .list-group-item,
+.axisDroppableContainer.xSettings .list-group-item,
+.axisDroppableContainer.oppositeYSettings .list-group-item {
+	border-radius: 0;
+	border: none;
+	pointer-events: all;
+}
+
+.axisDroppableContainer.xSettings .list-group-item {
+	float: right;
+	margin-top: -10px;
+	background: transparent;
+}
+
+.axisDroppableContainer.ySettings a.list-group-item:hover,
+.axisDroppableContainer.xSettings a.list-group-item:hover,
+.axisDroppableContainer.oppositeYSettings a.list-group-item:hover {
+	 background: none;
+}
+
+.axisDroppableContainer.ySettings .list-group-item .close,
+.axisDroppableContainer.xSettings .list-group-item .close,
+.axisDroppableContainer.oppositeYSettings .list-group-item .close {
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: -10px;
+	bottom: -16px;
+}
+
+.axisDroppableContainer.ySettings .list-group-item .btn.popoverToggle,
+.axisDroppableContainer.xSettings .list-group-item .btn.popoverToggle,
+.axisDroppableContainer.oppositeYSettings .list-group-item .btn.popoverToggle {
+	position: absolute;
+	left: -23px;
+	bottom: -16px;
+	width: 12px;
+	height: 12px;
+}
+
+/*AXIS SETTINGS BADGE*/
+
+.axisSettings .popoverToggle {
+	display: inline-block !important;
+	margin: 0;
+}
+
+.xSettings .axisSettings {
+	display: inline-block;
+	position: absolute;
+	right: 0;
+	margin-top: 3px;
+}
+
+div.axisTypeSelect.btn-group button.btn {
+	width: 26px;
+	margin-left: -3px;
+	border-radius: 0;
+	margin-top: 5px;
+	border: 1px solid #eee;
+	height: 26px;
+	padding: 0;
+	background: url(../img/glyphicons-halflings.png) no-repeat scroll -355px -139px white;
+	opacity: .7;
+}
+
+div.axisTypeSelect.btn-group button.btn:hover {
+	opacity: 1;
+}
+
+.oppositeYSettings div.axisTypeSelect.btn-group button.btn {
+	margin-left: 8px;
+}
+
+div.axisTypeSelect.btn-group button.btn .filter-option,
+div.axisTypeSelect.btn-group button.btn .caret {
+	display: none;
+}

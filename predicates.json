@@ -1,0 +1,52 @@
+{
+    "expressions" : [{
+        "name" : "AND",
+        "value": 0
+    },{
+        "name" : "OR",
+        "value": 1
+    },{
+        "name" : "NOT",
+        "value": 2
+    },{
+        "name" : "EXP_EQ",
+        "value": 3
+    }],
+    "predicates" : [{
+        "name" : "EqualsExpression",
+        "value": 0
+    },{
+        "name" : "LessThanExpression",
+        "value": 1
+    },{
+        "name" : "GreaterThanExpression",
+        "value": 2
+    },{
+        "name" : "BetweenExpression",
+        "value": 3
+    },{
+        "name" : "CompoundExpression",
+        "value": 4
+    },{
+        "name" : "NegateExpression",
+        "value": 5
+    },{
+        "name" : "AND",
+        "value": 6
+    },{
+        "name" : "OR",
+        "value": 7
+    },{
+        "name" : "NOT",
+        "value": 8
+    },{
+        "name" : "EqualsExpressionRaw",
+        "value": 13
+    },{
+        "name" : "LessThanExpressionRaw",
+        "value": 14
+    },{
+        "name" : "GreaterThanExpressionRaw",
+        "value": 15
+    }]
+}

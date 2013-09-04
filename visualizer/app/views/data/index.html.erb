@@ -1,0 +1,61 @@
+<div class="container">
+
+	<div id="title" class="navbar">
+		<div class="navbar-inner">
+			<a class="brand" href="#">HYRISE Visualizer</a>
+
+			<%= form_tag({controller: 'data', action: 'load_table'}, {:class => 'navbar-form pull-right'}) do %>
+				<%= text_field_tag(:table, nil, { placeholder: 'Table Name', :class => 'span2'}) %>
+				<%= text_field_tag(:file, nil, { placeholder: 'Table File', :class => 'span2'}) %>
+				<%= submit_tag('Load New Table', :class => 'btn') %>
+			<% end %> 
+			<!--<form class="navbar-form pull-right">
+				<select>
+					<option value="tables/employees.tbl">employees</option>
+					<option value="tables/companies.tbl">companies</option>
+				</select>
+				<input type="submit" class="btn btn-primary" value="Load"></input>
+			</form>-->
+
+		</div>
+	</div>
+
+	<div id="attributes">
+		<h3> Attributes </h3>
+
+		<% index = 0 %>
+		<% @scheme.each_pair do | table, columns| %>
+			<div class="subHeading"> <%= table %></div>
+			<% columns.each do | column | %>
+				<div class="btn disabled column" data-column="<%= column[:name] %>" data-table="<%= table %>" data-aggregation="none" data-type="<%= column[:type] %>" data-id="<%= index %>" data-chartType="line"> 	
+					
+					<button type="button" class="close removeColumn">×</button>
+
+					<%= column[:name] %>
+					<%= render 'column_settings', column: column %>
+
+				</div>
+				<% index += 1 %>
+			<% end %>
+		<% end %>
+	</div>
+	
+	<%= render 'graph_options' %>
+
+	<div class="axis" id="ySettings">
+		<h3> y-Axis </h3>
+		<%= render 'axis_settings', axis: 'yAxis' %>
+	</div>
+	<div id="graph" style="width:100%; height:400px;"></div>
+	<div class="axis" id="oppositeYSettings">
+		<h3> opposite y-Axis </h3>
+		<%= render 'axis_settings', axis: 'oAxis' %>
+	</div>
+	<div class="axis" id="xSettings">
+		<h3> x-Axis </h3>
+		<%= render 'axis_settings', axis: 'xAxis' %>
+	</div>
+
+	<%= render 'data_table' %>
+	
+</div>
