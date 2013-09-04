@@ -1,0 +1,143 @@
+{
+	"Barrier" : {},
+	"CreateIndex" : {},
+	"CreateRadixTable" : {},
+	"Distinct" : {},
+	"ExtractDelta" : {},
+	"GetTable" : {},
+	"GroupByScan" : {
+		"type": "GroupByScan",
+		"fields": {
+			"type": "column",
+			"isList": true,
+			"value": []
+		},
+		"instances": {
+			"type" : "number",
+			"value": 3
+		},
+		"functions": {
+			"type" : "function",
+			"isList": true,
+			"value": [{
+				"type" : 3,
+				"field" : ""
+			}]
+			
+		}
+	},
+	"HashBuild" : {
+		"type": "HashBuild",
+	"instances": {
+			"type" : "number",
+			"value": 3
+		},
+	"fields": {
+			"type": "column",
+			"isList": true,
+			"value": []
+		},
+	"key": {
+		"type": "string",
+		"value": "groupby"
+	}
+	},
+	"HashJoinProbe" : {},
+	"Histogram" : {},
+	"Histogram2ndPass" : {},
+	"IndexScan" : {},
+	"InsertOnlyDelete" : {},
+	"InsertOnlyInsert" : {},
+	"InsertOnlyLoad" : {},
+	"InsertOnlyUpdate" : {},
+	"InsertScan" : {},
+	"IntersectPositions" : {},
+	"JoinScan" : {},
+	"JsonTable" : {},
+	"LayoutSingleTable" : {},
+	"LayoutTable" : {},
+	"LayoutTableLoad" : {},
+	"LoadFile" : {},
+	"MaterializingScan" : {
+	"type" : "MaterializingScan",
+	"memcpy" : {
+		"type": "boolean",
+		"value": false
+	},
+	"copyValues" : {
+		"type": "boolean",
+		"value": true
+	}
+	},
+	"MergeHashTables" : {},
+	"MergeIndexScan" : {},
+	"MergePrefixSum" : {},
+	"MergeTable" : {
+	"type" : "MergeTable"
+	},
+	"MultiplyRefField" : {},
+	"NestedLoopEquiJoin" : {},
+	"NoOp" : {
+	"type" : "NoOp"
+	},
+	"PrefixSum" : {},
+	"ProjectionScan" : {
+	"type" : "ProjectionScan",
+	"fields" : {
+		"type" : "column",
+		"isList" : true,
+		"value" : ["quarter", "amount"]
+	}
+	},
+	"RadixCluster" : {},
+	"RadixCluster2ndPass" : {},
+	"RadixJoin" : {},
+	"ReplaceTable" : {},
+	"ScriptOperation" : {},
+	"SetTable" : {},
+	"SettingsOperation" : {},
+	"SimpleRawTableScan" : {},
+	"SimpleTableScan" : {
+	"type" : "SimpleTableScan",
+	"predicates" : {
+		"type" : "predicate",
+		"isList": true,
+		"value" : [{
+			"type" : "LT",
+			"in" : 0,
+			"f" : "year",
+			"value" : 2013
+		}]
+	}
+	},
+	"SmallestTableScan" : {},
+	"SortScan" : {
+		"type": "SortScan",
+		"fields": {
+			"type" : "column",
+			"isList": true,
+			"value" : []
+		}
+	},
+	"TableLoad" : {
+		"type": "TableLoad",
+		"table": {
+			"type" : "string",
+			"value" : "reference"
+		},
+		"filename": {
+			"type":"table",
+			"value":""
+		}
+	},
+	"TableScan" : {},
+	"TableUnload" : {},
+	"TaskSchedulerAdjustment" : {},
+	"ThreadpoolAdjustment" : {},
+	"Union" : {},
+	"UnionAll" : {},
+	"UnionScan" : {},
+	"UnloadAll" : {},
+	"ValidPositionsMain" : {},
+	"ValidPositionsRaw" : {}
+}

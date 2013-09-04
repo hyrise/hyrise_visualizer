@@ -1,0 +1,210 @@
+[draggable] {
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	-khtml-user-drag: element;
+	-webkit-user-drag: element;
+}
+
+.list-group-item {
+	cursor: move;
+	opacity: 1;
+}
+
+text.emptytext {
+    display: none;
+    font-size: 18px;
+    font-weight: 100;
+    letter-spacing: 1px;
+}
+
+text.emptytext.visible {
+    display: block;
+}
+
+rect.selection {
+    stroke          : gray;
+    stroke-dasharray: 2px;
+    stroke-opacity  : 0.5;
+    fill            : transparent;
+}
+
+g.node circle {
+    stroke  : gray;            
+}
+
+g.node circle.inner {
+    fill        : white;
+    transition  : fill 0.5s;
+    cursor      : move;
+}
+
+g.node circle.inner.hover,
+g.node circle.outer.hover {
+    fill : aliceblue;
+}
+
+g.node circle.outer.hover {
+    stroke-width    : 1px;
+}
+
+g.node circle.outer {
+    stroke-width    : 0px;
+    stroke-dasharray: 2px;
+    stroke-color    : gray;
+    fill            : transparent;
+    transition      : all 0.5s;
+    cursor          : pointer;
+}
+
+g.node.selected circle.outer {
+    stroke-width    : 1px;
+}
+
+g.node text {
+    font                : 12px sans-serif;
+    font-weight         : bold;
+    pointer-events      : none;
+}
+
+g.edge path,
+path.dragline {
+    fill        : none;
+    stroke      : gray;
+    stroke-width: 1px;
+}
+
+g.edge path.foreground {
+    /*marker-end  : url(#end-arrow);*/
+    /*marker-start  : url(#start-arrow);*/
+}
+
+g.edge.hover path.background {
+    stroke-dasharray: none;
+    stroke : aliceblue;
+    stroke-opacity  : 1.0;
+    transition : all 0.5s;
+}
+
+g.edge path.background {
+    stroke-dasharray: none;
+    stroke-width: 8px;
+    stroke : transparent;
+}
+
+g.edge.selected path.foreground {
+    stroke-dasharray: 2px;
+    stroke-color    : gray;
+}
+
+
+g.edge path {
+    cursor : default;
+}
+
+.end-arrow, .start-arrow {
+    fill            : gray;
+    stroke-width    : 1px;
+}
+
+g.edge circle.endpoint {
+    display         : none;
+    fill            : none;
+    cursor          : pointer;
+    stroke          : gray;
+    stroke-dasharray: 2px;
+}
+
+g.edge circle.point {
+    display         : none;
+    fill            : aliceblue;
+    cursor          : move;
+    stroke          : gray;
+}
+
+g.edge.selected circle.endpoint,
+g.edge.selected circle.point {
+    display        : inline;
+    transition : all 0.5s;
+}
+
+g.edge:not( .selected).hover *,
+path.dragline {
+    display         : inline;
+    
+}
+
+
+g.edge:not( .selected).hover {
+    transition      : all 0.5s;
+}
+
+path.dragline {
+    pointer-events: none;
+    stroke-opacity  : 0.5;
+    stroke-dasharray: 2px;
+}
+
+path.dragline.hidden {
+    stroke-width: 0;
+}
+
+svg.stencilgraph {
+    border : 1px solid #ccc;
+    padding: 0;
+}
+
+    /* disable text selection */
+svg *::selection {
+    background : transparent;
+}
+
+svg *::-moz-selection {
+    background:transparent;
+}
+
+svg *::-webkit-selection {
+    background:transparent;
+}
+
+.json-container {
+    height: 400px;
+    display: none;
+    padding: 0;
+}
+
+.json-container textarea {
+    width: 100%;
+    height: 100%;
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-size: 13px;
+}
+
+.canvas-controls {
+    /*margin-left: -8.333333333333332%;*/
+}
+
+.canvas-controls ul li {
+    display: block;
+    text-align: center;
+    font-weight: 100;
+    font-style: normal;
+    background: #010626;
+    color: #f2f2f2;
+    padding: 10px 0;
+    border: 1px solid transparent;
+    transition: background-color 200ms;
+    -webkit-transition: background-color 200ms;
+}
+
+.canvas-controls ul li.hover {
+    background: #2A5E8C;
+    cursor: pointer;
+}
+
+.canvas-controls ul li.active {
+    background: white;
+    border: 1px solid #010626;
+    color: #010626;
+}
