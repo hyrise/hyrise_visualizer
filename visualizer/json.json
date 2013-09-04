@@ -1,0 +1,1 @@
+{"operators":{"0":{"type":"ProjectionScan","fields":["employee_company_id","employee_id"],"input":["employees"]},"1":{"type":"GroupByScan","fields":["employee_company_id"],"functions":[]}},"edges":[["0","1"]]}

@@ -1,0 +1,109 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+
+label { display: inline-block; width: 7em; }
+
+#form-container {
+	position: absolute;
+	right: 50px;
+	top: 110px;
+}
+
+canvas {
+	margin-top: 50px;
+	float: left;
+}
+
+#json-container {
+	border: none;
+	display: block;
+	margin-top: 50px;
+	float: left;
+	width: 500px;
+	height: 400px;
+	overflow: auto;
+	background: transparent;
+}
+
+#stencil-container {
+	position: absolute;
+	left: -10px;
+	top: 110px;
+	list-style-type: none;
+}
+
+#stencil-container li {
+	line-height: 20px;
+	width: 200px;
+	border: 1px solid silver;
+	padding: 5px;
+	margin-bottom: 5px;
+	display: block;
+}
+
+#stencil-container li:hover {
+	background: #ddd;
+}
+
+#button-container {
+	clear: both;
+	position: absolute;
+	margin-top: 460px;
+}
+
+#result-container {
+	position: relative;
+	margin-left: 10px;
+	float: left;
+}
+
+#visualisation-container {
+	margin-top: 50px;
+	position: relative;
+	margin-left: 10px;
+	float: left;
+}
+
+.valuelist {
+	list-style: none;
+	text-align: left;
+}
+
+.valuelist li div {
+	display: inline-block;
+	float: right;
+}
+
+input.checkbox {
+	margin-left: 10px;
+	margin-top: -1px;
+}
+
+select.narrow {
+	width: 100px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.spacing-container {
+	display:block;
+	margin-top: 10px;
+}
+
+.spacing-container button {
+	margin-top: -12px;
+}
+
+/* =========== SVG =========== */
+#visualisation-container .operation {
+	opacity: .7;
+}
+
+#visualisation-container .operation:hover {
+	opacity: 1;
+}
+

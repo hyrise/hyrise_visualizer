@@ -1,0 +1,69 @@
+{
+	"tables" : [{
+		"name"		: "tables/employees_distinct.tbl",
+		"columns"	: [{
+			"name": "employee_id",
+			"type": "INTEGER"
+		},{
+			"name" : "employee_company_id",
+			"type" : "INTEGER"
+		},{
+			"name": "employee_name",
+			"type": "STRING"
+		}]
+	},{
+		"name"		: "tables/employees_per_company_id.tbl",
+		"columns"	: [{
+			"name": "employee_company_id",
+			"type": "INTEGER"
+		},{
+			"name": "COUNT(employee_company_id)",
+			"type": "INTEGER"
+		}]
+	},{
+		"name"		: "tables/employees.tbl",
+		"columns"	: [{
+			"name": "employee_id",
+			"type": "INTEGER"
+		},{
+			"name": "employee_company_id",
+			"type": "INTEGER"
+		},{
+			"name": "employee_name",
+			"type": "STRING"
+		}]
+	},{
+		"name"		: "tables/employees_new_row.tbl",
+		"columns"	: [{
+			"name": "employee_id",
+			"type": "INTEGER"
+		},{
+			"name": "employee_company_id",
+			"type": "INTEGER"
+		},{
+			"name": "employee_name",
+			"type": "STRING"
+		}]
+	},{
+		"name"		: "tables/companies.tbl",
+		"columns"	: [{
+			"name": "company_id",
+			"type": "INTEGER"
+		},{
+			"name": "company_name",
+			"type": "STRING"
+		}]
+	},{
+		"name"		: "tables/employees_revised.tbl",
+		"columns"	: [{
+			"name": "employee_id",
+			"type": "INTEGER"
+		},{
+			"name": "employee_company_id",
+			"type": "INTEGER"
+		},{
+			"name": "employee_name",
+			"type": "STRING"
+		}]
+	}]
+}

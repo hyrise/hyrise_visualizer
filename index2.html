@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang='de-DE'>
+<head>
+	<meta charset="utf-8">
+	<meta name='viewport' content="width=device-width, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
+	<title>HYRISE Visualizer</title>
+	<meta name="description" content="">
+
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="css/tabs.css">
+
+	<!-- CUSTOM CSS -->
+	<!-- <link rel="stylesheet" href="css/data.css"/> -->
+	<link rel="stylesheet" href="css/hyryx.css"/>
+	<link rel="stylesheet" href="css/page-1.css"/>
+	<link rel="stylesheet" href="css/page-1-attributes.css"/>
+	<link rel="stylesheet" href="css/page-1-graph.css"/>
+	<link rel="stylesheet" href="css/page-2.css"/>
+
+	<style>
+		body {
+			padding: 0px;
+			margin: 0px;
+		}
+	</style>
+
+	<!-- JAVASCRIPT SOURCES -->
+	<script src="js/modernizr.js"></script>
+	<script src="js/loader.js"></script>
+
+	<!-- <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.29.1"></script> -->
+</head>
+<body>
+	<div id='visualizer'>
+		<section class="container">
+			<!-- NAVIGATION -->
+			<h1>HYRISE Visualizer</h1>
+			<!-- 		<p class='navbar-text pull-right'>&copy; Hasso Plattner Institut 2013</p>
+			 -->
+			<div class="tabbable">
+				<!-- CONTENT -->
+			  <ul class="" id="tag">
+			    <li><a href="#page-explorer" data-toggle="tab">explore</a></li>
+			    <li><a href="#page-debug" data-toggle="tab">debug</a></li>
+			    <li><a href="#page-manage" data-toggle="tab">manage</a></li>
+			  </ul>
+			  <div class="tab-content">
+			    <div class='tab-pane' id='page-explorer'></div>
+			    <div class='tab-pane' id='page-debug'></div>
+			  </div>
+			</div>
+		</section>
+		<!-- FAKE OBJECT TO DETERMINE SIZE VIA CSS -->
+		<div id="hyryx-proto" class="hyryx-size"></div>
+	</div>
+</body>
+</html>
