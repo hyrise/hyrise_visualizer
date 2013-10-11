@@ -47,7 +47,7 @@ body, html {
 	display: none;
 }
 
-.attributes .btn.disabled,
+.tables .btn.disabled,
 .axisDroppableContainer .btn.disabled,
 .filterDroppableContainer .btn.disabled {
 	width: 80%;
@@ -113,6 +113,7 @@ body, html {
 	border: 1px solid #2A5E8C;
 	box-shadow: none;
 	margin-top: 60px;
+	max-width: 500px;
 }
 
 .popover .arrow {
@@ -135,7 +136,13 @@ body, html {
 	padding-bottom: 40px;
 }
 
-.popover .popover-content .form-control {
+div.popover .popover-content div.form-control {
+	width: 300px;
+	padding: 0;
+	height: auto;
+}
+
+div.popover .popover-content input.form-control {
 	width: 200px;
 	margin-bottom: 5px;
 	border-radius: 0;
@@ -146,11 +153,20 @@ body, html {
 	border-radius: 0;
 	color: white;
 	font-weight: 100;
+	cursor: pointer;
 }
 
 .popover .popover-content .btn-plain {
 	background: transparent;
 	color: #2A5E8C;
+}
+
+.popover .popover-content .btn:hover {
+	text-decoration: underline;
+}
+
+.popover .popover-content .btn-plain:hover {
+	text-decoration: underline;
 }
 
 /*PLUGINS*/

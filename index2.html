@@ -7,6 +7,8 @@
 	<title>HYRISE Visualizer</title>
 	<meta name="description" content="">
 
+	<link rel="shortcut icon" type="image/png" href="/favicon.png?v=2" />
+
 	<!-- VENDOR CSS -->
 	<link rel="stylesheet" href="css/jquery-ui.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -29,8 +31,8 @@
 	</style>
 
 	<!-- JAVASCRIPT SOURCES -->
-	<script src="js/modernizr.js"></script>
-	<script src="js/loader.js"></script>
+	<script src="js/libs/modernizr.js"></script>
+	<script src="js/controls/loader.js"></script>
 
 	<!-- <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.29.1"></script> -->
 </head>
@@ -38,7 +40,10 @@
 	<div id='visualizer'>
 		<section class="container">
 			<!-- NAVIGATION -->
-			<h1>HYRISE Visualizer</h1>
+			<div class="logo">
+				<div class="white-header"></div>
+				<span class="logo-text">hyrise visualizer</span>
+			</div>
 			<!-- 		<p class='navbar-text pull-right'>&copy; Hasso Plattner Institut 2013</p>
 			 -->
 			<div class="tabbable">

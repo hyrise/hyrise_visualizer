@@ -57,7 +57,6 @@
 
 			$.each(hyryx.stencils, function(key, value) {
 				
-				value.key = key;
 				var $buttonMarkup = me.getStencilButtonMarkup(value);
 
 				panel.push($buttonMarkup);
@@ -72,8 +71,8 @@
 		},
 
 		getStencilButtonMarkup : function(config) {
-			return ['<a class="list-group-item" data-key="'+config.key+'" data-type="'+config.type+'" draggable="true">',
-						config.key,
+			return ['<a class="list-group-item" data-key="'+config.type+'" data-type="'+config.type+'" draggable="true">',
+						config.type,
 					'</a>'].join('');
 		},
 	});

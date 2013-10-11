@@ -17,6 +17,8 @@
 			this.id = hyryx.utils.getID('Graph');
 			// Add graph options
 			var $graphOptions = this.targetEl.append('<div id="'+this.id+'" class="graph col-md-10">').find('.graph');
+
+			this.addDescription($graphOptions);
 			// createGlobalFilterMarkup($graphOptions);
 			// createGraphTypeFilterMarkup($graphOptions);
 			// createGraphTitleMarkup($graphOptions);
@@ -45,6 +47,13 @@
 			if (helpers[event.type] instanceof Function) {
 				helpers[event.type](event.options);
 			}
+		},
+
+		addDescription : function(parent) {
+			var $desc = $('<div class="description">');
+			// $desc.text('Create a new graph by dragging columns onto the axis. Click here to add ');
+
+			$desc.appendTo(parent);
 		},
 
 		createGraphMarkup : function(parent) {
@@ -178,52 +187,6 @@
 					},
 					showEmpty: false
 				}]
-			});
-			$('#highcharts-0').on('click', function(event) {
-				if (event.target.nodeName === 'tspan') {
-					var axis = chart.axes.filter(function(a) {return a.axisTitle && a.axisTitle.element === event.target.parentNode})[0];
-					if (axis) {
-
-						var $textnode = $(event.target.parentNode);
-
-						var form = [
-							'<div id="set-'+(axis.userOptions.id||'axis')+'-name" class="form-horizontal">',
-								'<input class="form-control" placeholder="Title" type="text" value="'+axis.axisTitle.text+'" />',
-								'<a class="btn col-md-6 btn-plain" href="#">cancel</a>',
-								'<a class="btn col-md-6 apply" href="#">Set name</a>',
-							'</div>'].join('');
-
-						$textnode.popover({
-							title: 'Rename axis',
-							html : true,
-							content : form,
-							placement: 'bottom',
-							container: 'body',
-							trigger: 'manual'
-						}).popover('show');
-
-						$('#set-'+(axis.userOptions.id||'axis')+'-name a').click(function() {
-							if ($(this).hasClass('apply')) {
-								axis.setTitle({text : $('#set-'+(axis.userOptions.id||'axis')+'-name input').val()});
-							}
-							$textnode.popover('hide');
-						});
-					}
-				}
-			});
-
-			// Add click listener to hide popover
-			// $(document).on('click', function(e) {
-			//     if (!$(e.target).parents('.popover')[0]){
-			//         $('.popover').popover().hide();
-			//     }
-			// });
-
-			// Add mouseup listener for the highcharts graph since click is blocked
-			$('#graph').on('mouseup', function(e) {
-				if (!$(e.target).parents('.popover')[0]){
-					$('.popover').popover().hide();
-				}
 			});
 
 			return chart;
@@ -362,6 +325,8 @@
 						break;
 				} 
 			});
+
+
 		},
 
 		initializeGraphTitle : function() {
@@ -467,6 +432,30 @@
 			return filters;
 		},
 
+		registerAxisPopover : function() {
+			var form = [
+				'<div id="set-'+(/*axis.userOptions.id||*/'axis')+'-name" class="form-horizontal">',
+					'<input class="form-control" placeholder="Title" type="text" value="'+/*axis.axisTitle.text+*/'" />',
+				'</div>'].join('');
+
+			new hyryx.screen.popover({
+				title : 'Rename axis',
+				content : form,
+				placement : 'bottom',
+				container : '#page-explorer',
+				target : $('#highcharts-0 .highcharts-axis text'),
+				modal : true,
+				applyClb : function(form, target) {
+					var axis = chart.axes.filter(function(ax) {
+						return ax.axisTitle && ax.axisTitle.element === target[0];
+					});
+					if (axis[0]) {
+						axis[0].setTitle({ text : form.find('input').val() });
+					}
+				}
+			});
+		},
+
 		reloadData : function() {
 			if ((jQuery('.ySettings .list-group-item').length > 0 || jQuery('.oppositeYSettings .list-group-item').length > 0) && jQuery('.xSettings .list-group-item').length > 0) {
 				
@@ -479,9 +468,10 @@
 					"table": xAxisColumn.data("table")
 				};
 				var filters = this.collectFilters();
+				var me = this;
 
 				jQuery.ajax({
-					url: 'http://192.168.200.10:3000/getContentForSeries',
+					url: hyryx.settings.railsPath + '/getContentForSeries',
 					type: "POST",
 					data: {series: newSeries, xaxis: xAxis, filters: filters},
 					dataType: "json",
@@ -523,6 +513,8 @@
 								chart.series[chart.series.length-1].update({type:  jQuery('.axisDroppableContainer [data-id="'+json[i]['id']+'"]').attr('data-chartType')});
 							}                    
 
+							me.registerAxisPopover();
+
 							// load the simple data table on bottom of page
 							jQuery('.data table').children().each(function(){
 								jQuery(this).remove();
@@ -563,6 +555,27 @@
 
 							// save created series in global variable
 							loadedSeries = newSeries;
+
+							try {
+								var query = JSON.parse(json[0].query);
+								console.log(query);
+							
+								if (!$('.btn-debug')[0]) {
+									$('.graph').append('<a class="btn-debug">debug</a>');
+								}
+
+								$('.btn-debug').click(function() {
+									hyryx.debug.dispatch({
+										type : 'canvas.loadPlan',
+										options : query
+									});
+								});
+								
+							} catch (e) {
+								console.log('query could not be parsed', json[0].query);
+							}
+
+
 						}   
 					}
 				});

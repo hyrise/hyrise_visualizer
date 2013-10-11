@@ -2,9 +2,28 @@
 	"Barrier" : {},
 	"CreateIndex" : {},
 	"CreateRadixTable" : {},
+	"CustomOperator" : {
+		"type" : "CustomOperator",
+		"custom" : {
+			"type" : "custom",
+			"value" : "",
+			"valueConfig" : {
+				"code" : {
+					"type" : "custom",
+					"value" : ""
+				}
+			}
+		}
+	},
 	"Distinct" : {},
 	"ExtractDelta" : {},
-	"GetTable" : {},
+	"GetTable" : {
+		"type" : "GetTable",
+		"name" : {
+			"type" : "string",
+			"value" : ""
+		}
+	},
 	"GroupByScan" : {
 		"type": "GroupByScan",
 		"fields": {
@@ -19,28 +38,34 @@
 		"functions": {
 			"type" : "function",
 			"isList": true,
-			"value": [{
-				"type" : 3,
-				"field" : ""
-			}]
-			
+			"value": [],
+			"valueConfig": {
+				"type" : {
+					"type" : "number",
+					"value" : 3
+				},
+				"field" : {
+					"type" : "string",
+					"value" : ""
+				}
+			}
 		}
 	},
 	"HashBuild" : {
 		"type": "HashBuild",
-	"instances": {
-			"type" : "number",
-			"value": 3
-		},
-	"fields": {
-			"type": "column",
-			"isList": true,
-			"value": []
-		},
-	"key": {
-		"type": "string",
-		"value": "groupby"
-	}
+		"instances": {
+				"type" : "number",
+				"value": 3
+			},
+		"fields": {
+				"type": "column",
+				"isList": true,
+				"value": []
+			},
+		"key": {
+			"type": "string",
+			"value": "groupby"
+		}
 	},
 	"HashJoinProbe" : {},
 	"Histogram" : {},
@@ -59,15 +84,15 @@
 	"LayoutTableLoad" : {},
 	"LoadFile" : {},
 	"MaterializingScan" : {
-	"type" : "MaterializingScan",
-	"memcpy" : {
-		"type": "boolean",
-		"value": false
-	},
-	"copyValues" : {
-		"type": "boolean",
-		"value": true
-	}
+		"type" : "MaterializingScan",
+		"memcpy" : {
+			"type": "boolean",
+			"value": false
+		},
+		"copyValues" : {
+			"type": "boolean",
+			"value": true
+		}
 	},
 	"MergeHashTables" : {},
 	"MergeIndexScan" : {},
@@ -82,12 +107,12 @@
 	},
 	"PrefixSum" : {},
 	"ProjectionScan" : {
-	"type" : "ProjectionScan",
-	"fields" : {
-		"type" : "column",
-		"isList" : true,
-		"value" : ["quarter", "amount"]
-	}
+		"type" : "ProjectionScan",
+		"fields" : {
+			"type" : "column",
+			"isList" : true,
+			"value" : ["quarter", "amount"]
+		}
 	},
 	"RadixCluster" : {},
 	"RadixCluster2ndPass" : {},
@@ -98,17 +123,30 @@
 	"SettingsOperation" : {},
 	"SimpleRawTableScan" : {},
 	"SimpleTableScan" : {
-	"type" : "SimpleTableScan",
-	"predicates" : {
-		"type" : "predicate",
-		"isList": true,
-		"value" : [{
-			"type" : "LT",
-			"in" : 0,
-			"f" : "year",
-			"value" : 2013
-		}]
-	}
+		"type" : "SimpleTableScan",
+		"predicates" : {
+			"type" : "predicate",
+			"isList": true,
+			"value":[],
+			"valueConfig" : {
+				"type" : {
+					"type" : "string",
+					"value" : "LT"
+				},
+				"in" : {
+					"type" : "number",
+					"value" : 0
+				},
+				"f" : {
+					"type" : "string",
+					"value" : "year"
+				},
+				"value" : {
+					"type" : "number",
+					"value" : 2013
+				}
+			}
+		}
 	},
 	"SmallestTableScan" : {},
 	"SortScan" : {

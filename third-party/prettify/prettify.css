@@ -8,6 +8,7 @@
 }
 
 @media screen {
+
   /* string content */
   .str {
     color: #718c00;
@@ -51,6 +52,7 @@
   /* a markup tag name */
   .tag {
     color: #c82829;
+    text-decoration: underline;
   }
 
   /* a markup attribute name */
@@ -71,6 +73,7 @@
   /* a variable name */
   .var {
     color: #c82829;
+    text-decoration: underline;
   }
 
   /* a function name */
@@ -126,12 +129,16 @@ pre.prettyprint {
   font-family: Menlo, "Bitstream Vera Sans Mono", "DejaVu Sans Mono", Monaco, Consolas, monospace;
   font-size: 12px;
   line-height: 1.5;
-  border: 1px solid #cccccc;
   padding: 10px;
+  margin: 0;
   color: #4d4d4c;
-  border-radius: 0;
-  height: 100%;
-  overflow: scroll;
+  border: none;
+  height: auto;
+  overflow: hidden;
+}
+
+pre.prettyprint span {
+  pointer-events : none;
 }
 
 /* Specify class=linenums on a pre to get line numbering */
