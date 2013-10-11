@@ -1,6 +1,5 @@
-#graph {
-	height: 420px;
-	box-shadow: 0px 0px 1px -4px;
+.graph {
+	margin-top: 15px;
 }
 
 #graph-container .row {
@@ -207,4 +206,9 @@ div.axisTypeSelect.btn-group button.btn:hover {
 div.axisTypeSelect.btn-group button.btn .filter-option,
 div.axisTypeSelect.btn-group button.btn .caret {
 	display: none;
+}
+
+.btn-debug {
+	clear : both;
+	display: block;
 }

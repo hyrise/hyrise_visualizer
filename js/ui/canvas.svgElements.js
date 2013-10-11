@@ -25,59 +25,29 @@
 	 */
 
 	(function() {
-		var Position = function(position) {
-
-			var pos;
-
-			var valid = function(n) {
-				return !!(+n === 0 || +n);
-			}
-
-			this.setPosition = function(x, y) {
-				if (!x) { return; }
-
-				// parse an array of the format [x, y]
-				if (x instanceof Array) {
-					y = x[1];
-					x = x[0];
-				}
-				// if position should be set to an object {x:number, y:number}
-				else if (x.x && x.y) {
-					y = x.y;
-					x = x.x;
-				}
-
-				// prevent NaN
-				if (valid(x) && valid(y)) {
-					pos = [+x, +y];
-					pos.x = +x;
-					pos.y = +y;
-				}
-
-				return this.getPosition();
-			}
-
-			this.getPosition = function() {
-				return pos;
-			}
-
-			this.setPosition(position);
-
-			return this;
-		}
 
 		hyryx.debug.Canvas.Node = function() {
 			hyryx.screen.AbstractCanvasPlugin.apply(this, arguments);
 		}
 
 		hyryx.debug.Canvas.Node.prototype = extend(hyryx.screen.AbstractCanvasPlugin, {
-			init : function(position, name, edges, id) {
+			init : function(position, type, edges, data, id) {
 				
-				this.label = name || '';
+				this.type = type || '';
 
-				this.position = new Position(position);
+				this._position = position;
 
 				this.edges = (edges||[]).map(function(d){ return d; });
+
+				$.each((hyryx.stencils[type]||{}), function(key, value) {
+					if (key === 'type') { return; }
+
+					// get properties defined in the stencil
+					this[key] = data && data[key] || value.value;
+				}.bind(this));
+
+				// this = $.extend(true, this, (data||hyryx.stencils[type]||{}));
+				// console.log(this.data)
 
 				if (id) {
 					this.id = id;
@@ -86,11 +56,11 @@
 			},
 
 			getPosition : function() {
-				return this.position.getPosition();
+				return this._position;
 			},
 
 			setPosition : function(x, y) {
-				return this.position.setPosition(x, y);
+				return this._position = [+x, +y];
 			}
 		});
 	})();

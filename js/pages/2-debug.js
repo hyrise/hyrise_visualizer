@@ -1,6 +1,6 @@
 hyryx.debug = (function() {
     
-    var Stencils, Canvas, Json, Visualization, Result, Button, Form;
+    var Stencils, Canvas, Json, Visualization, Result, Attributes;
 
     function setup() {
         var $visualizer = $('#visualizer #page-debug').append('<div class="container"><div class="row">');
@@ -11,6 +11,12 @@ hyryx.debug = (function() {
 
         // create canvas
         Canvas = new hyryx.debug.Canvas($fluidLayout);
+
+        // create attributes container
+        Attributes = new hyryx.debug.Attributes($fluidLayout);
+
+        // Create data container
+        Data = new hyryx.explorer.Data($visualizer);
     }
 
     function dispatch(event) {
@@ -27,6 +33,11 @@ hyryx.debug = (function() {
                 type    : command,
                 options : event.options
             });
+        } else if (target === 'attributes' && Attributes) {
+            Attributes.handleEvent({
+                type    : command,
+                options : event.options
+            })
         }
     }
 

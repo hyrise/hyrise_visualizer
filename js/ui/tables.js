@@ -5,7 +5,7 @@
 
 	hyryx.explorer.Attributes.prototype = extend(hyryx.screen.AbstractUIPlugin, {
 		render : function() {
-			this.id = hyryx.utils.getID('Attributes');
+			this.id = hyryx.utils.getID('Tables');
 			return this.createAttributesMarkup();
 		},
 
@@ -13,43 +13,30 @@
 			this.load();
 		},
 
-		// Add attributes area and a form to add new tables, TODO refactor form
+		// Add tables area and a form to add new tables, TODO refactor form
 		createAttributesMarkup : function() {
 			var form = [
-				'<div class="attributes-add-form form-horizontal">',
+				'<div class="tables-add-form form-horizontal">',
 					'<input class="form-control" id="table" placeholder="Table name" type="text" />',
 					'<input class="form-control" id="file" placeholder="Path to table" type="text" />',
-					'<a class="btn col-md-6 btn-plain" href="javascript:$(\'#show-form-btn\').click()">cancel</a>',
-					'<a class="btn col-md-6" href="javascript:hyryx.explorer.loadTable()">Load table</a>',
 				'</div>'].join('');
 			
-			var $attributes = $('<div class="col-md-2 attributes" id="'+this.id+'"><h3>Attributes</h3></div>').appendTo(this.targetEl);
-			$attributes.append('<a href="#" class="" id="show-form-btn">+</a>');
-			var p = $('#show-form-btn').popover({
-				title: 'Add table',
-				html : true,
+			var $tables = $('<div class="col-md-2 tables" id="'+this.id+'"><h3>Tables</h3></div>').appendTo(this.targetEl);
+			$tables.append('<a href="#" class="" id="show-form-btn">+</a>');
+			
+			new hyryx.screen.popover({
+				title : "Add table",
 				content : form,
-				placement: 'right',
-				trigger : 'manual'
-			}).click(function() {
-				var $this = $(this);
-				if ($this.toggleClass('active').hasClass('active')) {
-					$this.popover('show');
+				container: 'body',
+				placement : 'right',
+				target : $('#show-form-btn'),
+				applyClb : hyryx.explorer.loadTable
+			})
 
-					var form = $this.next('.popover');
-					// add close button
-					form.find('.popover-title').append('<span class="close">x</span>').find('.close').click(function() {
-						$this.click();
-					});
-				} else {
-					$this.popover('hide');
-				}
-			});
-			// The list for all attributes
-			$attributes.append('<div class="panel-group list">');
-			// $form.appendTo($attributes);
-
-			return $attributes;
+			// The list for all tables
+			$tables.append('<div class="panel-group list">');
+			
+			return $tables;
 		},
 
 		getAttributeButtonSettings : function(type, min, max) {
@@ -125,8 +112,12 @@
 			});
 
 			// render slider
-			var lower = $li.attr('data-lower-value'); lower = (typeof lower === 'undefined' ? min : lower);
-			var higher = $li.attr('data-higher-value'); higher = (typeof higher === 'undefined' ? max : higher);
+			var lower = $li.attr('data-lower-value');
+			lower = (typeof lower === 'undefined' ? min : lower);
+			
+			var higher = $li.attr('data-higher-value');
+			higher = (typeof higher === 'undefined' ? max : higher);
+			
 			form.find('.valueRangeSlider').slider({
 				min		: min,
 				max		: max,
@@ -138,24 +129,21 @@
 					hyryx.explorer.dispatch('graph.reloadData');
 				}
 			});
-
-			// add close button
-			form.parents('.popover').find('.popover-title').append('<span class="close">x</span>').find('.close').click(function() {
-				form.parents('.axis').find('.popoverToggle').click();
-			});
 		},
 
 		load : function() {
 			var me = this;
 
-			jQuery.ajax('http://192.168.200.10:3000/tables', {
+			$.ajax(hyryx.settings.railsPath + '/tables', {
 				success : function(r) {
-					$('.attributes .list').html('');
+					$('.tables .list').html('');
+
+					hyryx.tables = r;
 
 					$.each(r, function(key, value) {
 						var panel = ['<div class="panel panel-default">',
 										'<div class="panel-heading">',
-											'<h4 class="panel-title"><a class="accordion-toggle" data-toggle="collapse" data-parent=".attributes .list" href="#collapse-',key,'">',
+											'<h4 class="panel-title"><a class="accordion-toggle" data-toggle="collapse" data-parent=".tables .list" href="#collapse-',key,'">',
 											key,
 											'</h4>',
 										'</div>',
@@ -172,17 +160,18 @@
 
 						panel.push('</div></div>');
 
-						$(panel.join('')).appendTo('.attributes .list');
+						$(panel.join('')).appendTo('.tables .list');
 					});
 
-					$('.attributes .list .collapse.panel-collapse:first').addClass('in');
+					$('.tables .list .collapse.panel-collapse:first').addClass('in');
 
 					//initilaize the options popover
 					
 
-					//make attributes draggable and clone them
-					jQuery(".attributes .list .list-group-item").draggable({ 
+					//make tables draggable and clone them
+					$(".tables .list .list-group-item").draggable({ 
 						helper: 'clone',
+						appendTo : $('#visualizer'),
 						start: function(e, ui) {
 							$('.axis').each(function() {
 								if (!$(this).find('.list-group-item')[0]) {
@@ -203,22 +192,23 @@
 								}
 							});
 
+							var axis = $(e.toElement);
 							// if dropped onto an axis, hide the axis label and display only the attribute
-							var toggle = $(e.toElement).find('.popoverToggle');
-							toggle.popover({
-								html: true,
-								container: $(e.toElement),
+							var toggle = axis.find('.popoverToggle'),
+								min = toggle.data('min'),
+								max = toggle.data('max');
+							
+
+							new hyryx.screen.popover({
+								container: axis,
 								placement: 'right',
 								title: 'Options',
-								trigger: 'manual',
-								content: me.getAttributeButtonSettings(toggle.data('type'), toggle.data('min'), toggle.data('max'))
-							}).click(function() {
-								var $this = $(this);
-								if ($this.toggleClass('active').hasClass('active')) {
-									$this.popover('show');
-									me.registerFormControls($(e.toElement), $(e.toElement).find('.popover form'), toggle.data('min'), toggle.data('max'));
-								} else {
-									$this.popover('hide');
+								target : toggle,
+								enableButtons : false,
+								content: me.getAttributeButtonSettings(toggle.data('type'), min, max),
+
+								showClb : function(form) {
+									me.registerFormControls(axis, form, min, max);
 								}
 							});
 						}
@@ -230,24 +220,24 @@
 		loadTable : function() {
 			var me = this;
 
-			var $form = $('.attributes-add-form');
+			var $form = $('.tables-add-form');
 			var table = $form.find('#table').val();
 			var file = $form.find('#file').val();
 
 			if (table && file) {
-				jQuery.ajax({
-					url: 'http://192.168.200.10:3000/loadTable',
+				$.ajax({
+					url: hyryx.settings.railsPath + '/loadTable',
 					type: "POST",
 					data: {
 						table: table,
 						file: file
 					},
 					dataType: "json",
-					complete: function(res) {
-						// update list of attributes
+					complete: function() {
+						// update list of tables
 						me.load();
 						// close popover
-						$('.attributes #show-form-btn').click();
+						// $('.tables #show-form-btn').click();
 					}
 				});
 			}

@@ -121,3 +121,21 @@ Array.prototype.invoke = function invoke(method) {
 		return value[method].apply(value, args);
 	});
 };
+
+var _reduce = Array.prototype.reduce;
+Array.prototype.inject = function inject(memo, iterator) {
+	iterator = iterator;
+	var context = arguments[2];
+	// The iterator must be bound, as `Array#reduce` always binds to
+	// `undefined`.
+	return _reduce.call(this, iterator.bind(context), memo);
+}
+
+Array.prototype.flatten = function flatten() {
+	return this.inject([], function(array, value) {
+		if (value instanceof Array)
+			return array.concat(value.flatten());
+		array.push(value);
+		return array;
+	});
+};
