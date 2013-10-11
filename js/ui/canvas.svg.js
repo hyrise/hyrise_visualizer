@@ -7,6 +7,7 @@
 		this.targetEl = config.targetEl;
 		this.cls = config.cls || 'canvas';
 
+		this.isActiveScreen = false;
 		this.id = hyryx.utils.getID('Canvas');
 		
 		this.el = this.render();
@@ -14,18 +15,22 @@
 		return this;
 	}
 
+	height = 400;
+
 	hyryx.screen.CanvasScreen.prototype = {
 
 		nodes : [],
 
 		show : function(data) {
+			this.isActiveScreen = true;
 			this.setValue(data);
 			this.update();
-			$(this.el).find('.stencilgraph').show();
+			$(this.el).find('.canvas-scroll').show();
 		},
 
 		hide : function() {
-			$(this.el).find('.stencilgraph').hide();
+			this.isActiveScreen = false;
+			$(this.el).find('.canvas-scroll').hide();
 		},
 
 		render : function() {
@@ -36,17 +41,34 @@
 			return markup;
 		},
 
+		setHeight : function(newHeight) {
+			svg.style('height', Math.max(height, newHeight) + 'px');
+		},
+
 		init : function() {
 
 			me = this;
 
 			radius = 40;
-			height = 400;
+			outerHeight = 400;
 
-			svg = d3.select(this.el[0]).append('svg')
-				.attr('class', 'screen stencilgraph col-md-8')
+			var container = d3.select(this.el[0]).append('div')
+				.attr({
+					'class' : 'canvas-scroll col-md-10',
+				})
+				.style({
+					height	: outerHeight + 'px',
+					overflow: 'auto',
+					padding : 0,
+					display : 'block'
+				});
+
+			svg = container.append('svg')
+				.attr('class', 'screen stencilgraph col-md-12')
+				.style('height', height+'px')
+				.style('display', 'block')
 				// .attr('width', width)
-				.attr('height', height);
+				;
 
 			width = $('svg.stencilgraph').width();
 
@@ -85,6 +107,7 @@
 					if (d3.event.target.tagName == 'svg') {
 						if (!d3.event.shiftKey) {
 							d3.selectAll('g.selected').classed('selected', false);
+							me.handleNodeSelectionChange(false);
 						}
 					}
 				},
@@ -205,10 +228,19 @@
 				},
 				'class' : 'node'
 			})
-			.call(d3.behavior.drag().on('drag', function(d) {
+			.call(d3.behavior.drag()
+				.on('dragstart', function(d) {
+					
+				})
+				.on('dragend', function(d) {
+					delete me.isDragging;
+				})
+				.on('drag', function(d) {
 				if (startNode) {
 					return;
 				}
+
+				me.isDragging = true;
 
 				var selection = d3.selectAll('.stencilgraph .selected');
 
@@ -216,6 +248,8 @@
 					selection.classed('selected', false);
 					selection = d3.select(this);
 					selection.classed('selected', true);
+
+					me.handleNodeSelectionChange(selection.length === 1, selection.data()[0]);
 				}
 
 				selection.attr({
@@ -224,8 +258,8 @@
 						if (!d) { return; }
 
 						// limit movement to canvas boundaries
-						var x = Math.max(radius, Math.min(width - radius, d.getPosition().x + d3.event.dx));
-						var y = Math.max(radius, Math.min(height - radius, d.getPosition().y + d3.event.dy));
+						var x = Math.max(radius, Math.min(width - radius, d.getPosition()[0] + d3.event.dx));
+						var y = Math.max(radius, Math.min(height - radius, d.getPosition()[1] + d3.event.dy));
 
 						return 'translate(' + d.setPosition(x, y) + ')';
 					}
@@ -295,7 +329,10 @@
 				r : radius,
 				'class' : 'inner'
 			}).on({
-				click : function(d) {
+				mouseup : function(d) {
+					if (me.isDragging) { return; }
+
+
 					var e = d3.event,
 						g = this.parentNode,
 						isSelected = d3.select(g).classed('selected');
@@ -303,7 +340,10 @@
 					if (!e.shiftKey) {
 						d3.selectAll('g.selected').classed('selected', false);
 					}
+
 					d3.select(g).classed('selected', !isSelected);
+					
+					me.handleNodeSelectionChange(!isSelected, d);
 					// put back on top
 					// g.parentNode.appendChild(g);
 				},
@@ -315,18 +355,9 @@
 				},
 				dblclick : function() {
 					var d = d3.select(this.parentNode).datum();
-					var index = me.nodes.indexOf(d);
-					me.nodes.splice(index, 1);
 
-					me.nodes.each(function(node) {
-						node.edges.each(function(edge, i) {
-							if (edge.target === d) {
-								node.edges.splice(i, 1);
-							}
-						});
-					});
-
-					me.update();
+					var command = new hyryx.command.removeNodeCommand(d, me.nodes, me.update.bind(me));
+					hyryx.command.do(command);
 				}
 			});
 
@@ -335,11 +366,11 @@
 					'text-anchor' : 'middle',
 					y : 4
 				})
-				.text(function(d) { return d.label; })
+				.text(function(d) { return d.type; })
 			;
 
 			gNode.append('title')
-				.text(function(d) { return d.label; })
+				.text(function(d) { return d.type; })
 			;
 
 			gNodes.exit().remove();
@@ -355,6 +386,8 @@
 				click : function() {
 					d3.selectAll('g.node.selection').classed('selection', false);
 					d3.selectAll('g.selected').classed('selected', false);
+
+					me.handleNodeSelectionChange(false);
 
 					d3.select(this).classed('selected', true);
 					// d3.event.stopPropagation();
@@ -388,11 +421,10 @@
 					// 	});
 					// } else {
 					gEdge = d3.select(d3.event.target.parentElement);
-					var edge = gEdge.datum(),
-						index = edge.source.edges.indexOf(edge.edge);
+					var edge = gEdge.datum();
 
-					edge.source.edges.splice(index, 1);
-					gEdge.remove();
+					var command = new hyryx.command.removeEdgeCommand(edge, me.update.bind(me));
+					hyryx.command.do(command);
 
 					d3.event.stopPropagation();
 					// }
@@ -411,32 +443,28 @@
 			gEdges.exit().remove();
 		},
 
-		/**
-		 * Initialize drag/drop behavior for stencils and plans, so they can be placed on the canvas.
-		 */
-		initDragDrop : function() {
+		onDragStart : function(d) {
+			// the dom node representing a new stencil
+			var gStencil = d3.select(this);
 
-			d3.selectAll('.stencils .list-group-item').call(d3.behavior.drag().on('dragstart', function(d) {
-				// the dom node representing a new stencil
-				var gStencil = d3.select(this);
+			gStencil.style('opacity', .4);
 
-				gStencil.style('opacity', .4);
+			d3.event.sourceEvent.stopPropagation();
+		},
 
-				d3.event.sourceEvent.stopPropagation();
-			}).on('dragend', function(d) {
-				var gStencil = d3.select(this);
-				gStencil.style('opacity', 1);
+		onDragEnd : function(d) {			
+			var gStencil = d3.select(this);
+			gStencil.style('opacity', 1);
 
-				if (d3.event.sourceEvent.toElement.tagName == 'svg') {
-					var p = d3.mouse(d3.event.sourceEvent.toElement);
-					var x = p[0]-radius,
-						y = p[1]-radius,
-						name = $(gStencil[0]).data('type');
+			if (d3.event.sourceEvent.toElement.tagName == 'svg') {
+				var p = d3.mouse(d3.event.sourceEvent.toElement);
+				var x = p[0]-radius,
+					y = p[1]-radius,
+					name = $(gStencil[0]).data('type');
 
-					var command = new hyryx.command.createNodeCommand([x, y], name, me.nodes, me.update.bind(me));
-					hyryx.command.do(command);
-				}
-			}));
+				var command = new hyryx.command.createNodeCommand([x, y], name, me.nodes, me.update.bind(me));
+				hyryx.command.do(command);
+			}
 		},
 
 		/**
@@ -471,49 +499,58 @@
 		},
 
 		getValue : function() {
-			var serializedNodes = {}, serializedEdges = [];
-			this.nodes.each(function(node) {
+			
+			var nodes = {};
+			var edges = [];
 
-				serializedNodes[node.id] = {
-					type : node.label,
-					_position : node.getPosition()
-				};
+			this.nodes.each(function(node) {
+				nodes[node.id] = {};
+
+				$.each(node, function(key, value) {
+					if (hyryx.stencils[node.type] && hyryx.stencils[node.type][key]) {
+						nodes[node.id][key] = value;
+					}
+				});
+
+				nodes[node.id]._position = node._position;
 
 				node.edges.each(function(edge) {
-					serializedEdges.push([node.id, edge.target.id]);
+					edges.push([node.id, edge.target.id]);
 				});
 			})
 
 			return {
-			    "operators": serializedNodes,
-			    "edges": serializedEdges
+			    "operators": nodes,
+			    "edges": edges
 			};
 		},
 
-		setValue : function(data) {
-			me.nodes = [];
+		setValue : function(data, forceLoad) {
 
-			$.each(data.operators, function(key, values) {
-				me.nodes.push(new hyryx.debug.Canvas.Node(values._position, values.type, undefined, key));
-			});
+			// if data was modified using the json text editor
+			if (data.hasChanged || forceLoad) {
+				// check if basic constrains are met
+				if (data.operators) {
+					// load the new data
+					var command = new hyryx.command.loadPlanCommand(data, this.nodes, this.update.bind(this));
+					hyryx.command.do(command);
+				}
+			}
+		},
 
-			data.edges.each(function(edge) {
-				var start, end;
+		handleNodeSelectionChange : function(select, node) {
 
-				me.nodes.each(function(node) {
-					if (node.id === edge[0]) {
-						start = node;
-					} else if (node.id === edge[1]) {
-						end = node;
+			if (select) {
+				hyryx.debug.dispatch({
+					type : 'attributes.show',
+					options : {
+						node : node
 					}
 				});
-
-				if (start && end) {
-					var edge = new hyryx.debug.Canvas.Edge(end);
-					start.edges.push(edge);
-				}
-			});
-		}
+			} else {
+				hyryx.debug.dispatch('attributes.hide');
+			}
+		},
 	};
 
 	var edges = function() {
@@ -550,25 +587,25 @@
 		return function(d) {
 			var source = d.source,
 				target = d.edge.points.length && d.edge.points[0] || d.edge.target,
-				deltaX = target.getPosition().x - source.getPosition().x,
-				deltaY = target.getPosition().y - source.getPosition().y,
+				deltaX = target.getPosition()[0] - source.getPosition()[0],
+				deltaY = target.getPosition()[1] - source.getPosition()[1],
 				dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
 	            normX = deltaX / dist,
 	            normY = deltaY / dist,
 	            sourcePadding = radius + 4,
-	            sourceX = source.getPosition().x + (sourcePadding * normX),
-	            sourceY = source.getPosition().y + (sourcePadding * normY);
+	            sourceX = source.getPosition()[0] + (sourcePadding * normX),
+	            sourceY = source.getPosition()[1] + (sourcePadding * normY);
 
 			source = d.edge.points.length && d.edge.points[ d.edge.points.length-1] || d.source;
             target = d.edge.target;
-            deltaX = target.getPosition().x - source.getPosition().x;
-            deltaY = target.getPosition().y - source.getPosition().y;
+            deltaX = target.getPosition()[0] - source.getPosition()[0];
+            deltaY = target.getPosition()[1] - source.getPosition()[1];
             dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
             normX = deltaX / dist;
             normY = deltaY / dist;
             var targetPadding = radius + 8,
-	            targetX = target.getPosition().x - (targetPadding * normX),
-	            targetY = target.getPosition().y - (targetPadding * normY);
+	            targetX = target.getPosition()[0] - (targetPadding * normX),
+	            targetY = target.getPosition()[1] - (targetPadding * normY);
 
 	        var points = [{
 	        	x : sourceX,
@@ -653,24 +690,24 @@
 			var endPoints = function() {
 				var source = d.source,
 		            target = d.edge.points.length && d.edge.points[0] || d.edge.target,
-		            deltaX = target.getPosition().x - source.getPosition().x,
-		            deltaY = target.getPosition().y - source.getPosition().y,
+		            deltaX = target.getPosition()[0] - source.getPosition()[0],
+		            deltaY = target.getPosition()[1] - source.getPosition()[1],
 		            dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
 		            normX = deltaX / dist,
 		            normY = deltaY / dist,
-		            sourceX = source.getPosition().x + (radius * normX),
-		            sourceY = source.getPosition().y + (radius * normY);
+		            sourceX = source.getPosition()[0] + (radius * normX),
+		            sourceY = source.getPosition()[1] + (radius * normY);
 
 	            source = d.edge.points.length && d.edge.points[ d.edge.points.length-1] || d.source;
 	            target = d.edge.target;
-	            deltaX = target.getPosition().x - source.getPosition().x;
-	            deltaY = target.getPosition().y - source.getPosition().y;
+	            deltaX = target.getPosition()[0] - source.getPosition()[0];
+	            deltaY = target.getPosition()[1] - source.getPosition()[1];
 	            dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 	            normX = deltaX / dist;
 	            normY = deltaY / dist;
 		        var targetPadding = radius + 8,
-		            targetX = target.getPosition().x - (radius * normX),
-		            targetY = target.getPosition().y - (radius * normY);
+		            targetX = target.getPosition()[0] - (radius * normX),
+		            targetY = target.getPosition()[1] - (radius * normY);
 
 		        return [ { x : sourceX, y : sourceY}, { x : targetX, y : targetY}];
 			};

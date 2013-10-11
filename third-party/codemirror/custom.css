@@ -1,0 +1,24 @@
+.cm-s-custom span.cm-property, .cm-s-custom span.cm-variable {
+	color: #c82829;
+	text-decoration: underline;
+}
+
+.cm-s-custom span.cm-string.cm-property {
+	color: #4271ae;
+	text-decoration: none;
+}
+
+.cm-s-custom span.cm-string {
+	color: #718c00;
+}
+
+.cm-s-custom span.cm-number {
+	color: #8959a8;
+}
+
+.cm-s-custom span.cm-atom {
+	color: #f5871f;
+}
+
+.cm-s-custom .CodeMirror-activeline-background {background: #e8f2ff !important;}
+.cm-s-custom .CodeMirror-matchingbracket {outline:1px solid grey; color:black !important;}

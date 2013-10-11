@@ -1,0 +1,5 @@
+{
+	"server" : "http://192.168.200.10",
+	"railsPort" : 3000,
+	"hyrisePort" : 5000
+}

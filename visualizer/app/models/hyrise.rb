@@ -79,7 +79,9 @@ class Hyrise
 			queryOperator = composeProjectionOperator xaxis, column, queryOperator
 			queryOperator = composeAggregationOperator xaxis, column, queryOperator
 
-			result = executeQuery queryOperator.getQuery
+			query = queryOperator.getQuery
+
+			result = executeQuery query
 
 			unless result['rows'].nil?
 				if xaxis['type'].to_i < 2
@@ -98,6 +100,7 @@ class Hyrise
 				finalResult['id'] = column['id']
 				finalResult['name'] = result['header'].second
 				finalResult['name'][xaxis['column']] = column['column'] if finalResult['name'].include? xaxis["column"]  #replace names like COUNT(xaxis) with COUNT(yaxis)
+				finalResult['query'] = query
 			end
 
 			content.push finalResult 

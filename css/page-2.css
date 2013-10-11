@@ -17,6 +17,7 @@ text.emptytext {
     font-size: 18px;
     font-weight: 100;
     letter-spacing: 1px;
+    pointer-events: none;
 }
 
 text.emptytext.visible {
@@ -172,17 +173,48 @@ svg *::-webkit-selection {
     height: 400px;
     display: none;
     padding: 0;
+    overflow: auto;
+    border: 1px solid #cccccc;
 }
 
-.json-container textarea {
-    width: 100%;
+.json-container .CodeMirror {
     height: 100%;
-    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-    font-size: 13px;
+}
+
+#page-debug .canvas {
+    margin-top: 5px;
 }
 
 .canvas-controls {
+    padding: 0;
+    margin-top: 10px;
     /*margin-left: -8.333333333333332%;*/
+}
+
+.canvas-controls .button-execute {
+    display: inline-block;
+    text-align: center;
+    font-weight: 100;
+    font-style: normal;
+    text-decoration: none;
+    background: #010626;
+    color: #f2f2f2;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    transition: background-color 200ms;
+    -webkit-transition: background-color 200ms;
+    float: left;
+    margin-left: 10px;
+}
+
+.canvas-controls .button-execute:hover {
+    background: #2A5E8C;
+    cursor: pointer;
+}
+
+.canvas-controls ul {
+    padding : 0;
+    float: left;
 }
 
 .canvas-controls ul li {
@@ -190,9 +222,10 @@ svg *::-webkit-selection {
     text-align: center;
     font-weight: 100;
     font-style: normal;
+    float: left;
     background: #010626;
     color: #f2f2f2;
-    padding: 10px 0;
+    padding: 5px 10px;
     border: 1px solid transparent;
     transition: background-color 200ms;
     -webkit-transition: background-color 200ms;
@@ -207,4 +240,84 @@ svg *::-webkit-selection {
     background: white;
     border: 1px solid #010626;
     color: #010626;
+}
+
+.attributes .form fieldset {
+    border: 1px solid #eee;
+    padding: 5px;
+    margin-bottom: 5px;
+    background: #fafafa;
+    font-weight: 100;
+}
+
+/*.attributes .form fieldset .plain-value {
+    font-weight: normal;
+    text-align: right;
+    width: auto;
+    float: right;
+}
+*/
+.attributes {
+    display: none;
+    margin-left: -15px;
+}
+
+.attributes .form .valuelist {
+    list-style: none;
+    padding-left: 0;
+}
+
+.attributes .form .valuelist .del {
+    cursor: pointer;
+    float: right;
+}
+
+.attributes .form .form-control {
+    width: 100%;
+    margin-bottom: 5px;
+    border-radius: 0;
+    padding-left: 5px;
+}
+
+.attributes .form .form-complex {
+    text-align: center;
+    cursor: pointer;
+}
+
+.attributes .form .form-complex:hover {
+    box-shadow: 0 0 5px 0px #ccc inset;
+}
+
+.execution-preview {
+    margin-left: 10px;
+    display: block;
+    float: left;
+    height: 34px;
+    position: relative;
+}
+
+.execution-preview .axis path,
+.execution-preview .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.execution-preview .axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+
+.execution-preview .text-overlay {
+    display: block;
+    text-align: center;
+    font-weight: 100;
+    font-style: normal;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: #860106;
+    color: #f2f2f2;
+    padding: 5px 10px;
+    border: 1px solid transparent;
 }
