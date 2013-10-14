@@ -16,9 +16,18 @@
 }
 .actionSelect,
 .removeColumn,
-.popoverToggle {
+.popoverToggle,
+.xSettings .actionSelect,
+.xSettings .popoverToggle {
   display: none;
 }
+
+.axis .actionSelect,
+.axis .removeColumn,
+.axis .popoverToggle {
+  display: block;
+}
+
 .tables .btn.disabled {
   cursor: pointer;
 }

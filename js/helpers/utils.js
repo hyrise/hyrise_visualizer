@@ -1,6 +1,7 @@
 if ('undefined' === typeof hyryx) { var hyryx = {}; }
 
 (function() {
+
 	hyryx.utils = (function() {
 
 		function getID(cls) {
@@ -10,19 +11,21 @@ if ('undefined' === typeof hyryx) { var hyryx = {}; }
 		  return '' + (this.uniqueId++) + '#' + (cls||'Object');
 		};
 
-		function showScreen() {
-			var hash = window.location.hash;
+		function showScreen(id) {
+            var hash = (window.location.hash||'').trim().split('#')[1];
+            
+            id = (id||hash).trim() || 'explorer';
+			// var hash = window.location.hash;
 			// the default page
-			var $target = $('#tag a[href=#page-explorer]');
+			var $target = $('#tag a[href=#page-'+id+']');
 
-			if (hash.trim()) {
-				var target = hash.replace('#', '#page-');
-				if ($('#tag a[href='+target+']')[0]) {
-					$target = $('#tag a[href='+target+']');
-				}
-			}
-
-			$target.click();			
+			// if (hash.trim()) {
+			// 	var target = hash.replace('#', '#page-');
+			// 	if ($('#tag a[href='+target+']')[0]) {
+			// 		$target = $('#tag a[href='+target+']');
+			// 	}
+			// }
+			$target.click();
 		}
 
         function getConfigForProperty(type, key) {

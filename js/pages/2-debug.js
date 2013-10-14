@@ -38,6 +38,11 @@ hyryx.debug = (function() {
                 type    : command,
                 options : event.options
             })
+        } else if (target === 'data') {
+            Data.handleEvent({
+                type : command,
+                options : event.options
+            })
         }
     }
 
