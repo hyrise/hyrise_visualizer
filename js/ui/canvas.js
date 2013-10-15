@@ -93,6 +93,14 @@
 						} else {
 							console.log(data);
 							this.resultPreview.update(data.performanceData);
+
+							hyryx.debug.dispatch({
+								type : 'data.reload',
+								options : {
+									all : true,
+									data : data
+								}
+							});
 					}
 
 						// $('.execution-preview')

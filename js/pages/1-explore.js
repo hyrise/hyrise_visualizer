@@ -42,6 +42,13 @@ hyryx.explorer = (function() {
 				options	:event.options
 			});
 		}
+
+		if (target === 'data') {
+			Data.handleEvent({
+				type : command,
+				options : event.options
+			})
+		}
 	}
 
 	return {

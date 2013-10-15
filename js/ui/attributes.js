@@ -416,11 +416,9 @@
 					return i !== index;
 				});
 
-				var property = attributes.selection[me.id];
-
 				$(this).parent().detach();
 	
-				var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, property);
+				var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, attributes.selection, me.id);
 				hyryx.command.do(command);
 			}
 

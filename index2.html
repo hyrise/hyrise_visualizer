@@ -7,7 +7,7 @@
 	<title>HYRISE Visualizer</title>
 	<meta name="description" content="">
 
-	<link rel="shortcut icon" type="image/png" href="/favicon.png?v=2" />
+	<link rel="shortcut eicon" type="image/png" href="/favicon.png?v=2" />
 
 	<!-- VENDOR CSS -->
 	<link rel="stylesheet" href="css/jquery-ui.css">
@@ -41,21 +41,23 @@
 		<section class="container">
 			<!-- NAVIGATION -->
 			<div class="logo">
-				<div class="white-header"></div>
+				<!-- <div class="white-header"></div> -->
 				<span class="logo-text">hyrise visualizer</span>
 			</div>
 			<!-- 		<p class='navbar-text pull-right'>&copy; Hasso Plattner Institut 2013</p>
 			 -->
 			<div class="tabbable">
 				<!-- CONTENT -->
-			  <ul class="" id="tag">
-			    <li><a href="#page-explorer" data-toggle="tab">explore</a></li>
-			    <li><a href="#page-debug" data-toggle="tab">debug</a></li>
-			    <li><a href="#page-manage" data-toggle="tab">manage</a></li>
-			  </ul>
+		      <div id="tag">
+			      <a href="#page-explorer" data-toggle="tab">Explore</a>|<a href="#page-debug" data-toggle="tab">Debug</a>|<a href="#page-manage" data-toggle="tab">Manage</a>
+			  </div>
+			  <div class="loading">
+			  	Fetching data...
+			  </div>
 			  <div class="tab-content">
 			    <div class='tab-pane' id='page-explorer'></div>
 			    <div class='tab-pane' id='page-debug'></div>
+			    <div class='tab-pane' id='page-manage'></div>
 			  </div>
 			</div>
 		</section>
