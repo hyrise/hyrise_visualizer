@@ -15,6 +15,24 @@ body {
   overflow: auto;
 }
 
+.loading {
+  width: 150px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 50%;
+  opacity: 1;
+  -webkit-transition: opacity 1s;
+  background: url(../img/ajax-loader.gif) no-repeat scroll left center white;
+  height: auto;
+  padding-left: 24px;
+}
+
+.onload .loading {
+  opacity: 0;
+}
+
 div.logo {
   background-image: url(/skyline.png);
   background-size: cover;
@@ -91,17 +109,20 @@ h3 {
 }
 
 #tag {
-  height: 34px;
+  height: auto;
   border-top: 2px solid black;
   margin-top: -22px;
   padding-left: 200px;
+  font-size: 19px;
   margin-bottom: 20px;
   -webkit-transition: margin-top 200ms, margin-bottom 200ms, padding-left 1s;
   -moz-transition: margin-top 200ms, margin-bottom 200ms, padding-left 1s;
+  padding-top: 0px;
+  text-transform: capitalize;
 }
 
 #tag li {
-  margin-top: -30px;
+  /*margin-top: -30px;*/
   display: block;
   float: left;
   height: auto;
@@ -112,18 +133,16 @@ h3 {
   padding-bottom: 2px;
 }
 
-#tag li a {
+#tag a {
   margin: 0 10px;
   font-style: normal;
   font-weight: 200;
-  font-size: 26px;
-  line-height: 26px;
   letter-spacing: 1px;
-  color: #428bca;
+  /*color: #428bca;*/
 }
 
 .onload #tag li {
-  margin-top: 0px;
+  /*margin-top: 0px;*/
 }
 
 #tag .active {
@@ -133,7 +152,7 @@ h3 {
   /*border-top: none;*/
 }
 
-#tag .active a {
+#tag a.active {
   text-decoration: underline;
   /*color: white;*/
 }

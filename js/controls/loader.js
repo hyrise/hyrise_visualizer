@@ -68,6 +68,27 @@ window.addEventListener('load', function() {
 					hyryx.settings.hyrisePath = result.server + ':' + result.hyrisePort;
 				}
 			});
+
+			$('#tag a').on('click', function(event) {
+				event.preventDefault();
+				console.log('link clicked')
+				var $target = $(event.target);
+
+				$('#tag a').removeClass('active');
+            	$target.addClass('active');
+
+				window.location.hash = $target.attr('href').split('#page-')[1];
+			});
+
+			// disable hash change events for now until a proper navigation is implemented to prevent double page events
+			// $(window).on('hashchange', function(event) {
+			// 	console.log('hashchange')
+			// 	var hash = (window.location.hash||'').trim().split('#')[1];
+			// 	if (hash) {
+			// 		hyryx.utils.showScreen(hash);
+			// 	}
+			// });
+
 		}
 	},{
 		load : [

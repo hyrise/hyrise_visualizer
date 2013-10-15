@@ -101,6 +101,7 @@ class Hyrise
 				finalResult['name'] = result['header'].second
 				finalResult['name'][xaxis['column']] = column['column'] if finalResult['name'].include? xaxis["column"]  #replace names like COUNT(xaxis) with COUNT(yaxis)
 				finalResult['query'] = query
+				finalResult['raw'] = result
 			end
 
 			content.push finalResult 

@@ -36,7 +36,6 @@
 			this.createHighChart();
 			this.initializeDragDrop();
 			this.initializeAxisRemoval();
-			this.initializeAxisTitles();
 			this.initializeAxisTypeSelect();
 
 			this.initializeGraphTitle();
@@ -170,20 +169,20 @@
 				xAxis: {
 					id : 'xaxis',
 					title: {
-						text: ''
+						text: ''//x axis'
 					}
 				},
 				yAxis: [{
 					opposite: false,
 					id : 'yaxis',
 					title: {
-						text: 'Values'
+						text: ''//y axis'
 					}
 				}, {
 					opposite: true,
 					id : 'yaxis2',
 					title: {
-						text: ''
+						text: ''//y axis'
 					},
 					showEmpty: false
 				}]
@@ -193,6 +192,7 @@
 		},
 
 		initializeDragDrop : function() {
+			var me = this;
 			//define dropzone for the attributes
 			$(".axisDroppableContainer").droppable({
 				over: function(event, ui){
@@ -202,45 +202,47 @@
 					$(this).find('.drop-hint.zone').removeClass("over");
 				},
 				drop: function(event, ui) {
-					// if no attribute is present
-					if (!$(this).find('.list-group-item')[0]) {
-						$(this).append($(ui.draggable).clone());
-						helpers.reloadData();
-					} else {
-						$(this).find('.list-group-item').remove();
-						$(this).append($(ui.draggable).clone());
-						helpers.reloadData();
-						// if (jQuery(this).hasClass('xAxis')) {
-						//     // WTF -- copied
-						//     jQuery(this).children('.column').each( function() {
-						//         removeSeriesWithColumn(jQuery(this).data('id'), 'x');
-						//         jQuery(this).remove();
-						//     });
-						// }
-						// // check for identical types of columns
-						// if ((jQuery(ui.draggable).data("type") < 2 && jQuery(this).children('[data-id="2"]').length == 0) ||
-						//     (jQuery(ui.draggable).data("type") == 2 && jQuery(this).children('[data-id="1"]').length == 0 && jQuery(this).children('[data-id="0"]').length == 0)) {  
-						//     jQuery(this).append(jQuery(ui.draggable).clone());
-						//     reloadData();
-						// } else {
-						//     alert('You can only add columns of either number or string type at the same time');
-						// }
-					}
-					
-					// if (jQuery(this).children('[data-id="' + jQuery(ui.draggable).data("id") + '"]').length <= 0) { //no column twice
-					//     if (jQuery(this).hasClass('xAxis')) {
-					//         jQuery(this).children('.column').each( function() {
-					//             removeSeriesWithColumn(jQuery(this).data('id'), 'x');
-					//             jQuery(this).remove();
-					//         });
-					//     }
-					//     if ((jQuery(ui.draggable).data("type") < 2 && jQuery(this).children('[data-id="2"]').length == 0) || (jQuery(ui.draggable).data("type") == 2 && jQuery(this).children('[data-id="1"]').length == 0 && jQuery(this).children('[data-id="0"]').length == 0)) {  
-					//         jQuery(this).append(jQuery(ui.draggable).clone());
-					//         reloadData();
-					//     } else {
-					//         alert('You can only add columns of either number or string type at the same time');
-					//     }
-					// }
+					// remove existing axis binding
+					$(this).find('.list-group-item').remove();
+					// add new axis binding
+					$(this).append($(ui.draggable).clone());
+
+					$(this).find('.axisTypeSelect button').tipsy({
+						gravity : 'w',
+						title : function() { return 'Axis type'; }
+					});
+
+					$(this).find('.popoverToggle').tipsy({
+						gravity: 'w',
+						offset:0,
+						// fade:true,
+						title: function() { return 'Aggregations and filters'; }
+					});
+
+					$(this).find('.close').tipsy({
+						gravity : 'w',
+						title : function() { return 'Remove axis'; }
+					});
+
+					var toggle = $(this).find('.popoverToggle'),
+						min = toggle.data('min'),
+						max = toggle.data('max');
+							
+
+					new hyryx.screen.popover({
+						container: $(this),
+						placement: 'right',
+						title: 'Options',
+						target : toggle,
+						enableButtons : false,
+						content: '', //me.createForm(toggle.data('type'), min, max),
+
+						showClb : function(form) {
+							me.createForm($(this), form.contents('.popover-content'), toggle);
+						}.bind(this)
+					});
+
+					helpers.reloadData();
 					$(this).find('.drop-hint.zone').removeClass("over");
 				}
 			});
@@ -259,6 +261,98 @@
 						helpers.reloadData();
 					}
 					jQuery(this).removeClass("hoverDroppable");
+				}
+			});
+		},
+
+		createForm : function(axis, target, toggle) {
+
+			var $form = $('<form class="form">'),
+				type = toggle.data('type'),
+				min = toggle.data('min'),
+				max = toggle.data('max');
+
+			$form.append('<div class="control-group aggregationControls">'+
+						'<label class="control-label" for="aggregationSelect">Aggregation</label>'+
+						
+						'<select class="selectpicker aggrSelect show-tick">' +
+							('none count average sum'.split(' ')).map(function(type) {
+								return '<option value="'+type+'">'+type.capitalize()+'</option>';
+							}).join('')+
+						'</select>'+					
+					'</div>');
+					
+			$form.append('<div class="control-group typeControls">'+
+						'<label class="control-label" for="chartTypeSelect">Type</label>'+
+						'<select class="selectpicker typeSelect show-tick">' +
+							('line spline bar column area areaspline scatter pie'.split(' ')).map(function(type) {
+								return '<option value="'+type+'">'+type.capitalize()+'</option>';
+							}).join('')+
+						'</select>'+
+					'</div>');
+					
+			if (Number(type) < 2) {
+				$form.append('<div class="control-group rangeControls">'+
+							'<label class="control-label" for="valueRangeSlider">Value range:</label>'+
+							// '<div class="form-group">'+
+								'<div class="valueRangeSlider col-md-offset-1 col-md-10"></div>'+
+								'<div class="col-md-6 text-left">'+min+'</div>'+
+								'<div class="col-md-6 text-right">'+max+'</div>'+
+							// '</div>'+
+						'</div>');
+			} 
+
+			// initialize select picker plugin
+			// $form.find('.selectpicker').selectpicker();
+
+			target.html($form);
+
+			this.registerFormControls(axis, $form, min, max);
+
+		},
+
+		registerFormControls : function(axis, form, min, max) {
+
+			var $li = axis.find('.list-group-item');
+
+			// add listener for aggregation change
+			var aggrSelect = form.find('.aggrSelect').selectpicker();
+			aggrSelect.selectpicker('val', $li.attr('data-aggregation'));
+
+			aggrSelect.on("change", function() {
+				$li.attr('data-aggregation', $(this).val());
+				helpers.reloadData();
+			});
+
+			// add listener for diagram type change
+			var typeSelect = form.find('.typeSelect').selectpicker();
+			typeSelect.selectpicker('val', $li.attr('data-chartType'));
+
+			typeSelect.on('change', function() {
+				$li.attr('data-chartType',$(this).val());
+				helpers.changeChartType({
+					columnId	: $li.data('id'),
+					chartType	: $(this).val(),
+					axis		: axis.attr('id').substring(0,1)
+				});
+			});
+
+			// render slider
+			var lower = $li.attr('data-lower-value');
+			lower = (typeof lower === 'undefined' ? min : lower);
+			
+			var higher = $li.attr('data-higher-value');
+			higher = (typeof higher === 'undefined' ? max : higher);
+			
+			form.find('.valueRangeSlider').slider({
+				min		: min,
+				max		: max,
+				range	: true,
+				values	: [lower, higher],
+				slide : function(e, ui) {
+					$li.attr('data-lower-value', ui.values[0]);
+					$li.attr('data-higher-value', ui.values[1]);
+					helpers.reloadData();
 				}
 			});
 		},
@@ -287,27 +381,6 @@
 				$(this).parent().parent().siblings('.actionSelect').html($(this).text()+'<span class="caret">');
 				helpers.reloadData();
 			});
-		},
-
-		initializeAxisTitles : function() {
-			//change the axis titles
-			$(".axisTitle").bind('input', function() {
-				switch($(this).parents('.axisSettings').attr('id')) {
-					case 'yAxis':
-						chart.yAxis[0].setTitle({text: $(this).val()}); 
-						break;
-					case 'oAxis':
-						chart.yAxis[1].setTitle({text: $(this).val()});
-						break;
-					case 'xAxis':
-						chart.xAxis[0].setTitle({text: $(this).val()});
-						break;
-				}
-			});
-			//initialize axis titles
-			$('.ySettings .axisTitle').val(chart.options.yAxis[0].title.text);
-			$('.oppositeYSettings .axisTitle').val(chart.options.yAxis[1].title.text);
-			$('.xSettings .axisTitle').val(chart.options.xAxis[0].title.text);
 		},
 
 		initializeAxisTypeSelect : function() {
@@ -352,6 +425,8 @@
 			});
 		}
 	});
+
+	var hasPopover = [];
 
 	var helpers = {
 		changeChartType : function(options) {
@@ -432,7 +507,15 @@
 			return filters;
 		},
 
-		registerAxisPopover : function() {
+		registerAxisPopover : function(target) {
+
+			if (hasPopover.indexOf(target) !== -1) {
+				return;
+			}
+			hasPopover.push(target);
+
+			target = $(target);
+
 			var form = [
 				'<div id="set-'+(/*axis.userOptions.id||*/'axis')+'-name" class="form-horizontal">',
 					'<input class="form-control" placeholder="Title" type="text" value="'+/*axis.axisTitle.text+*/'" />',
@@ -443,7 +526,7 @@
 				content : form,
 				placement : 'bottom',
 				container : '#page-explorer',
-				target : $('#highcharts-0 .highcharts-axis text'),
+				target : target,
 				modal : true,
 				applyClb : function(form, target) {
 					var axis = chart.axes.filter(function(ax) {
@@ -488,8 +571,8 @@
 							if (json[0].hasOwnProperty("categories")) {
 								chart.xAxis[0].setCategories(json[0]['categories'], true);
 							}
-							chart.xAxis[0].setTitle({text:xAxis['column']}, true);
-							jQuery('.xSettings .axisTitle').val(xAxis['column']);
+							// chart.xAxis[0].setTitle({text:xAxis['column']}, true);
+							// jQuery('.xSettings .axisTitle').val(xAxis['column']);
 
 							//remove old series from chart
 							while (chart.series.length) {
@@ -511,57 +594,43 @@
 								}, true);
 								//preserve chart type after reload
 								chart.series[chart.series.length-1].update({type:  jQuery('.axisDroppableContainer [data-id="'+json[i]['id']+'"]').attr('data-chartType')});
-							}                    
 
-							me.registerAxisPopover();
+								// add click listener for title field
+								if (chart.yAxis[axis].axisTitle) {
+									var element = chart.yAxis[axis].axisTitle.element;
 
-							// load the simple data table on bottom of page
-							jQuery('.data table').children().each(function(){
-								jQuery(this).remove();
-							});
-
-							var headers = '<tr>'
-							headers += '<th>' + xAxis['column'] + '</th>';
-							jQuery.each(json, function(index,val) {
-								if(val != 'rows')
-									headers = headers + '<th>' + val['name'] + '</th>';
-							});
-							headers += '</tr>';
-
-							jQuery('.data table').append(headers);
-
-							for(var i = 0; i < json[0]['data'].length; i++) {
-								var html = '<tr class="dataTableRow">';
-
-								if (json[0].hasOwnProperty("categories")) {
-									html += '<td>' + json[0]['categories'][i] + '</td>'; 
-
-									jQuery.each(json, function(index,val) {
-										if(val != 'rows')
-											html += '<td>' + val['data'][i] + '</td>';
-									});
-								} else {
-									html += '<td>' + json[0]['data'][i][0] + '</td>';
-
-									jQuery.each(json, function(index,val) {
-										if(val != 'rows')
-											html += '<td>' + val['data'][i][1] + '</td>';
-									});
+									// set initial title of the axis
+									$(element).text(json[i]['name']);
+									helpers.registerAxisPopover(element);
 								}
 
-								html += '</tr>';
-								jQuery('.data table').append(html);
+								// var target = $('#highcharts-0 .highcharts-axis text');
+
+								// add a popover to edit the name of the axis
+								
 							}
+
+							if (chart.xAxis[0].axisTitle) {
+								helpers.registerAxisPopover(chart.xAxis[0].axisTitle.element);	
+							}
+
+							hyryx.explorer.dispatch({
+								type : 'data.reload',
+								options : {
+									all : true,
+									data : json[0].raw
+								}
+							});
 
 							// save created series in global variable
 							loadedSeries = newSeries;
 
 							try {
 								var query = JSON.parse(json[0].query);
-								console.log(query);
+								// console.log(query);
 							
 								if (!$('.btn-debug')[0]) {
-									$('.graph').append('<a class="btn-debug">debug</a>');
+									$('.graph').append('<a class="btn-debug col-md-10"><div>Debug query &raquo;</div></a>');
 								}
 
 								$('.btn-debug').click(function() {
@@ -569,6 +638,7 @@
 										type : 'canvas.loadPlan',
 										options : query
 									});
+									hyryx.utils.showScreen('debug');
 								});
 								
 							} catch (e) {

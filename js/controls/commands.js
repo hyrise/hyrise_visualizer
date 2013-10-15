@@ -325,11 +325,15 @@
 		execute : function() {
 
 			this.field.setValue(this.newValue);
-			this.object[this.id] = this.field.getValue();
+			this.updateObject();
 		},
 
 		rollback : function() {
 			this.field.setValue(this.oldValue);
+			this.updateObject();
+		},
+
+		updateObject : function() {
 			this.object[this.id] = this.field.getValue();
 		}
 	});

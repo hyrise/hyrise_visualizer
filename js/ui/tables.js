@@ -39,96 +39,12 @@
 			return $tables;
 		},
 
-		getAttributeButtonSettings : function(type, min, max) {
-
-			var $form = $('<form class="form">');
-
-			$form.append('<div class="control-group aggregationControls">'+
-						'<label class="control-label" for="aggregationSelect">Aggregation</label>'+
-						
-						'<select class="selectpicker aggrSelect show-tick">' +
-							('none count average sum'.split(' ')).map(function(type) {
-								return '<option value="'+type+'">'+type.capitalize()+'</option>';
-							}).join('')+
-						'</select>'+					
-					'</div>');
-					
-			$form.append('<div class="control-group typeControls">'+
-						'<label class="control-label" for="chartTypeSelect">Type</label>'+
-						'<select class="selectpicker typeSelect show-tick">' +
-							('line spline bar column area areaspline scatter pie'.split(' ')).map(function(type) {
-								return '<option value="'+type+'">'+type.capitalize()+'</option>';
-							}).join('')+
-						'</select>'+
-					'</div>');
-					
-			if (Number(type) < 2) {
-				$form.append('<div class="control-group rangeControls">'+
-							'<label class="control-label" for="valueRangeSlider">Value range:</label>'+
-							// '<div class="form-group">'+
-								'<div class="valueRangeSlider col-md-offset-1 col-md-10"></div>'+
-								'<div class="col-md-6 text-left">'+min+'</div>'+
-								'<div class="col-md-6 text-right">'+max+'</div>'+
-							// '</div>'+
-						'</div>');
-			} 
-			
-			// render select picker
-			$form.find('.selectpicker').selectpicker();
-
-			// registerFormControls($form, min, max);
-
-			return $form;
-		},
-
 		getAttributeButtonMarkup : function(config) {
 			return ['<a class="list-group-item" data-column="'+config.name+'" data-table="'+config.key+'" data-aggregation="none" data-type="'+config.type+'" data-id="'+config.index+'" data-chartType="line">',
-						'<button type="button" class="close removeColumn">×</button>',
+						'<button type="button" class="close removeColumn"></button>',
 						config.name,
 						'<span class="btn btn-default btn-sm popoverToggle" data-type="',config.type,'" data-min="',config.min,'" data-max="',config.max,'"><i class="icon-cog"></i></span>',
 					'</a>'].join('');
-		},
-
-		registerFormControls : function(axis, form, min, max) {
-
-			var $li = axis.find('.list-group-item');
-
-			// add listener for aggregation change
-			form.find('.aggrSelect').on("change", function() {
-				$li.attr('data-aggregation', $(this).val());
-				hyryx.explorer.dispatch('graph.reloadData');
-			});
-			// add listener for diagram type change
-			form.find('.typeSelect').on('change', function() {
-				$li.attr('data-chartType',$(this).val());
-				hyryx.explorer.dispatch({
-					type	: 'graph.changeChartType',
-					options	: {
-						columnId	: $li.data('id'),
-						chartType	: $(this).val(),
-						axis		: axis.attr('id').substring(0,1)
-					}
-				});
-			});
-
-			// render slider
-			var lower = $li.attr('data-lower-value');
-			lower = (typeof lower === 'undefined' ? min : lower);
-			
-			var higher = $li.attr('data-higher-value');
-			higher = (typeof higher === 'undefined' ? max : higher);
-			
-			form.find('.valueRangeSlider').slider({
-				min		: min,
-				max		: max,
-				range	: true,
-				values	: [lower, higher],
-				slide : function(e, ui) {
-					$li.attr('data-lower-value', ui.values[0]);
-					$li.attr('data-higher-value', ui.values[1]);
-					hyryx.explorer.dispatch('graph.reloadData');
-				}
-			});
 		},
 
 		load : function() {
@@ -181,7 +97,6 @@
 							});
 						},
 						stop: function(e, ui) {
-
 							$('.axis').each(function() {
 								if ($(this).find('.list-group-item')[0]) {
 									$(this).find('.drop-hint').hide();
@@ -189,26 +104,6 @@
 								} else {
 									$(this).find('.drop-hint:not(.zone)').show();
 									$(this).find('.drop-hint.zone').hide();
-								}
-							});
-
-							var axis = $(e.toElement);
-							// if dropped onto an axis, hide the axis label and display only the attribute
-							var toggle = axis.find('.popoverToggle'),
-								min = toggle.data('min'),
-								max = toggle.data('max');
-							
-
-							new hyryx.screen.popover({
-								container: axis,
-								placement: 'right',
-								title: 'Options',
-								target : toggle,
-								enableButtons : false,
-								content: me.getAttributeButtonSettings(toggle.data('type'), min, max),
-
-								showClb : function(form) {
-									me.registerFormControls(axis, form, min, max);
 								}
 							});
 						}
