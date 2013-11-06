@@ -13,6 +13,10 @@ class Hyrise
 
 	HYRISE_DEFAULT_URL = URI('http://localhost:5000/')
 
+	def startHyrise
+		return 'test'
+	end
+
 	def loadTable(tablename, tablefile)
 		loadOperator = TableLoadOperator.new
 		loadOperator.setTableName tablename
