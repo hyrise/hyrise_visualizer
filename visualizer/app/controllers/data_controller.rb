@@ -25,6 +25,11 @@ class DataController < ApplicationController
 		render json: results
 	end
 
+	def start_hyrise
+		results = @data.startHyrise()
+		render json: results
+	end
+
 	protected
 
 		def load_data_model
