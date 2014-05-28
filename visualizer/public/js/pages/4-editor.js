@@ -1,5 +1,5 @@
 hyryx.editor = (function() {
-    var StoredProcedureList, Editor;
+    var eventHandlers;
 
     function setup() {
         $.get('js/templates/page_editor.mst', function(template) {
@@ -9,11 +9,10 @@ hyryx.editor = (function() {
             }));
             $('#visualizer #page-editor').append(rendered);
 
-            // create stored procedure list
-            StoredProcedureList = new hyryx.editor.StoredProcedureList(rendered.find('#frame_storedProcedureList'));
-
-            // create editor
-            Editor = new hyryx.editor.Editor(rendered.find('#frame_editor'));
+            this.eventHandlers = {
+                'storedProcedureList': new hyryx.editor.StoredProcedureList(rendered.find('#frame_storedProcedureList')),
+                'editor': new hyryx.editor.Editor(rendered.find('#frame_editor'))
+            };
         });
     }
 
@@ -28,13 +27,8 @@ hyryx.editor = (function() {
             target = config[0],
             command = config[1];
 
-        if (target === 'storedprocedurelist' && StoredProcedureList) {
-            StoredProcedureList.handleEvent({
-                type: command,
-                options: event.options
-            });
-        } else if (target === 'editor' && Editor) {
-            Editor.handleEvent({
+        if (eventHandlers[target]) {
+            eventHandlers[target].handleEvent({
                 type: command,
                 options: event.options
             });
