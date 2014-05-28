@@ -12,7 +12,7 @@
 			return this;
 		}
 
-		hyryx.screen.AbstractUIPlugin.prototype = {
+		hyryx.screen.AbstractCanvasPlugin.prototype = {
 
 			init : function() {
 				console.log('apply abstract canvas plugin logic');
