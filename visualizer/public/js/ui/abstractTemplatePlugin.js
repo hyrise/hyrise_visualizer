@@ -9,6 +9,7 @@
 			if (($(this.targetEl)[0] instanceof Element)) {
 				this.render(function (el) {
 					self.el = el;
+					self.targetEl.append(self.el);
 					self.init();
 				});
 			}

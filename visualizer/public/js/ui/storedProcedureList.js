@@ -1,34 +1,24 @@
 (function() {
 	hyryx.editor.StoredProcedureList = function() {
-		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
+		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
 	}
 
-	hyryx.editor.StoredProcedureList.prototype = extend(hyryx.screen.AbstractUIPlugin, {
+	hyryx.editor.StoredProcedureList.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 		id: hyryx.utils.getID('StoredProcedureList'),
-		frame: $('<div class="col-md-' + 2 + '"></div>'),
 
-		render: function() {
+		render: function(callback) {
 			var self = this;
 			$.get('js/templates/storedProcedureList.mst', function(template) {
 				var rendered = Mustache.render(template, {
 					id: self.id
 				});
-				self.frame.append(rendered);
-				self.frame.on("click", "a.list-group-item", function() {
-					hyryx.editor.dispatch({
-						type: 'editor.load',
-						options: {
-							data: $(this).data('content')
-						}
-					});
-				})
+				callback(rendered)
 			});
-			this.targetEl.append(this.frame);
-			return this.frame;
 		},
 
 		init: function() {
 			$.getJSON('procedures.json', this.updateProcedureList);
+			this.registerEvents();
 		},
 
 		updateProcedureList: function(data) {
@@ -42,6 +32,17 @@
 				});
 				$('.storedProcedureList .list').append(rendered);
 				$('.storedProcedureList .list .collapse.panel-collapse:first').addClass('in');
+			});
+		},
+
+		registerEvents: function() {
+			this.targetEl.on("click", "a.list-group-item", function() {
+				hyryx.editor.dispatch({
+					type: 'editor.load',
+					options: {
+						data: $(this).data('content')
+					}
+				});
 			});
 		}
 	});

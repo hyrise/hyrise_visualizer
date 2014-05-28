@@ -1,16 +1,20 @@
 hyryx.editor = (function() {
-
     var StoredProcedureList, Editor;
 
     function setup() {
-        var $visualizer = $('#visualizer #page-editor').append('<div class="container"><div class="row">');
-        var $fluidLayout = $visualizer.find('.row');
+        $.get('js/templates/page_editor.mst', function(template) {
+            var rendered = $(Mustache.render(template, {
+                width_storedProcedureList: 2,
+                width_editor: 10
+            }));
+            $('#visualizer #page-editor').append(rendered);
 
-        // create stored procedure list
-        StoredProcedureList = new hyryx.editor.StoredProcedureList($fluidLayout);
+            // create stored procedure list
+            StoredProcedureList = new hyryx.editor.StoredProcedureList(rendered.find('#frame_storedProcedureList'));
 
-        // create editor
-        Editor = new hyryx.editor.Editor($fluidLayout);
+            // create editor
+            Editor = new hyryx.editor.Editor(rendered.find('#frame_editor'));
+        });
     }
 
     function dispatch(event) {

@@ -13,13 +13,8 @@
 			$.get('js/templates/editor.mst', function(template) {
 				var rendered = Mustache.render(template, {
 					id: self.id,
-					width: 10,
 					submitbutton: true
 				});
-				self.targetEl.append(rendered);
-				$(self.targetEl).find('a.button-execute').on(
-					'click', self.execute
-				);
 				callback(rendered);
 			});
 		},
@@ -27,10 +22,11 @@
 		/** Instantiate the Canvas and add the editor for the JSON representation */
 		init: function() {
 			this.registerEditor();
+			this.registerEvents();
 		},
 
 		/** Make certain functions accessible for other plugins */
-		handleEvent : function(event) {
+		handleEvent: function(event) {
 			if (event.type === "load") {
 				this.loadContent(event.options.data);
 			}
@@ -51,6 +47,12 @@
 				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true
 			});
+		},
+
+		registerEvents: function() {
+			$(self.targetEl).find('a.button-execute').on(
+				'click', self.execute
+			);
 		},
 
 		loadContent: function(content) {

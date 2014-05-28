@@ -1,4 +1,4 @@
-<div class="screen col-md-{{width}} editor" id="{{id}}"></div>
+<div class="screen editor" id="{{id}}"></div>
 {{#submitbutton}}
 <a class="button-execute">Execute</a>
 {{/submitbutton}}
