@@ -1,14 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Visualizer</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= csrf_meta_tags %>
+ 	<meta charset="utf-8">
+	<meta name='viewport' content="width=device-width, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
+	<title>HYRISE Visualizer</title>
+	<meta name="description" content="">
+
+	<link rel="shortcut eicon" type="image/png" href="/favicon.png?v=2" />
+
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="css/tabs.css">
+
+	<!-- CUSTOM CSS -->
+	<!-- <link rel="stylesheet" href="css/data.css"/> -->
+	<link rel="stylesheet" href="css/hyryx.css"/>
+	<link rel="stylesheet" href="css/page-1.css"/>
+	<link rel="stylesheet" href="css/page-1-attributes.css"/>
+	<link rel="stylesheet" href="css/page-1-graph.css"/>
+	<link rel="stylesheet" href="css/page-2.css"/>
+
+	<style>
+		body {
+			padding: 0px;
+			margin: 0px;
+		}
+	</style>
+
+	<!-- JAVASCRIPT SOURCES -->
+	<script src="js/libs/modernizr.js"></script>
+	<script src="js/controls/loader.js"></script>
+
+	<!-- <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.29.1"></script> -->
 </head>
 <body>
 
 	<%= yield %>
 
-	<%= javascript_include_tag "application" %>
 </body>
 </html>
