@@ -1,6 +1,6 @@
 hyryx.debug = (function() {
     
-    var Stencils, Canvas, Json, Visualization, Result, Attributes;
+    var Stencils, eventHandlers;
 
     function setup() {
         var $visualizer = $('#visualizer #page-debug').append('<div class="container"><div class="row">');
@@ -9,14 +9,11 @@ hyryx.debug = (function() {
         // create stencils container
         Stencils = new hyryx.debug.Stencils($fluidLayout);
 
-        // create canvas
-        Canvas = new hyryx.debug.Canvas($fluidLayout);
-
-        // create attributes container
-        Attributes = new hyryx.debug.Attributes($fluidLayout);
-
-        // Create data container
-        Data = new hyryx.explorer.Data($visualizer);
+        eventHandlers = {
+            'canvas': new hyryx.debug.Canvas($fluidLayout),
+            'attributes': new hyryx.debug.Attributes($fluidLayout),
+            'data': new hyryx.explorer.Data($visualizer)
+        };
     }
 
     function dispatch(event) {
@@ -28,21 +25,11 @@ hyryx.debug = (function() {
         }
         var config = (event.type||'').split('.'), target = config[0], command = config[1];
 
-        if (target === 'canvas' && Canvas) {
-            Canvas.handleEvent({
+        if (eventHandlers[target]) {
+            eventHandlers[target].handleEvent({
                 type    : command,
                 options : event.options
             });
-        } else if (target === 'attributes' && Attributes) {
-            Attributes.handleEvent({
-                type    : command,
-                options : event.options
-            })
-        } else if (target === 'data') {
-            Data.handleEvent({
-                type : command,
-                options : event.options
-            })
         }
     }
 
