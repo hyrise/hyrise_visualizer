@@ -30,7 +30,11 @@
 		},
 
 		/** Make certain functions accessible for other plugins */
-		handleEvent: function(event) {},
+		handleEvent : function(event) {
+			if (event.type === "load") {
+				this.loadContent(event.options.data);
+			}
+		},
 
 		execute: function() {
 			alert('Execute!');
@@ -47,6 +51,10 @@
 				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true
 			});
+		},
+
+		loadContent: function(content) {
+			this.editor.setValue(content);
 		}
 	});
 })();

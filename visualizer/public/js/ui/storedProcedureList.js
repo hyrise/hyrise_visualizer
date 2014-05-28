@@ -14,8 +14,13 @@
 					id: self.id
 				});
 				self.frame.append(rendered);
-				self.frame.on("click", "a.list-group-item", function () {
-					alert($(this).data('content'));
+				self.frame.on("click", "a.list-group-item", function() {
+					hyryx.editor.dispatch({
+						type: 'editor.load',
+						options: {
+							data: $(this).data('content')
+						}
+					});
 				})
 			});
 			this.targetEl.append(this.frame);
