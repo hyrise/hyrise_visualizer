@@ -554,7 +554,7 @@
 				var me = this;
 
 				jQuery.ajax({
-					url: hyryx.settings.railsPath + '/getContentForSeries',
+					url: _BASE_URL + 'getContentForSeries',
 					type: "POST",
 					data: {series: newSeries, xaxis: xAxis, filters: filters},
 					dataType: "json",

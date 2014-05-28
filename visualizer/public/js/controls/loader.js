@@ -1,5 +1,4 @@
 var hyryx = {
-	settings	: {},
 	images		: {},
 	stencils	: {}
 };
@@ -8,8 +7,6 @@ window.addEventListener('load', function() {
 
 	var hyryxProto = document.getElementById('hyryx-proto'),
 		rect = hyryxProto.getBoundingClientRect();
-
-	hyryx.settings.hyryxSize = rect.width;
 
 	Modernizr.addTest('standalone', function() {
 		return (window.navigator.standalone != false);
@@ -60,16 +57,6 @@ window.addEventListener('load', function() {
 
 		// load server config
 		complete : function() {
-			d3.json('config.json', function(error, result) {
-				if (error) {
-					alert('Couldn\'t load server configuration');
-				} else {
-					hyryx.settings.server = result.server;
-					hyryx.settings.railsPath =  result.server + ':' + result.railsPort;
-					hyryx.settings.hyrisePath = result.server + ':' + result.hyrisePort;
-				}
-			});
-
 			$('#tag a').on('click', function(event) {
 				event.preventDefault();
 				console.log('link clicked')

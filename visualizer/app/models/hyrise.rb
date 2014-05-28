@@ -11,8 +11,6 @@ require 'operators/sortscan.rb'
 
 class Hyrise
 
-	HYRISE_DEFAULT_URL = URI('http://localhost:5000/')
-
 	def startHyrise
 		return 'test'
 	end
@@ -116,7 +114,9 @@ class Hyrise
 
 	protected
 
-		def executeQuery(query, url = HYRISE_DEFAULT_URL)
+		def executeQuery(query)
+			url = URI(Visualizer::Application.config.hyrise["database"]["server"])
+
 			req = Net::HTTP::Post.new(url.path)
 			req.set_form_data({:query=> query, :limit => 0})
 

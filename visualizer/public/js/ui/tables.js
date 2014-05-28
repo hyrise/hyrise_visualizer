@@ -50,7 +50,7 @@
 		load : function() {
 			var me = this;
 
-			$.ajax(hyryx.settings.railsPath + '/tables', {
+			$.ajax(_BASE_URL + 'tables', {
 				success : function(r) {
 					$('.tables .list').html('');
 
@@ -121,7 +121,7 @@
 
 			if (table && file) {
 				$.ajax({
-					url: hyryx.settings.railsPath + '/loadTable',
+					url: _BASE_URL + 'loadTable',
 					type: "POST",
 					data: {
 						table: table,
