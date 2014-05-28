@@ -82,6 +82,7 @@
 
 				var request = this.getSerializedQuery();
 				
+				/*
 				$.ajax({
 					url : hyryx.settings.hyrisePath + '/jsonQuery',
 					type : 'POST',
@@ -101,11 +102,12 @@
 									data : data
 								}
 							});
-					}
+						}
 
 						// $('.execution-preview')
 					}.bind(this)
 				});
+				*/
 
 			}.bind(this));
 
