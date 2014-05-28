@@ -2,7 +2,7 @@
 	// Extend the standard ui plugin
 	hyryx.editor.Editor = function() {
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
-	}
+	};
 
 	hyryx.editor.Editor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 		id: hyryx.utils.getID('Editor'),
@@ -13,9 +13,13 @@
 			$.get('js/templates/editor.mst', function(template) {
 				var rendered = Mustache.render(template, {
 					id: self.id,
-					width: 10
+					width: 10,
+					submitbutton: true
 				});
 				self.targetEl.append(rendered);
+				$(self.targetEl).find('a.button-execute').on(
+					'click', self.execute
+				);
 				callback(rendered);
 			});
 		},
@@ -27,6 +31,10 @@
 
 		/** Make certain functions accessible for other plugins */
 		handleEvent: function(event) {},
+
+		execute: function() {
+			alert('Execute!');
+		},
 
 		registerEditor: function() {
 			this.editor = CodeMirror(document.getElementById(this.id), {
