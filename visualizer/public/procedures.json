@@ -1,0 +1,12 @@
+{
+	"procedures": [{
+		"name": "Procedure1",
+		"content": "function(){\nconsole.log('Procedure1')\n}"
+	}, {
+		"name": "Procedure2",
+		"content": "function(){\nconsole.log('Procedure2')\n}"
+	}, {
+		"name": "Procedure3",
+		"content": "function(){\nconsole.log('Procedure3')\n}"
+	}]
+}

@@ -1,0 +1,9 @@
+<div class="storedProcedureList" id="{{id}}">
+	<h3>Procedures</h3>
+	<div class="panel-group list">
+	</div>
+	<div>
+		<button class="btn btn-default">Save</button>
+		<button class="btn btn-default">Load</button>
+	</div>
+</div>
