@@ -134,7 +134,6 @@ class Hyrise
 		    response_body = response.body
 		    json = JSON.parse(response_body)
 
-		    jj json
 		    json
 		end
 
