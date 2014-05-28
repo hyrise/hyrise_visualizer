@@ -13,7 +13,29 @@ hyryx.editor = (function() {
         Editor = new hyryx.editor.Editor($fluidLayout);
     }
 
-    function dispatch(event) {}
+    function dispatch(event) {
+        if ('string' === typeof event) {
+            event = {
+                type : event,
+                options : {}
+            };
+        }
+        var config = (event.type||'').split('.'),
+            target = config[0],
+            command = config[1];
+
+        if (target === 'storedprocedurelist' && StoredProcedureList) {
+            Canvas.handleEvent({
+                type    : command,
+                options : event.options
+            });
+        } else if (target === 'editor' && Editor) {
+            Attributes.handleEvent({
+                type    : command,
+                options : event.options
+            });
+        }
+    }
 
     return {
         setup : setup,
