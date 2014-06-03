@@ -8,7 +8,7 @@
 
 		render: function(callback) {
 			var self = this;
-			$.get('js/templates/storedProcedureList.mst', function(template) {
+			$.get('templates/storedProcedureList.mst', function(template) {
 				var rendered = Mustache.render(template, {
 					id: self.id
 				});
@@ -24,7 +24,7 @@
 		updateProcedureList: function(data) {
 			$('.storedProcedureList .list').html('');
 
-			$.get('js/templates/storedProcedureList_content.mst', function(template) {
+			$.get('templates/storedProcedureList_content.mst', function(template) {
 				var rendered = Mustache.render(template, {
 					procedures: data.procedures
 				});

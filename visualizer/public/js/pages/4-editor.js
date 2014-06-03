@@ -2,7 +2,7 @@ hyryx.editor = (function() {
     var eventHandlers;
 
     function setup() {
-        $.get('js/templates/page_editor.mst', function(template) {
+        $.get('templates/page_editor.mst', function(template) {
             var rendered = $(Mustache.render(template, {
                 width_storedProcedureList: 3,
                 width_editor: 9

@@ -10,7 +10,7 @@
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render: function(callback) {
 			var self = this;
-			$.get('js/templates/editor.mst', function(template) {
+			$.get('templates/editor.mst', function(template) {
 				var rendered = Mustache.render(template, {
 					id: self.id,
 					submitbutton: true
