@@ -9,7 +9,7 @@ hyryx.explorer = (function() {
 		var $visualizer = $('#visualizer #page-explorer').append('<div class="container"><div class="row">');
 		var $fluidLayout = $visualizer.find('.row');
 
-		this.eventHandlers = {
+		eventHandlers = {
 			'attributes': new hyryx.explorer.Attributes($fluidLayout),
 			'graph': new hyryx.explorer.Graph($fluidLayout),
 			'data': new hyryx.explorer.Data($visualizer)

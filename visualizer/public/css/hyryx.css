@@ -1,12 +1,50 @@
 body, html {
   font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #2C2C2C;
+  background: #E0E0E0;
 }
 
-html {
+/*html {
   height: 100%;
   width: 100%;
-  /*overflow: hidden;*/
+  overflow: hidden;
+}*/
+
+header {
+  border-bottom: 1px solid #CCC;
+}
+
+footer {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-top: 50px;
+  color: #777;
+  text-align: center;
+}
+
+.navbar-nav li a {
+  margin: 0px 4px;
+}
+
+.navbar-nav li a {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  border-radius: 4px;
+}
+
+.navbar-nav li a:hover {
+  background-color: #ccc;
+}
+
+.navbar-nav li.active a {
+  background-color: #2A5E8C;
+  color: #FFFFFF;
+}
+
+.navbar-toggle .icon-bar {
+  background-color: #2A5E8C;
 }
 
 body {
@@ -34,22 +72,30 @@ body {
 }
 
 div.logo {
-  background-image: url(../skyline.png);
-  background-size: cover;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  height: 36px;
-  background-position: 0 0px;
+  background-color: #2A5E8C;
+  height: 44px;
   width: 176px;
-  padding-top: 14px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  float: left;
+  margin-top: -8px;
+  margin-bottom: -18px;
   opacity: 1;
-  -webkit-transition: background-position 1000ms, opacity 1000ms;
+}
+
+div.logo {
+  -webkit-mask-image: url(../skyline.png);
+  -webkit-mask-size: cover;
+  -webkit-mask-position: 0 38px;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-transition: -webkit-mask-position 1000ms, opacity 1000ms;
+}
+
+div.logo + span {
+  padding-left: 183px;
+  display: block;
 }
 
 .onload div.logo {
-  background-position: 0 -6px;
+  -webkit-mask-position: 0 0px;
   opacity: 1;
 }
 
@@ -192,15 +238,51 @@ a:hover {
 }
 
 #visualizer {
+  min-height: 100%;
+/*  height: auto !important;*/
   height: 100%;
-  background: #F2F2F2;
+/*  background: #F2F2F2;*/
+  margin: -50px auto -174px;
 }
 
 #visualizer > .container {
-  height: 100%;
-  box-shadow: 0px 0 15px -5px;
-  background: white;
+/*  height: 100%;
+  box-shadow: 0px 0 15px -5px;*/
+/*  background: white;*/
   position: relative;
+  margin-top: 60px;
+}
+
+#visualizer > .container .row {
+/*  display: table-row;*/
+}
+
+#visualizer > .container div[class^="col-"] {
+/*  margin-left: 0;
+  margin-right: 0;
+  height: 300px;
+  margin: 0 -8px;
+  padding: 0 8px;*/
+    /*display: table-row;*/
+
+}
+
+#visualizer > .container div[class^="col-"] .area_frame {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: none;
+  padding: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+#visualizer > .container div[class^="col-"] .area_frame h3 {
+  margin-top: 4px;
+}
+
+#visualizer > .container div[class^="col-"] .area_frame.no_padding {
+  padding: 0;
 }
 
 .white-header {

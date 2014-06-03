@@ -79,9 +79,11 @@
 				theme: 'custom',
 				lint: true,
 				gutters: ['CodeMirror-lint-markers'],
-				lineNumbers: true
+				lineNumbers: true,
+				minHeight: 500
 			});
 			this.generation = 0;
+			this.editor.setSize(null, 500);
 		},
 
 		registerEvents: function() {

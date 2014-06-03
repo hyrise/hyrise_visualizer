@@ -7,10 +7,10 @@
 	-webkit-user-drag: element;
 }
 
-.list-group-item {
+/*.list-group-item {
 	cursor: move;
 	opacity: 1;
-}
+}*/
 
 text.emptytext {
     display: none;

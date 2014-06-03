@@ -4,12 +4,12 @@ hyryx.editor = (function() {
     function setup() {
         $.get('js/templates/page_editor.mst', function(template) {
             var rendered = $(Mustache.render(template, {
-                width_storedProcedureList: 2,
-                width_editor: 10
+                width_storedProcedureList: 3,
+                width_editor: 9
             }));
             $('#visualizer #page-editor').append(rendered);
 
-            this.eventHandlers = {
+            eventHandlers = {
                 'storedProcedureList': new hyryx.editor.StoredProcedureList(rendered.find('#frame_storedProcedureList')),
                 'editor': new hyryx.editor.Editor(rendered.find('#frame_editor'))
             };

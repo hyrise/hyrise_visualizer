@@ -1,9 +1,13 @@
-<div class="storedProcedureList" id="{{id}}">
-	<h3>Procedures</h3>
-	<div class="panel-group list">
-	</div>
-	<div>
-		<button class="btn btn-default">Save</button>
-		<button class="btn btn-default">Load</button>
+<div class="area_frame">
+	<div class="storedProcedureList" id="{{id}}">
+		<h3>Procedures</h3>
+		<div class="panel-group list">
+		</div>
+		<div class="input-group">
+			<input type="text" class="form-control">
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button">Save</button>
+			</span>
+		</div>
 	</div>
 </div>

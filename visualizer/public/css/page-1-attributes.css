@@ -44,7 +44,7 @@
   font-size: 24px;
 }
 
-.list .list-group-item {
+/*.list .list-group-item {
   list-style: none;
   border-bottom: 1px solid #eee;
   padding: 5px;
@@ -55,7 +55,7 @@
 .list .list-group-item:last-child {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-}
+}*/
 
 .list .panel-heading {
   padding: 0;

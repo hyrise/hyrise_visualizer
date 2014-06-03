@@ -1,15 +1,7 @@
-<div class="panel panel-default">
-	<div class="panel-heading">
-		<h4 class="panel-title">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent=".{{parent}} .list" href="#collapse-{{header}}">
-			{{header}}
-		</h4>
-	</div>
-	<div id="collapse-{{header}}" class="panel-collapse collapse list-group">
-		{{#procedures}}
-		<a class="list-group-item" data-content="{{content}}">
-			{{name}}
-		</a>
-		{{/procedures}}
-	</div>
+<div class="list-group">
+	{{#procedures}}
+	<a class="list-group-item" data-content="{{content}}">
+		{{name}}
+	</a>
+	{{/procedures}}
 </div>

@@ -26,8 +26,6 @@
 
 			$.get('js/templates/storedProcedureList_content.mst', function(template) {
 				var rendered = Mustache.render(template, {
-					header: 'Operations',
-					parent: 'storedProcedureList',
 					procedures: data.procedures
 				});
 				$('.storedProcedureList .list').append(rendered);

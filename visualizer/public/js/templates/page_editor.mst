@@ -1,5 +1,5 @@
-<div class="container">
-	<div class="row">
+<div>
+	<div class="row equal">
 		<div id="frame_storedProcedureList" class="col-md-{{width_storedProcedureList}}"></div>
 		<div id="frame_editor" class="col-md-{{width_editor}}"></div>
 	</div>
