@@ -1,0 +1,9 @@
+<div>
+	<div class="row equal">
+		<div id="frame_attributes" class="col-md-{{width_attributes}}"></div>
+		<div id="frame_graph" class="col-md-{{width_graph}}"></div>
+	</div>
+	<div class="row equal">
+		<div id="frame_data" class="col-md-{{width_data}}"></div>
+	</div>
+</div>

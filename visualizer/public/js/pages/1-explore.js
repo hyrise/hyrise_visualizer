@@ -1,21 +1,27 @@
 hyryx.explorer = (function() {
-    var eventHandlers;
+	var eventHandlers;
 
 	function setup() {
 		$(document).bind('touchmove', function(event) {
 			event.preventDefault();
-		})
+		});
 
-		var $visualizer = $('#visualizer #page-explorer').append('<div class="container"><div class="row">');
-		var $fluidLayout = $visualizer.find('.row');
+		$.get('templates/page_explore.mst', function(template) {
+			var rendered = $(Mustache.render(template, {
+				width_attributes: 3,
+				width_graph: 9,
+				width_data: 12
+			}));
+			$('#visualizer #page-explorer').append(rendered);
 
-		eventHandlers = {
-			'attributes': new hyryx.explorer.Attributes($fluidLayout),
-			'graph': new hyryx.explorer.Graph($fluidLayout),
-			'data': new hyryx.explorer.Data($visualizer)
-		};
+			eventHandlers = {
+				'attributes': new hyryx.explorer.Attributes(rendered.find('#frame_attributes')),
+				'graph': new hyryx.explorer.Graph(rendered.find('#frame_graph')),
+				'data': new hyryx.explorer.Data(rendered.find('#frame_data'))
+			};
 
-		initUIElements();
+			initUIElements();
+		});
 	}
 
 	function initUIElements() {
@@ -23,24 +29,24 @@ hyryx.explorer = (function() {
 		$('.selectpicker').selectpicker();
 	}
 
-    function dispatch(event) {
-        if ('string' === typeof event) {
-            event = {
-                type: event,
-                options: {}
-            };
-        }
-        var config = (event.type || '').split('.'),
-            target = config[0],
-            command = config[1];
+	function dispatch(event) {
+		if ('string' === typeof event) {
+			event = {
+				type: event,
+				options: {}
+			};
+		}
+		var config = (event.type || '').split('.'),
+			target = config[0],
+			command = config[1];
 
-        if (eventHandlers[target]) {
-            eventHandlers[target].handleEvent({
-                type    : command,
-                options : event.options
-            });
-        }
-    }
+		if (eventHandlers[target]) {
+			eventHandlers[target].handleEvent({
+				type    : command,
+				options : event.options
+			});
+		}
+	}
 
 	return {
 		setup: setup,

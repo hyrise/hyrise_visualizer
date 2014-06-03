@@ -16,7 +16,7 @@
 		render : function() {
 			this.id = hyryx.utils.getID('Graph');
 			// Add graph options
-			var $graphOptions = this.targetEl.append('<div id="'+this.id+'" class="graph col-md-10">').find('.graph');
+			var $graphOptions = this.targetEl.append('<div class="area_frame no_padding"><div id="'+this.id+'" class="graph col-md-10">').find('.graph');
 
 			this.addDescription($graphOptions);
 			// createGlobalFilterMarkup($graphOptions);

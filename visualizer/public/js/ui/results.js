@@ -6,16 +6,17 @@
 	hyryx.explorer.Data.prototype = extend(hyryx.screen.AbstractUIPlugin, {
 
 		render: function() {
-			
+
 			this.table = this.createDataContainerMarkup();
 			return this.table;
 		},
 
 		createDataContainerMarkup : function() {
 			this.id = hyryx.utils.getID('Data');
+			var frame = $('<div class="area_frame"></div>').appendTo(this.targetEl);
 			var $div = jQuery('<div class="data" id="'+this.id+'"><h3>Retrieved Data</h3></div>');
 			jQuery('<table width="100%" class="table table-condensed table-striped table-responsive"></table>').appendTo($div);
-			$div.appendTo(this.targetEl);
+			$div.appendTo(frame);
 
 			return $div;
 		},
@@ -52,7 +53,7 @@
 				}).join('</tr><tr>') + '</tr></tbody>';
 
 				container.append(body);
-				
+
 			}
 		}
 	});
