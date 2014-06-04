@@ -279,6 +279,33 @@ a:hover {
   padding: 0;
 }
 
+div.storedProcedureList .list {
+  max-height: 392px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+div.storedProcedureList .list .list-group {
+  margin: 0;
+}
+
+div.storedProcedureList .list .list-group-item {
+  border: none;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+div.storedProcedureList .list .list-group-item:first-child {
+  border-top: none
+}
+
+div.storedProcedureList .list .list-group-item:last-child {
+  border-bottom: none
+}
+
+
 .row.equal-500 .area_frame {
   height: 500px;
 }

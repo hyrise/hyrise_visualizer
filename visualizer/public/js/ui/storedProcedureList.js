@@ -26,11 +26,12 @@
 			$('.storedProcedureList .list').html('');
 
 			$.get('templates/storedProcedureList_content.mst', function(template) {
-				var rendered = Mustache.render(template, {
-					procedures: data.procedures
+				hyryx.ProcedureStore.get().done(function(procedures) {
+					var rendered = Mustache.render(template, {
+						procedures: procedures
+					});
+					$('.storedProcedureList .list').html(rendered);
 				});
-				$('.storedProcedureList .list').append(rendered);
-				$('.storedProcedureList .list .collapse.panel-collapse:first').addClass('in');
 			});
 		},
 

@@ -1,7 +1,7 @@
 <div class="list-group">
 	{{#procedures}}
-	<a class="list-group-item" data-content="{{content}}">
-		{{name}}
+	<a class="list-group-item" data-name="{{.}}">
+		{{.}}
 	</a>
 	{{/procedures}}
 </div>
