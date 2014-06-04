@@ -56,6 +56,14 @@ window.addEventListener('load', function() {
 
 		// load server config
 		complete : function() {
+			d3.json('config.json', function(error, result) {
+				if (error) {
+					alert('Could not load server configuration');
+				} else {
+					hyryx.settings = result;
+				}
+			});
+
 			$('#tag a').on('click', function(event) {
 				event.preventDefault();
 				console.log('link clicked')
