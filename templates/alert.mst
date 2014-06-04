@@ -1,0 +1,8 @@
+<div class="alert alert-{{type}}">
+	{{#strong}}
+		<strong>
+			{{strong}}
+		</strong>
+	{{/strong}}
+	{{message}}
+</div>

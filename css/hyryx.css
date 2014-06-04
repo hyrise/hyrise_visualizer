@@ -319,3 +319,50 @@ div.storedProcedureList .list .list-group-item:last-child {
   left: 200px;
   right: 0;
 }
+
+/******  alerts on top of page  *********/
+
+.alerts {
+  position: absolute;
+  z-index: 1000;
+  left: 50%;
+  width: 450px;
+  margin-left: -225px;
+}
+
+.alert {
+  position: relative;
+  padding: 8px 10px;
+  margin: 7px 4px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-animation: alert 0.5s ease forwards;
+   -moz-animation: alert 0.5s ease forwards;
+    -ms-animation: alert 0.5s ease forwards;
+     -o-animation: alert 0.5s ease forwards;
+        animation: alert 0.5s ease forwards;
+}
+
+/* Animation */
+
+@-webkit-keyframes alert {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@-moz-keyframes alert {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@-ms-keyframes alert {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@-o-keyframes alert {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@keyframes alert {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
