@@ -2,7 +2,7 @@
 
 	function request(data) {
 		return $.ajax({
-			url : hyryx.settings.database + '/JSProcedure',
+			url : hyryx.settings.database + '/JSProcedure/',
 			type : 'POST',
 			dataType: 'json',
 			data : "procedure=" + JSON.stringify(data)
