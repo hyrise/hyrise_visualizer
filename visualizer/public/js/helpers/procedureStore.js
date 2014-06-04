@@ -1,10 +1,12 @@
 (function() {
 
-	function request(data) {
+	function request(data, dataType) {
+		if (dataType === undefined)
+			dataType = 'json';
 		return $.ajax({
 			url : hyryx.settings.database + '/JSProcedure/',
 			type : 'POST',
-			dataType: 'json',
+			dataType: dataType,
 			data: "procedure=" + encodeURIComponent(JSON.stringify(data))
 		});
 	}
@@ -34,7 +36,7 @@
 				action: 'create',
 				procedureName: procedureName,
 				procedureSource: procedureSource
-			});
+			}, 'text');
 		},
 
 		execute:  function(procedureName) {
