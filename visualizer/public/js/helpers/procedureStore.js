@@ -7,7 +7,7 @@
 			url : hyryx.settings.database + '/JSProcedure/',
 			type : 'POST',
 			dataType: dataType,
-			data: "procedure=" + encodeURIComponent(JSON.stringify(data))
+			data: {procedure: JSON.stringify(data)}
 		});
 	}
 
