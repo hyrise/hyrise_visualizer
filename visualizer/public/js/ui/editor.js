@@ -42,13 +42,13 @@
 
 				var code = this.editor.getValue();
 				$.ajax({
-					url : hyryx.settings.database + '/jsprocedure',
+					url : hyryx.settings.database + '/JSProcedure',
 					type : 'POST',
 					dataType: 'json',
-					data : {
-						action: 'executeDirect',
-						source: code
-					}
+					data : "procedure=" + JSON.stringify({
+						action: 'execute',
+						procedureSource: code
+					})
 				}).done(function(data) {
 					if (data.error) {
 						console.error("Error executing procedure:" + data.error);
