@@ -18,7 +18,7 @@
 		},
 
 		init: function() {
-			$.getJSON('procedures.json', this.updateProcedureList);
+			this.updateProcedureList();
 			this.registerEvents();
 		},
 
