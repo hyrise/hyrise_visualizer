@@ -42,7 +42,7 @@
 
 				var code = this.editor.getValue();
 				$.ajax({
-					url : hyryx.settings.hyrisePath + '/jsprocedure',
+					url : hyryx.settings.database + '/jsprocedure',
 					type : 'POST',
 					dataType: 'json',
 					data : {
@@ -63,7 +63,7 @@
 						});
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown ) {
-					console.log("Couldn't post/execute jsprocedure: " + textStatus);
+					console.log("Couldn't post/execute jsprocedure: " + textStatus + errorThrown);
 				});
 			} else {
 				console.log("Nothing changed - nothing to do");
