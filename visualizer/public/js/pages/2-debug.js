@@ -5,7 +5,7 @@ hyryx.debug = (function() {
         var $visualizer = $('#visualizer #page-debug').append('<div class="container"><div class="row">');
         var $fluidLayout = $visualizer.find('.row');
 
-        this.eventHandlers = {
+        eventHandlers = {
             'stencil': new hyryx.debug.Stencils($fluidLayout),
             'canvas': new hyryx.debug.Canvas($fluidLayout),
             'attributes': new hyryx.debug.Attributes($fluidLayout),
@@ -18,7 +18,7 @@ hyryx.debug = (function() {
             event = {
                 type: event,
                 options: {}
-            }
+            };
         }
         var config = (event.type || '').split('.'),
             target = config[0],
