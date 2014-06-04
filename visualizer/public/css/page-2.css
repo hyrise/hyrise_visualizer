@@ -7,10 +7,10 @@
 	-webkit-user-drag: element;
 }
 
-/*.list-group-item {
+div.stencils .list-group-item {
 	cursor: move;
 	opacity: 1;
-}*/
+}
 
 text.emptytext {
     display: none;
@@ -32,7 +32,7 @@ rect.selection {
 }
 
 g.node circle {
-    stroke  : gray;            
+    stroke  : gray;
 }
 
 g.node circle.inner {
@@ -133,7 +133,6 @@ g.edge.selected circle.point {
 g.edge:not( .selected).hover *,
 path.dragline {
     display         : inline;
-    
 }
 
 
@@ -149,11 +148,6 @@ path.dragline {
 
 path.dragline.hidden {
     stroke-width: 0;
-}
-
-svg.stencilgraph {
-    border : 1px solid #ccc;
-    padding: 0;
 }
 
     /* disable text selection */
@@ -173,73 +167,22 @@ svg *::-webkit-selection {
     height: 400px;
     display: none;
     padding: 0;
-    overflow: auto;
-    border: 1px solid #cccccc;
 }
 
 .json-container .CodeMirror {
     height: 100%;
 }
 
-#page-debug .canvas {
-    margin-top: 5px;
-}
 
 .canvas-controls {
-    padding: 0;
-    margin-top: 10px;
-    /*margin-left: -8.333333333333332%;*/
+    position: absolute;
+    bottom: 24px;
+    right: 23px;
+    z-index: 2000;
 }
 
-.canvas-controls .button-execute {
-    display: inline-block;
-    text-align: center;
-    font-weight: 100;
-    font-style: normal;
-    text-decoration: none;
-    background: #010626;
-    color: #f2f2f2;
-    padding: 5px 10px;
-    border: 1px solid transparent;
-    transition: background-color 200ms;
-    -webkit-transition: background-color 200ms;
-    float: left;
-    margin-left: 10px;
-}
-
-.canvas-controls .button-execute:hover {
-    background: #2A5E8C;
-    cursor: pointer;
-}
-
-.canvas-controls ul {
-    padding : 0;
-    float: left;
-}
-
-.canvas-controls ul li {
-    display: block;
-    text-align: center;
-    font-weight: 100;
-    font-style: normal;
-    float: left;
-    background: #010626;
-    color: #f2f2f2;
-    padding: 5px 10px;
-    border: 1px solid transparent;
-    transition: background-color 200ms;
-    -webkit-transition: background-color 200ms;
-}
-
-.canvas-controls ul li.hover {
-    background: #2A5E8C;
-    cursor: pointer;
-}
-
-.canvas-controls ul li.active {
-    background: white;
-    border: 1px solid #010626;
-    color: #010626;
+.canvas-controls .btn-group{
+    padding: 0px 8px;
 }
 
 .attributes .form fieldset {
@@ -259,7 +202,6 @@ svg *::-webkit-selection {
 */
 .attributes {
     display: none;
-    margin-left: -15px;
 }
 
 .attributes .form .valuelist {

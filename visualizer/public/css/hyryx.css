@@ -285,6 +285,10 @@ a:hover {
   padding: 0;
 }
 
+.row.equal-500 .area_frame {
+  height: 500px;
+}
+
 .white-header {
   width: 400px;
   height: 40px;

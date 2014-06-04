@@ -9,13 +9,13 @@
 
 		this.isActiveScreen = false;
 		this.id = hyryx.utils.getID('Canvas');
-		
+
 		this.el = this.render();
 		this.init();
 		return this;
 	}
 
-	height = 400;
+	height = 500;
 
 	hyryx.screen.CanvasScreen.prototype = {
 
@@ -34,7 +34,7 @@
 		},
 
 		render : function() {
-			var markup = $('<div class="col-md-'+this.width+' '+this.cls+'" id="'+this.id+'">');
+			var markup = $('<div class="'+this.cls+'" id="'+this.id+'">');
 
 			this.targetEl.append(markup);
 
@@ -50,21 +50,21 @@
 			me = this;
 
 			radius = 40;
-			outerHeight = 400;
+			outerHeight = 500;
 
 			var container = d3.select(this.el[0]).append('div')
 				.attr({
-					'class' : 'canvas-scroll col-md-10',
+					'class' : 'canvas-scroll',
 				})
 				.style({
 					height	: outerHeight + 'px',
-					overflow: 'auto',
+					// overflow: 'auto',
 					padding : 0,
 					display : 'block'
 				});
 
 			svg = container.append('svg')
-				.attr('class', 'screen stencilgraph col-md-12')
+				.attr('class', 'screen stencilgraph')
 				.style('height', height+'px')
 				.style('display', 'block')
 				// .attr('width', width)
@@ -87,7 +87,7 @@
 				dy : '.35em',
 				'text-anchor' : 'middle'
 			}).text('Create a new plan by dragging operations onto the canvas...');
-			
+
 			svg.append('text').attr({
 				'class' : 'emptytext visible',
 				x : width/2,
@@ -95,7 +95,7 @@
 				dy : '.35em',
 				'text-anchor' : 'middle'
 			}).text('... or drag an existing plan to continue.');
-			
+
 
 			this.createDefs(svg);
 
@@ -128,7 +128,7 @@
 					if (startNode) {
 
 						me.createConnection(startNode, endNode);
-						
+
 						startNode = endNode = undefined;
 
 						d3.event.stopPropagation();
@@ -161,7 +161,7 @@
 				.style('marker-end', '');
 
 			if (this.allowConnection(startNode, endNode)) {
-				
+
 				var command = new hyryx.command.createEdgeCommand(startNode, endNode, this.update.bind(this));
 				hyryx.command.do(command);
 			}
@@ -230,7 +230,7 @@
 			})
 			.call(d3.behavior.drag()
 				.on('dragstart', function(d) {
-					
+
 				})
 				.on('dragend', function(d) {
 					delete me.isDragging;
@@ -342,7 +342,7 @@
 					}
 
 					d3.select(g).classed('selected', !isSelected);
-					
+
 					me.handleNodeSelectionChange(!isSelected, d);
 					// put back on top
 					// g.parentNode.appendChild(g);
@@ -377,7 +377,7 @@
 		},
 
 		renderEdges : function() {
-			
+
 			var gEdge = gEdges.enter().append('g')
 			// .style('marker-start', 'url(#start-arrow)')
 			.attr({
@@ -452,12 +452,12 @@
 			d3.event.sourceEvent.stopPropagation();
 		},
 
-		onDragEnd : function(d) {			
+		onDragEnd : function(d) {
 			var gStencil = d3.select(this);
 			gStencil.style('opacity', 1);
 
-			if (d3.event.sourceEvent.toElement.tagName == 'svg') {
-				var p = d3.mouse(d3.event.sourceEvent.toElement);
+			if (d3.event.sourceEvent.toElement.firstChild.tagName == 'svg') {
+				var p = d3.mouse(d3.event.sourceEvent.toElement.firstChild);
 				var x = p[0]-radius,
 					y = p[1]-radius,
 					name = $(gStencil[0]).data('type');
@@ -499,7 +499,7 @@
 		},
 
 		getValue : function() {
-			
+
 			var nodes = {};
 			var edges = [];
 
@@ -615,7 +615,7 @@
 	        	y : targetY
 	        }]);
 
-	        return line(points); 
+	        return line(points);
 		}
 	})();
 

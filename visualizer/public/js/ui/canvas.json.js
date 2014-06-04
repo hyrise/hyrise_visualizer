@@ -33,7 +33,7 @@
 		},
 
 		render : function() {
-			var markup = $('<div class="screen col-md-'+this.width+' '+this.cls+'" id="'+this.id+'">');
+			var markup = $('<div class="screen '+this.cls+'" id="'+this.id+'">');
 
 			this.targetEl.append(markup);
 
@@ -87,6 +87,7 @@
 				gutters : ['CodeMirror-lint-markers'],
 				lineNumbers : true
 			});
+			this.editor.setSize(null, 500);
 
 			this.editor.on('blur', function(editor) {
 				var oldValue = this.getValue();

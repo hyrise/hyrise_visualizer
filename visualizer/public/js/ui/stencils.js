@@ -4,7 +4,7 @@
 	}
 
 	hyryx.debug.Stencils.prototype = extend(hyryx.screen.AbstractUIPlugin, {
-		
+
 		render : function() {
 			return this.createStencilsMarkup();
 		},
@@ -16,7 +16,8 @@
 		createStencilsMarkup : function() {
 			// create container for stencils
 			this.id = hyryx.utils.getID('Stencils');
-			var $stencils = $('<div class="col-md-2 stencils" id="'+this.id+'"><h3>Stencils</h3></div>').appendTo(this.targetEl);
+			var frame = $('<div class="area_frame"></div>').appendTo(this.targetEl);
+			var $stencils = $('<div class="stencils" id="'+this.id+'"><h3>Stencils</h3></div>').appendTo(frame);
 			$stencils.append('<div class="panel-group list">');
 
 			return $stencils;
@@ -56,7 +57,7 @@
 							'<div id="collapse-',header,'" class="panel-collapse collapse list-group">'];
 
 			$.each(hyryx.stencils, function(key, value) {
-				
+
 				var $buttonMarkup = me.getStencilButtonMarkup(value);
 
 				panel.push($buttonMarkup);
