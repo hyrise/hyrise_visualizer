@@ -57,14 +57,6 @@ class Hyrise
 		return tables
 	end
 
-	# get the meta data for a specific table. This function assumes that the table is already loaded.
-	def getColumnsForTable(table)
-		metaOperator = MetaDataOperator.new
-		metaOperator.addInput table
-
-		return executeQuery metaOperator.getQuery
-	end
-
 	def getContentForSeries(series, xaxis, filters)
 
 		content = Array.new
