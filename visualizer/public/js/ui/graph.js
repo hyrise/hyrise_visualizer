@@ -623,39 +623,39 @@
 
 		composeLocalFilterQuery : function(column, query) {
 			if (column.min) {
-				/*
-				minFilterOperator = SimpleTableScanOperator.new
-				
-				minFilterOperator.addPredicate(SCAN_TYPE::OR)
+				var minFilter = {
+					type: 'SimpleTableScan',
+					predicates: [
+						{type: 7 /* OR */},
+						{type: 2 /* GT */, 'in': 0, f: column.column, vtype: column.type, value: column.min},
+						{type: 0 /* EQ */, 'in': 0, f: column.column, vtype: column.type, value: column.min}
+					]
+				};
 
-				minFilterOperator.addPredicate(SCAN_TYPE::GT,0,column['column'], column['type'].to_i,column['min'].to_i)
-				minFilterOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['min'].to_i)
-
-				if returnOperator.nil? 
-					minFilterOperator.addInput column["table"]
-				else
-					returnOperator.addEdgeTo minFilterOperator
-				end
-				returnOperator = minFilterOperator
-				*/
+				// FIXME
+				if (query) {
+					// returnOperator.addEdgeTo minFilterOperator
+				} else {
+					minFilter.input = [column.table];
+				}
 			}
 
 			if (column.max) {
-				/*
-				maxFilterOperator = SimpleTableScanOperator.new
+				var maxFilter = {
+					type: 'SimpleTableScan',
+					predicates: [
+						{type: 7 /* OR */},
+						{type: 1 /* LT */, 'in': 0, f: column.column, vtype: column.type, value: column.max},
+						{type: 0 /* EQ */, 'in': 0, f: column.column, vtype: column.type, value: column.max}
+					]
+				};
 
-				maxFilterOperator.addPredicate(SCAN_TYPE::OR)
-
-				maxFilterOperator.addPredicate(SCAN_TYPE::LT,0,column['column'], column['type'].to_i,column['max'].to_i)
-				maxFilterOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['max'].to_i)
-
-				if returnOperator.nil?
-					maxFilterOperator.addInput column["table"]
-				else 
-					returnOperator.addEdgeTo maxFilterOperator
-				end
-				returnOperator = maxFilterOperator
-				*/
+				// FIXME
+				if (query) {
+					// returnOperator.addEdgeTo maxFilterOperator
+				} else {
+					maxFilter.input = [column.table];
+				}
 			}
 
 			return query;
