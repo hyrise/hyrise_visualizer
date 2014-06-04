@@ -32,24 +32,38 @@
 		handleEvent: function(event) {
 			if (event.type === "load") {
 				this.loadContent(event.options.data);
+			} else if (event.type === "save") {
+				event.options.callback(
+					this.getCurrentSource(event.options.generation)
+				);
 			}
+		},
+
+		getCurrentSource: function(generation) {
+			// returns current content of the editor
+			// if generation is given:
+			//	- checks if content changed since then and return false if not
+			//  - otherwise change generation and return new one
+			var result = {};
+
+			if (generation !== undefined) {
+				if (this.editor.isClean(generation)) {
+					return false;
+				} else {
+					result.generation = this.editor.changeGeneration();
+				}
+			}
+			result.source = this.editor.getValue();
+			return result;
 		},
 
 		execute: function() {
 			console.log("Execute stored procedure...");
-			if (this.editor.isClean(this.generation)) {
-				this.generation = this.editor.changeGeneration();
+			var current = this.getCurrentSource(this.generation);
+			if (current) {
+				this.generation = current.generation;
 
-				var code = this.editor.getValue();
-				$.ajax({
-					url : hyryx.settings.database + '/jsprocedure',
-					type : 'POST',
-					dataType: 'json',
-					data : {
-						action: 'executeDirect',
-						source: code
-					}
-				}).done(function(data) {
+				hyryx.ProcedureStore.executeSource(current.source).done(function(data) {
 					if (data.error) {
 						console.error("Error executing procedure:" + data.error);
 					} else {
@@ -62,7 +76,7 @@
 							}
 						});
 					}
-				}).fail(function(jqXHR, textStatus, errorThrown ) {
+				}).fail(function(jqXHR, textStatus, errorThrown) {
 					console.log("Couldn't post/execute jsprocedure: " + textStatus + errorThrown);
 				});
 			} else {

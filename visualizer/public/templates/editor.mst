@@ -1,8 +1,8 @@
 <div class="area_frame no_padding">
 	<div class="screen editor" id="{{id}}"></div>
 </div>
-<div class="pull-right">
+<div class="canvas-controls">
 	{{#submitbutton}}
-	<a class="btn btn-default button-execute">Execute</a>
+	<a class="btn btn-primary button-execute">Execute</a>
 	{{/submitbutton}}
 </div>
