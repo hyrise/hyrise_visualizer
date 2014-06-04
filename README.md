@@ -1,13 +1,13 @@
 hyrise_visualizer
 =================
 
-Explorative user interface for HYRISE based on JS and Ruby
+Explorative user interface for HYRISE based on JavaScript
 
 ## Installation
 
- 1. Run `bundle install` in the `visualizer` directory to install all dependencies.
- 2. Copy `public/config.json.example` to `public/config.json` and adapt the config therein to point to your HYRISE installation.
- 3. Start the webserver using `rails s`.
+ 1. Copy `config.json.example` to `config.json` and adapt the config therein to point to your HYRISE installation.
+ 2. Start the webserver using `server.sh`.
+ 3. Your webservice will run at http://localhost:8000.
 
 ## Other
 
