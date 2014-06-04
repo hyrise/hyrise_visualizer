@@ -19,44 +19,6 @@ class Hyrise
 		return executeQuery loadOperator.getQuery
 	end
 
-	def getTables
-		metaOperator = MetaDataOperator.new
-
-		tables = Hash.new
-		result = executeQuery metaOperator.getQuery
-
-		unless result['rows'].nil?
-			result['rows'].each do | row |
-				table = { name: row.second, type: row.third}
-
-				#get the smalles and the highest value for each column if type is 0 or 1
-				if row.third < 2
-					projectionOperator = ProjectionScanOperator.new
-
-					projectionOperator.addInput row.first
-					projectionOperator.addField row.second
-
-					sortscanOperator = SortScanOperator.new
-					sortscanOperator.addField 0 #row.second
-
-					projectionOperator.addEdgeTo sortscanOperator
-
-					data = executeQuery sortscanOperator.getQuery
-
-					unless data['rows'].nil?
-						table[:min] = data['rows'].first.first
-						table[:max] = data['rows'].last.first
-					end
-				end
-
-				(tables[row.first] ||= []) << table
-			end
-		end
-
-
-		return tables
-	end
-
 	def getContentForSeries(series, xaxis, filters)
 
 		content = Array.new
@@ -103,7 +65,7 @@ class Hyrise
 	protected
 
 		def executeQuery(query)
-			url = URI("http://chemnitz.eaalab.hpi.uni-potsdam.de:5000/jsonQuery/")
+			url = URI("http://chemnitz.eaalab.hpi.uni-potsdam.de:6666/jsonQuery/")
 
 			req = Net::HTTP::Post.new(url.path)
 			req.set_form_data({:query=> query, :limit => 0})

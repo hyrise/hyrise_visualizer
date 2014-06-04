@@ -6,11 +6,6 @@ class DataController < ApplicationController
 		redirect_to root_url
 	end
 
-	def get_tables
-		results = @data.getTables()
-		render json: results
-	end
-
 	def get_content_for_series
 		results = @data.getContentForSeries(params[:series], params[:xaxis], params[:filters]) unless params[:series].blank? || params[:xaxis].blank?
 		render json: results
