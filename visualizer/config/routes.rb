@@ -1,12 +1,5 @@
 Visualizer::Application.routes.draw do
 
-  root :to => 'data#index'
-
-  match '/loadTable' => 'data#load_table'
-
-  post '/getContent' => 'data#get_content'
-  post '/getContentForSeries' => 'data#get_content_for_series'
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -17,9 +10,6 @@ Visualizer::Application.routes.draw do
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
-
-  match '/tables' => 'data#get_tables'
-  match '/startHyrise' => 'data#start_hyrise'
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products

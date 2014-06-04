@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+ 	<meta charset="utf-8">
+	<meta name='viewport' content="width=device-width, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
+	<title>HYRISE Visualizer</title>
+	<meta name="description" content="">
+
+	<link rel="shortcut eicon" type="image/png" href="/favicon.png?v=2" />
+
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="css/tabs.css">
+
+	<!-- CUSTOM CSS -->
+	<!-- <link rel="stylesheet" href="css/data.css"/> -->
+	<link rel="stylesheet" href="css/hyryx.css"/>
+	<link rel="stylesheet" href="css/page-1.css"/>
+	<link rel="stylesheet" href="css/page-1-attributes.css"/>
+	<link rel="stylesheet" href="css/page-1-graph.css"/>
+	<link rel="stylesheet" href="css/page-2.css"/>
+
+	<style>
+		body {
+			padding: 0px;
+			margin: 0px;
+		}
+	</style>
+
+	<!-- JAVASCRIPT SOURCES -->
+	<script src="js/libs/modernizr.js"></script>
+	<script src="js/controls/loader.js"></script>
+
+	<!-- <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.29.1"></script> -->
+</head>
+<body>
+
+	<header>
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".hyryx-navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="../" class="navbar-brand">
+					<div class="logo"></div>
+					<span>hyrise visualizer</span>
+				</a>
+			</div>
+			<nav class="collapse navbar-collapse hyryx-navbar-collapse" role="navigation">
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="#page-explorer" data-toggle="tab">Explore</a>
+					</li>
+					<li>
+						<a href="#page-debug" data-toggle="tab">Debug</a>
+					</li>
+					<li class="disabled">
+						<a href="#page-manage" data-toggle="tab">Manage</a>
+					</li>
+					<li>
+						<a href="#page-editor" data-toggle="tab">Editor</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+
+	<div id='visualizer'>
+		<section class="container">
+			<!-- 		<p class='navbar-text pull-right'>&copy; Hasso Plattner Institut 2013</p>
+			 -->
+			<div class="tabbable">
+			  <div class="loading">
+			  	Fetching data...
+			  </div>
+			  <div class="tab-content">
+			    <div class='tab-pane' id='page-explorer'></div>
+			    <div class='tab-pane' id='page-debug'></div>
+			    <div class='tab-pane' id='page-manage'></div>
+			    <div class='tab-pane' id='page-editor'></div>
+			  </div>
+			</div>
+		</section>
+		<!-- FAKE OBJECT TO DETERMINE SIZE VIA CSS -->
+		<div id="hyryx-proto" class="hyryx-size"></div>
+	</div>
+
+	<footer>
+		<div class="container">
+			<span>Developed at Hasso Plattner Institut &copy; 2014</span>
+		</div>
+	</footer>
+
+</body>
+</html>
