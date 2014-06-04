@@ -22,7 +22,7 @@
 			this.registerEvents();
 		},
 
-		updateProcedureList: function(data) {
+		updateProcedureList: function() {
 			$('.storedProcedureList .list').html('');
 
 			$.get('templates/storedProcedureList_content.mst', function(template) {
@@ -62,7 +62,7 @@
 							console.log("success! procedure saved!");
 						}).fail(function(jqXHR, textStatus, errorThrown) {
 							console.log("Couldn't save procedure: " + textStatus + ", " + errorThrown);
-						});
+						}).always(self.updateProcedureList);
 					}
 				}
 			});
