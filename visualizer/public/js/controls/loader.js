@@ -59,6 +59,7 @@ window.addEventListener('load', function() {
 		complete : function() {
 			d3.json('config.json', function(error, result) {
 				if (error) {
+					console.log(error);
 					alert('Could not load server configuration');
 				} else {
 					hyryx.settings = result;
