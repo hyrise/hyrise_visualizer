@@ -195,20 +195,21 @@
 			var file = $form.find('#file').val();
 
 			if (table && file) {
-				$.ajax({
-					url: _BASE_URL + 'loadTable',
-					type: "POST",
-					data: {
-						table: table,
-						file: file
-					},
-					dataType: "json",
-					complete: function() {
-						// update list of tables
-						me.load();
-						// close popover
-						// $('.tables #show-form-btn').click();
+				var query = {
+					operators: {
+						0: {
+							type: 'TableLoad',
+							table: table,
+							filename: file
+						}
 					}
+				};
+
+				this.runQuery(query).then(function() {
+					// update list of tables
+					me.load();
+					// close popover
+					// $('.tables #show-form-btn').click();
 				});
 			}
 		}

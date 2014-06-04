@@ -11,14 +11,6 @@ require 'operators/sortscan.rb'
 
 class Hyrise
 
-	def loadTable(tablename, tablefile)
-		loadOperator = TableLoadOperator.new
-		loadOperator.setTableName tablename
-		loadOperator.setTableFileName tablefile
-
-		return executeQuery loadOperator.getQuery
-	end
-
 	def getContentForSeries(series, xaxis, filters)
 
 		content = Array.new
