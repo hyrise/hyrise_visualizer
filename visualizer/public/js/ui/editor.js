@@ -46,8 +46,8 @@
 					type : 'POST',
 					dataType: 'json',
 					data : {
-						action: 'execute',	//TODO: verify this!
-						code: code
+						action: 'executeDirect',
+						source: code
 					}
 				}).done(function(data) {
 					if (data.error) {
