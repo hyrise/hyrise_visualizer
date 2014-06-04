@@ -19,7 +19,6 @@ Visualizer::Application.routes.draw do
   # This route can be invoked with purchase_url(:id => product.id)
 
   match '/tables' => 'data#get_tables'
-  match '/startHyrise' => 'data#start_hyrise'
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products

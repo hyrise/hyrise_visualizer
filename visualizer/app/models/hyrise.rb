@@ -11,10 +11,6 @@ require 'operators/sortscan.rb'
 
 class Hyrise
 
-	def startHyrise
-		return 'test'
-	end
-
 	def loadTable(tablename, tablefile)
 		loadOperator = TableLoadOperator.new
 		loadOperator.setTableName tablename
