@@ -73,6 +73,12 @@
 			this.targetEl.on("click", "a.list-group-item", function() {
 				self.loadStoredProcedure($(this).data('name'));
 			});
+
+			this.targetEl.on("click", "button", function() {
+				self.saveProcedure(
+					self.targetEl.find("input")[0].value
+				);
+			});
 		},
 
 		loadStoredProcedure: function(procedureName) {
@@ -85,12 +91,6 @@
 				});
 			}).fail(function(jqXHR, textStatus, errorThrown ) {
 				console.log("Couldn't load jsprocedure: " + textStatus + errorThrown);
-			});
-
-			this.targetEl.on("click", "button", function() {
-				self.saveProcedure(
-					self.targetEl.find("input")[0].value
-				);
 			});
 		}
 	});
