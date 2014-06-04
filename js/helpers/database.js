@@ -42,6 +42,10 @@
 					return key;
 				},
 
+				getOperator : function(key) {
+					return this.operators[key];
+				},
+
 				addEdge : function(from, to) {
 					this.edges.push([from, to]);
 				},
