@@ -558,8 +558,8 @@
 					var finalResult = {};
 					var column = serie.yColumn;
 
-					var query;
-					query = this.composeFilterQuery(filters);
+					var query = new hyryx.Database.Query;
+					query = this.composeFilterQuery(filters, query);
 					query = this.composeLocalFilterQuery(column, query);
 					query = this.composeProjectionQuery(xAxis, column, query);
 					query = this.composeAggregationQuery(xAxis, column, query);
@@ -607,87 +607,86 @@
 			}
 		},
 
-		composeFilterQuery : function(filters) {
+		composeFilterQuery : function(filters, query) {
 			if ( ! filters) {
-				return;
+				return query;
 			}
 
-			var query;
 			$.each(filters, function(index, filterColumn) {
 				query = this.composeLocalFilterQuery(filterColumn, query);
 			}.bind(this));
 
-			// FIXME
 			return query;
 		},
 
-		composeLocalFilterQuery : function(column, query) {
+		composeLocalFilterQuery : function(column, query, lastOp) {
 			if (column.min) {
-				var minFilter = {
+				var minFilter = query.addOperator({
 					type: 'SimpleTableScan',
 					predicates: [
 						{type: 7 /* OR */},
 						{type: 2 /* GT */, 'in': 0, f: column.column, vtype: column.type, value: column.min},
 						{type: 0 /* EQ */, 'in': 0, f: column.column, vtype: column.type, value: column.min}
 					]
-				};
+				});
 
-				// FIXME
-				if (query) {
-					// returnOperator.addEdgeTo minFilterOperator
+				if (lastOp) {
+					query.addEdge(lastOp, minFilter);
 				} else {
-					minFilter.input = [column.table];
+					query.getOperator(minFilter).input = [column.table];
 				}
+
+				lastOp = minFilter;
 			}
 
 			if (column.max) {
-				var maxFilter = {
+				var maxFilter = query.addOperator({
 					type: 'SimpleTableScan',
 					predicates: [
 						{type: 7 /* OR */},
 						{type: 1 /* LT */, 'in': 0, f: column.column, vtype: column.type, value: column.max},
 						{type: 0 /* EQ */, 'in': 0, f: column.column, vtype: column.type, value: column.max}
 					]
-				};
+				});
 
-				// FIXME
-				if (query) {
-					// returnOperator.addEdgeTo maxFilterOperator
+				if (lastOp) {
+					query.addEdge(lastOp, maxFilter);
 				} else {
-					maxFilter.input = [column.table];
+					query.getOperator(maxFilter).input = [column.table];
 				}
+
+				lastOp = maxFilter;
 			}
 
-			return query;
+			return lastOp;
 		},
 
-		composeProjectionQuery : function(xaxis, column, query) {
-			var projection = {
+		composeProjectionQuery : function(xaxis, column, query, lastOp) {
+			var projection = query.addOperator({
 				type: 'ProjectionScan',
 				fields: [
 					xaxis.column,
 					column.column
 				]
-			};
+			});
 
-			if (query) {
-				// currentOperator.addEdgeTo projectionOperator
+			if (lastOp) {
+				query.addEdge(lastOp, projection);
 			} else {
-				projection.input = [column.table];
+				query.getOperator(projection).input = [column.table];
 			}
 
-			// FIXME
-
-			return query;
+			return projection;
 		},
 
-		composeAggregationQuery : function(xaxis, column, query) {
+		composeAggregationQuery : function(xaxis, column, query, lastOp) {
 			if (column.aggregation != 'none') {
-				var group = {
+				var group = query.addOperator({
 					type: 'GroupByScan',
 					fields: [xaxis.column]
-				};
+				});
 
+				// FIXME
 				switch (column.aggregation) {
 					case 'count':
 						group['function'] = {
@@ -714,30 +713,27 @@
 						};
 				}
 
-				var hash = {
+				var hash = query.addOperator({
 					type: 'HashBuild',
 					fields: [xaxis.column],
 					key: 'groupby'
-				};
+				});
 
-				var sort = {
+				var sort = query.addOperator({
 					type: 'SortScan',
 					fields: [0]
-				};
-				/*
+				});
 
-				currentOperator.addEdgeTo(hashBuildOperator)
-				currentOperator.addEdgeTo(groupOperator)
-				hashBuildOperator.addEdgeTo(groupOperator)
+				query.addEdge(lastOp, hash);
+				query.addEdge(lastOp, group);
 
-				groupOperator.addEdgeTo sortOperator
-
-				return sortOperator
-				*/
-
+				query.addEdge(hash, group);
+				query.addEdge(group, sort);
+				
+				lastOp = sort;
 			}
 
-			return query;
+			return lastOp;
 		},
 
 		displayContent : function(content) {
