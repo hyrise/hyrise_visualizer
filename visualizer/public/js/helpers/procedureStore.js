@@ -26,7 +26,7 @@
 				return request({
 					action: 'get',
 					procedureName: procedureName
-				});
+				}, 'text');
 			}
 		},
 

@@ -15,9 +15,6 @@
 					id: self.id,
 					submitbutton: true
 				});
-				self.targetEl.on(
-					'click', 'a.button-execute', self.execute.bind(self)
-				);
 				callback(rendered);
 			});
 		},
@@ -30,8 +27,8 @@
 
 		/** Make certain functions accessible for other plugins */
 		handleEvent: function(event) {
-			if (event.type === "load") {
-				this.loadContent(event.options.data);
+			if (event.type === "show") {
+				this.showContent(event.options.data);
 			} else if (event.type === "save") {
 				event.options.callback(
 					this.getCurrentSource(event.options.generation)
@@ -62,7 +59,6 @@
 			var current = this.getCurrentSource(this.generation);
 			if (current) {
 				this.generation = current.generation;
-
 				hyryx.ProcedureStore.executeSource(current.source).done(function(data) {
 					if (data.error) {
 						console.error("Error executing procedure:" + data.error);
@@ -101,12 +97,12 @@
 		},
 
 		registerEvents: function() {
-			$(self.targetEl).find('a.button-execute').on(
-				'click', self.execute
+			this.targetEl.on(
+				'click', 'button.button-execute', this.execute.bind(this)
 			);
 		},
 
-		loadContent: function(content) {
+		showContent: function(content) {
 			this.editor.setValue(content);
 		}
 	});

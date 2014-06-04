@@ -3,6 +3,8 @@
 </div>
 <div class="canvas-controls">
 	{{#submitbutton}}
-	<a class="btn btn-primary button-execute">Execute</a>
+	<button type="button" class="btn btn-primary button-execute">
+		Execute
+	</button>
 	{{/submitbutton}}
 </div>

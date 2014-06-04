@@ -70,14 +70,21 @@
 
 		registerEvents: function() {
 			var self = this;
-
 			this.targetEl.on("click", "a.list-group-item", function() {
+				self.loadStoredProcedure($(this).data('name'));
+			});
+		},
+
+		loadStoredProcedure: function(procedureName) {
+			hyryx.ProcedureStore.get(procedureName).done(function(source) {
 				hyryx.editor.dispatch({
-					type: 'editor.load',
+					type: 'editor.show',
 					options: {
-						data: $(this).data('content')
+						data: source
 					}
 				});
+			}).fail(function(jqXHR, textStatus, errorThrown ) {
+				console.log("Couldn't load jsprocedure: " + textStatus + errorThrown);
 			});
 
 			this.targetEl.on("click", "button", function() {
