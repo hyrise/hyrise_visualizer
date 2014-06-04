@@ -1,7 +1,5 @@
 Visualizer::Application.routes.draw do
 
-  root :to => 'data#index'
-
   match '/loadTable' => 'data#load_table'
 
   post '/getContentForSeries' => 'data#get_content_for_series'
