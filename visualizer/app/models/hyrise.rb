@@ -57,7 +57,7 @@ class Hyrise
 	protected
 
 		def executeQuery(query)
-			url = URI("http://chemnitz.eaalab.hpi.uni-potsdam.de:6666/jsonQuery/")
+			url = URI("http://chemnitz.eaalab.hpi.uni-potsdam.de:5555/jsonQuery/")
 
 			req = Net::HTTP::Post.new(url.path)
 			req.set_form_data({:query=> query, :limit => 0})

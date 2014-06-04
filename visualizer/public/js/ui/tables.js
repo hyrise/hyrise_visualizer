@@ -60,7 +60,7 @@
 				}
 			};
 
-			this.runQuery(metaOperator).then(function(result) {
+			hyryx.Database.runQuery(metaOperator).then(function(result) {
 				if (result.rows) {
 					var queries = [];
 					var tables = {};
@@ -93,7 +93,7 @@
 								]
 							}
 
-							queries.push(me.runQuery(query).done(function(data) {
+							queries.push(hyryx.Database.runQuery(query).done(function(data) {
 								if (data.rows) {
 									column.min = data.rows[0][0];
 									column.max = data.rows[data.rows.length - 1][0];
@@ -108,20 +108,6 @@
 						me.displayTables(tables);
 					});
 				}
-			});
-		},
-
-		runQuery : function(query) {
-			return $.ajax({
-				url : hyryx.settings.database + '/jsonQuery/',
-				type : 'POST',
-				dataType: 'json',
-				data : {
-					query: JSON.stringify(query),
-					limit: 0
-				}
-			}).fail(function(jqXHR, textStatus, errorThrown ) {
-				console.log('Could not execute query: ' + textStatus + errorThrown);
 			});
 		},
 
@@ -205,7 +191,7 @@
 					}
 				};
 
-				this.runQuery(query).then(function() {
+				hyryx.Database.runQuery(query).then(function() {
 					// update list of tables
 					me.load();
 					// close popover

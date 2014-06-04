@@ -1,7 +1,5 @@
 Visualizer::Application.routes.draw do
 
-  post '/getContentForSeries' => 'data#get_content_for_series'
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

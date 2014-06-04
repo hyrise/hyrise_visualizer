@@ -551,104 +551,277 @@
 					"table": xAxisColumn.data("table")
 				};
 				var filters = this.collectFilters();
-				var me = this;
 
-				jQuery.ajax({
-					url: _BASE_URL + 'getContentForSeries',
-					type: "POST",
-					data: {series: newSeries, xaxis: xAxis, filters: filters},
-					dataType: "json",
-					error: function(jqXHR, textStatus, errorThrown) {
-						console.log(textStatus);
-					},
-					complete: function(jqXHR, textStatus ){
-						json = jQuery.parseJSON(jqXHR.responseText);
-						if (json.hasOwnProperty("error")){
-							alert(json["error"]);
-						}else{
+				var content = [];
+				var queries = [];
+				$.each(newSeries, function (index, serie) {
+					var finalResult = {};
+					var column = serie.yColumn;
 
-							// update x-axis
-							if (json[0].hasOwnProperty("categories")) {
-								chart.xAxis[0].setCategories(json[0]['categories'], true);
-							}
-							// chart.xAxis[0].setTitle({text:xAxis['column']}, true);
-							// jQuery('.xSettings .axisTitle').val(xAxis['column']);
+					var query;
+					query = this.composeFilterQuery(filters);
+					query = this.composeLocalFilterQuery(column, query);
+					query = this.composeProjectionQuery(xAxis, column, query);
+					query = this.composeAggregationQuery(xAxis, column, query);
 
-							//remove old series from chart
-							while (chart.series.length) {
-								chart.series[0].remove();
-							}
+					queries.push(hyryx.Database.runQuery(query).then(function(result) {
+						if (result.rows) {
+							finalResult = {
+								axis: serie.axis,
+								id: column.id,
+								name: result.header[1],
+								query: query,
+								raw: result
+							};
 
-							for (var i = 0; i < json.length; i++) {
-
-								var axis = 0;
-								if (json[i]['axis'] == 'o') {
-									axis = 1;
-								}
-
-								// update y-Axis with series
-								chart.addSeries({
-									name: json[i]['name'],
-									data: json[i]['data'],
-									yAxis: axis
-								}, true);
-								//preserve chart type after reload
-								chart.series[chart.series.length-1].update({type:  jQuery('.axisDroppableContainer [data-id="'+json[i]['id']+'"]').attr('data-chartType')});
-
-								// add click listener for title field
-								if (chart.yAxis[axis].axisTitle) {
-									var element = chart.yAxis[axis].axisTitle.element;
-
-									// set initial title of the axis
-									$(element).text(json[i]['name']);
-									helpers.registerAxisPopover(element);
-								}
-
-								// var target = $('#highcharts-0 .highcharts-axis text');
-
-								// add a popover to edit the name of the axis
-								
+							if (xAxis.type < 2) {
+								for (var i = 0; i < result.rows.length; i++) {
+									var row = result.rows[i];
+									(finalResult.data = finalResult.data || []).push([row[0], row[1]]);
+								};
+							} else {
+								var categories = [];
+								for (var i = 0; i < result.rows.length; i++) {
+									var row = result.rows[i];
+									if (categories.indexOf(row[0]) == -1) {
+										categories.push(row[0]);
+									}
+									(finalResult.data = finalResult.data || []).push(row[1]);
+								};
+								finalResult.categories = categories;
 							}
 
-							if (chart.xAxis[0].axisTitle) {
-								helpers.registerAxisPopover(chart.xAxis[0].axisTitle.element);	
+							// Replace names like COUNT(xaxis) with COUNT(yaxis)
+							if (finalResult.name[xaxis.column]) {
+								finalResult.name[xaxis.column] = column.column;
 							}
+						}
+					}.bind(this)));
 
-							hyryx.explorer.dispatch({
-								type : 'data.reload',
-								options : {
-									all : true,
-									data : json[0].raw
-								}
-							});
+					content.push(finalResult);
+				}.bind(this));
 
-							// save created series in global variable
-							loadedSeries = newSeries;
+				$.when.apply($, queries).done(function() {
+					this.displayContent(content);
+				}.bind(this));
+			}
+		},
 
-							try {
-								var query = JSON.parse(json[0].query);
-								// console.log(query);
-							
-								if (!$('.btn-debug')[0]) {
-									$('.graph').append('<a class="btn-debug col-md-10"><div>Debug query &raquo;</div></a>');
-								}
+		composeFilterQuery : function(filters) {
+			if ( ! filters) {
+				return;
+			}
 
-								$('.btn-debug').click(function() {
-									hyryx.debug.dispatch({
-										type : 'canvas.loadPlan',
-										options : query
-									});
-									hyryx.utils.showScreen('debug');
-								});
-								
-							} catch (e) {
-								console.log('query could not be parsed', json[0].query);
-							}
+			var query;
+			$.each(filters, function(index, filterColumn) {
+				query = this.composeLocalFilterQuery(filterColumn, query);
+			}.bind(this));
 
+			// FIXME
+			return query;
+		},
 
-						}   
+		composeLocalFilterQuery : function(column, query) {
+			if (column.min) {
+				/*
+				minFilterOperator = SimpleTableScanOperator.new
+				
+				minFilterOperator.addPredicate(SCAN_TYPE::OR)
+
+				minFilterOperator.addPredicate(SCAN_TYPE::GT,0,column['column'], column['type'].to_i,column['min'].to_i)
+				minFilterOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['min'].to_i)
+
+				if returnOperator.nil? 
+					minFilterOperator.addInput column["table"]
+				else
+					returnOperator.addEdgeTo minFilterOperator
+				end
+				returnOperator = minFilterOperator
+				*/
+			}
+
+			if (column.max) {
+				/*
+				maxFilterOperator = SimpleTableScanOperator.new
+
+				maxFilterOperator.addPredicate(SCAN_TYPE::OR)
+
+				maxFilterOperator.addPredicate(SCAN_TYPE::LT,0,column['column'], column['type'].to_i,column['max'].to_i)
+				maxFilterOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['max'].to_i)
+
+				if returnOperator.nil?
+					maxFilterOperator.addInput column["table"]
+				else 
+					returnOperator.addEdgeTo maxFilterOperator
+				end
+				returnOperator = maxFilterOperator
+				*/
+			}
+
+			return query;
+		},
+
+		composeProjectionQuery : function(xaxis, column, query) {
+			var projection = {
+				type: 'ProjectionScan',
+				fields: [
+					xaxis.column,
+					column.column
+				]
+			};
+
+			if (query) {
+				// currentOperator.addEdgeTo projectionOperator
+			} else {
+				projection.input = [column.table];
+			}
+
+			// FIXME
+
+			return query;
+		},
+
+		composeAggregationQuery : function(xaxis, column, query) {
+			if (column.aggregation != 'none') {
+				var group = {
+					type: 'GroupByScan',
+					fields: [xaxis.column]
+				};
+
+				switch (column.aggregation) {
+					case 'count':
+						group['function'] = {
+							type: 1,
+							field: xaxis.column
+						};
+						break;
+					case 'count':
+						group['function'] = {
+							type: 2,
+							field: column.column
+						};
+						break;
+					case 'count':
+						group['function'] = {
+							type: 0,
+							field: column.column
+						};
+						break;
+					default:
+						group['function'] = {
+							type: 1,
+							field: xaxis.column
+						};
+				}
+
+				var hash = {
+					type: 'HashBuild',
+					fields: [xaxis.column],
+					key: 'groupby'
+				};
+
+				var sort = {
+					type: 'SortScan',
+					fields: [0]
+				};
+				/*
+
+				currentOperator.addEdgeTo(hashBuildOperator)
+				currentOperator.addEdgeTo(groupOperator)
+				hashBuildOperator.addEdgeTo(groupOperator)
+
+				groupOperator.addEdgeTo sortOperator
+
+				return sortOperator
+				*/
+
+			}
+
+			return query;
+		},
+
+		displayContent : function(content) {
+			if (content.hasOwnProperty("error")) {
+				alert(content["error"]);
+			} else {
+
+				// update x-axis
+				if (content[0].hasOwnProperty("categories")) {
+					chart.xAxis[0].setCategories(content[0]['categories'], true);
+				}
+				// chart.xAxis[0].setTitle({text:xAxis['column']}, true);
+				// jQuery('.xSettings .axisTitle').val(xAxis['column']);
+
+				//remove old series from chart
+				while (chart.series.length) {
+					chart.series[0].remove();
+				}
+
+				for (var i = 0; i < content.length; i++) {
+
+					var axis = 0;
+					if (content[i]['axis'] == 'o') {
+						axis = 1;
+					}
+
+					// update y-Axis with series
+					chart.addSeries({
+						name: content[i]['name'],
+						data: content[i]['data'],
+						yAxis: axis
+					}, true);
+					//preserve chart type after reload
+					chart.series[chart.series.length-1].update({type:  jQuery('.axisDroppableContainer [data-id="'+content[i]['id']+'"]').attr('data-chartType')});
+
+					// add click listener for title field
+					if (chart.yAxis[axis].axisTitle) {
+						var element = chart.yAxis[axis].axisTitle.element;
+
+						// set initial title of the axis
+						$(element).text(content[i]['name']);
+						helpers.registerAxisPopover(element);
+					}
+
+					// var target = $('#highcharts-0 .highcharts-axis text');
+
+					// add a popover to edit the name of the axis
+					
+				}
+
+				if (chart.xAxis[0].axisTitle) {
+					helpers.registerAxisPopover(chart.xAxis[0].axisTitle.element);	
+				}
+
+				hyryx.explorer.dispatch({
+					type : 'data.reload',
+					options : {
+						all : true,
+						data : content[0].raw
 					}
 				});
+
+				// save created series in global variable
+				loadedSeries = newSeries;
+
+				try {
+					var query = JSON.parse(content[0].query);
+					// console.log(query);
+				
+					if (!$('.btn-debug')[0]) {
+						$('.graph').append('<a class="btn-debug col-md-10"><div>Debug query &raquo;</div></a>');
+					}
+
+					$('.btn-debug').click(function() {
+						hyryx.debug.dispatch({
+							type : 'canvas.loadPlan',
+							options : query
+						});
+						hyryx.utils.showScreen('debug');
+					});
+					
+				} catch (e) {
+					console.log('query could not be parsed', content[0].query);
+				}
 			}
 		}
 	}

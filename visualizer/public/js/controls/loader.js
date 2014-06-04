@@ -93,6 +93,7 @@ window.addEventListener('load', function() {
 			// HELPERS
 			'js/helpers/extensions.js',
 			'js/helpers/utils.js',
+			'js/helpers/database.js',
 			'js/helpers/procedureStore.js',
 
 			// CONTROLS
