@@ -51,7 +51,8 @@ window.addEventListener('load', function() {
 			"js/libs/jquery-ui.js",
 			"js/libs/bootstrap.js",
 			"js/libs/highcharts.js",
-			"js/libs/d3.v3.js"
+			"js/libs/d3.v3.js",
+			"js/libs/mustache.js"
 		],
 
 		// load server config
@@ -120,8 +121,11 @@ window.addEventListener('load', function() {
 			
 			'js/pages/1-explore.js',
 			'js/pages/2-debug.js',
+			'js/pages/4-editor.js',
+
 
 			'js/ui/abstractPlugin.js',
+			'js/ui/abstractTemplatePlugin.js',
 			'js/ui/popover.js'
 		]
 	},{
@@ -159,5 +163,16 @@ window.addEventListener('load', function() {
 			hyryx.debug.setup();
 		}
 	}]);
-			
+
+    // loading stage #4
+    Modernizr.load([{
+        load : [
+            // page 4 components
+            'js/ui/storedProcedureList.js',
+            'js/ui/editor.js'
+        ],
+        complete : function() {
+            hyryx.editor.setup();
+        }
+    }]);
 }, false);

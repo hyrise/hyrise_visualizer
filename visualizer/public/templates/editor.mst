@@ -1,0 +1,8 @@
+<div class="area_frame no_padding">
+	<div class="screen editor" id="{{id}}"></div>
+</div>
+<div class="pull-right">
+	{{#submitbutton}}
+	<a class="btn btn-default button-execute">Execute</a>
+	{{/submitbutton}}
+</div>

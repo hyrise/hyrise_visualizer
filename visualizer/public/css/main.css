@@ -4,6 +4,13 @@
    Author's custom styles
    ========================================================================== */
 
+header ul.nav.nav-bar li a:hover {
+	padding-top: 8px;
+	padding-bottom: 8px;
+	margin-top: 7px;
+	margin-bottom: 7px;
+	border-radius: 4px;
+}
 
 label { display: inline-block; width: 7em; }
 

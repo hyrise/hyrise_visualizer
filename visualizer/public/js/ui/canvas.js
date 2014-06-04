@@ -8,16 +8,17 @@
 	hyryx.debug.Canvas.prototype = extend(hyryx.screen.AbstractUIPlugin, {
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render : function() {
+			var frame = $('<div class="area_frame no_padding"></div>').appendTo(this.targetEl);
 			// create the canvas
 			this.activeScreen = this.screens.canvas = new hyryx.screen.CanvasScreen({
 				width : 7,
-				targetEl : this.targetEl
+				targetEl : frame
 			});
 
 			// create json view
 			this.screens.json = new hyryx.screen.JSONScreen({
 				width : 10,
-				targetEl : this.screens.canvas.el
+				targetEl : frame
 			});
 
 			this.createCanvasControls();
@@ -38,7 +39,7 @@
 			switch (event.type) {
 				// Update drag drop handlers when updating the list of possible operations
 				case 'initDragDrop' :
-					
+
 					var me = this;
 
 					d3.selectAll('.stencils .list-group-item').call(d3.behavior.drag()
@@ -47,7 +48,7 @@
 							me.activeScreen.onDragStart.call(this, d);
 						}
 					})
-					.on('dragend', function(d) {							
+					.on('dragend', function(d) {
 						if (me.activeScreen.onDragEnd instanceof Function) {
 							me.activeScreen.onDragEnd.call(this, d);
 						}
@@ -66,12 +67,19 @@
 		},
 
 		createCanvasControls : function() {
-			var $controls = $('<div class="col-md-10 canvas-controls">').appendTo($('div.canvas'));
-			$controls.append('<ul><li class="active" data-control="canvas">Designer</li><li data-control="json">JSON</li></ul>');
+			var $controls = $('<div class="canvas-controls pull-right">').appendTo($('div.canvas'));
+			$controls.append('<div class="btn-group" data-toggle="buttons">' +
+				'<label class="btn btn-default active" data-control="canvas">' +
+					'<input type="radio" name="switchView" id="canvas"> Designer' +
+				 '</label>' +
+				'<label class="btn btn-default" data-control="json">' +
+					'<input type="radio" name="switchView" id="json"> JSON' +
+				'</label>' +
+			'</div>');
 
-			$controls.append('<a class="button-execute">Execute<a>');
+			$controls.append('<a class="btn btn-primary button-execute">Execute<a>');
 
-			$controls.append('<div class="execution-preview">');
+			// $controls.append('<div class="execution-preview">');
 
 		},
 
@@ -81,7 +89,7 @@
 			$('.canvas-controls .button-execute').on('click', function() {
 
 				var request = this.getSerializedQuery();
-				
+
 				/*
 				$.ajax({
 					url : hyryx.settings.database + '/jsonQuery',
@@ -111,19 +119,19 @@
 
 			}.bind(this));
 
-			$('.canvas-controls li').on({
-				mouseover : function(d) {
-					var $this = $(this);
-					if (!$this.hasClass('active')) {
-						$this.addClass('hover');
-					}
-				},
-				mouseout : function(d) {
-					$(this).removeClass('hover');
-				},
+			$('.canvas-controls label').on({
+				// mouseover : function(d) {
+				// 	var $this = $(this);
+				// 	if (!$this.hasClass('active')) {
+				// 		$this.addClass('hover');
+				// 	}
+				// },
+				// mouseout : function(d) {
+				// 	$(this).removeClass('hover');
+				// },
 				click : function(d) {
-					$('.canvas-controls li.active').removeClass('active');
-					$(this).addClass('active');
+					// $('.canvas-controls li.active').removeClass('active');
+					// $(this).addClass('active');
 
 					me.switchView($(this).data('control'));
 				}

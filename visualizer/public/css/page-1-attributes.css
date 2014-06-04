@@ -1,7 +1,7 @@
 .tables, .stencils {
   height: calc(100% - 40px);
   position: relative;
-  box-shadow: 5px 0 20px -15px;
+/*  box-shadow: 5px 0 20px -15px;*/
   overflow: auto;
   height: 460px;
 }
@@ -38,13 +38,13 @@
 
 .tables #show-form-btn {
   position: absolute;
-  top: 12px;
-  right: 15px;
+  top: -6px;
+  right: 2px;
   font-weight: 100;
   font-size: 24px;
 }
 
-.list .list-group-item {
+/*.list .list-group-item {
   list-style: none;
   border-bottom: 1px solid #eee;
   padding: 5px;
@@ -55,7 +55,7 @@
 .list .list-group-item:last-child {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-}
+}*/
 
 .list .panel-heading {
   padding: 0;

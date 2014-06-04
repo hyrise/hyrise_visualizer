@@ -20,10 +20,11 @@
 					'<input class="form-control" id="table" placeholder="Table name" type="text" />',
 					'<input class="form-control" id="file" placeholder="Path to table" type="text" />',
 				'</div>'].join('');
-			
-			var $tables = $('<div class="col-md-2 tables" id="'+this.id+'"><h3>Tables</h3></div>').appendTo(this.targetEl);
+
+			var frame = $('<div class="area_frame"></div>').appendTo(this.targetEl);
+			var $tables = $('<div class="tables" id="'+this.id+'"><h3>Tables</h3></div>').appendTo(frame);
 			$tables.append('<a href="#" class="" id="show-form-btn">+</a>');
-			
+
 			new hyryx.screen.popover({
 				title : "Add table",
 				content : form,
@@ -35,7 +36,7 @@
 
 			// The list for all tables
 			$tables.append('<div class="panel-group list">');
-			
+
 			return $tables;
 		},
 
@@ -82,10 +83,10 @@
 					$('.tables .list .collapse.panel-collapse:first').addClass('in');
 
 					//initilaize the options popover
-					
+
 
 					//make tables draggable and clone them
-					$(".tables .list .list-group-item").draggable({ 
+					$(".tables .list .list-group-item").draggable({
 						helper: 'clone',
 						appendTo : $('#visualizer'),
 						start: function(e, ui) {

@@ -6,7 +6,6 @@
 	var attributes;
 
 	hyryx.debug.Attributes.prototype = extend(hyryx.screen.AbstractUIPlugin, {
-		
 		markups : {},
 		currentMarkup : null,
 
@@ -28,7 +27,6 @@
 					case 'hide' : attributes.hide(); break;
 					case 'show' : attributes.show(event.options); break;
 				}
-					
 			}
 		},
 
@@ -75,7 +73,8 @@
 		createAttributesContainer : function() {
 			// create container for stencils
 			this.id = hyryx.utils.getID('Attributes');
-			var $attributes = $('<div class="col-md-3 attributes" id="'+this.id+'"><h3>Attributes</h3></div>').appendTo(this.targetEl);
+			var frame = $('<div class="area_frame"></div>').appendTo(this.targetEl);
+			var $attributes = $('<div class="attributes" id="'+this.id+'"><h3>Attributes</h3></div>').appendTo(frame);
 			$attributes.append('<div class="panel-group form">');
 
 			$attributes.on('change', 'input', this.handleInputChange.bind(this));
@@ -106,7 +105,7 @@
 				if (field.isList) {
 					newValue = oldValue.concat(newValue);
 				}
-	
+
 				var command = new hyryx.command.changeValueCommand(oldValue, newValue, field, this.selection, id);
 				hyryx.command.do(command);
 			}
@@ -158,7 +157,6 @@
 					}
 					formElements[key] = new Input(config, key);
 				}
-				
 			}.bind(this));
 
 			this.formElements = formElements;
@@ -202,7 +200,7 @@
 		this.value = (config.isList ? [].concat(config.value||[]) : config.value);
 		this.valueConfig = config.valueConfig;
 		this.disabled = config.disabled;
-	
+
 		this.type = config.type || 'text';
 		this.id = config.id || id;
 
@@ -254,7 +252,7 @@
 		initList : function() {
 			if (this.isList) {
 				this.input.val('');
-				
+
 				var list = this.list;
 				list.html('');
 				this.value.each(function(v, i) {
@@ -302,7 +300,7 @@
 					if (me.isList) {
 						newValue = oldValue.concat(newValue);
 					}
-		
+
 					var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, me.selection, me.id);
 					hyryx.command.do(command);
 				}
@@ -333,7 +331,7 @@
 				this.input.addClass('checkbox');
 				if (this.value) {
 					this.input.attr('checked', 'checked');
-				}				
+				}
 			}
 
 			return this.fieldset;
@@ -355,7 +353,6 @@
 			var form = ['<div class="complex-add-form form-horizontal">'];
 
 			$.each(this.valueConfig, function(k, v) {
-				
 				// CodeMirror Javascript editor
 				if (v.type === 'custom') {
 					hasCustomAttribute = true;
@@ -366,7 +363,7 @@
 					form.push('<span>'+k+'</span><input type="'+v.type+'" class="form-control" id="complex-'+k+'" placeholder="'+v.value+'" type="text" />');
 				}
 
-			}.bind(this));			
+			}.bind(this));
 			form.push('</div>');
 
 			form = form.join('');
@@ -379,7 +376,7 @@
 				showClb : function(form) {
 					if (hasCustomAttribute) {
 						var renderTarget = form.find('.codemirror');
-						
+
 						var id = renderTarget.attr('id').split('complex-')[1];
 
 						// parse the initial value, which might be an object or the plain value
@@ -417,7 +414,7 @@
 				});
 
 				$(this).parent().detach();
-	
+
 				var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, attributes.selection, me.id);
 				hyryx.command.do(command);
 			}
@@ -428,7 +425,7 @@
 				}
 				list.delButton.appendTo(li);
 				list.delButton.show();
-				
+
 			};
 
 			function hideButtons() {
@@ -436,7 +433,7 @@
 					list.delButton.hide();
 				}
 			};
-			
+
 			list.on('mouseover', 'li', function(e) {
 				showButtonsOnEntry(e.target, list.children().index(e.target));
 			}).on('mouseout', 'li', function() {

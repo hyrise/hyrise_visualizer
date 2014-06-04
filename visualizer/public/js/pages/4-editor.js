@@ -1,21 +1,17 @@
-hyryx.debug = (function() {
+hyryx.editor = (function() {
     var eventHandlers;
 
     function setup() {
-        $.get('templates/page_debug.mst', function(template) {
+        $.get('templates/page_editor.mst', function(template) {
             var rendered = $(Mustache.render(template, {
-                width_stencils: 3,
-                width_canvas: 7,
-                width_attributes: 2,
-                width_data: 12
+                width_storedProcedureList: 3,
+                width_editor: 9
             }));
-            $('#visualizer #page-debug').append(rendered);
+            $('#visualizer #page-editor').append(rendered);
 
             eventHandlers = {
-                'stencil': new hyryx.debug.Stencils(rendered.find('#frame_stencils')),
-                'canvas': new hyryx.debug.Canvas(rendered.find('#frame_canvas')),
-                'attributes': new hyryx.debug.Attributes(rendered.find('#frame_attributes')),
-                'data': new hyryx.explorer.Data(rendered.find('#frame_data'))
+                'storedProcedureList': new hyryx.editor.StoredProcedureList(rendered.find('#frame_storedProcedureList')),
+                'editor': new hyryx.editor.Editor(rendered.find('#frame_editor'))
             };
         });
     }

@@ -1,60 +1,61 @@
 hyryx.explorer = (function() {
-
-	var Attributes, Graph, Data;
+	var eventHandlers;
 
 	function setup() {
 		$(document).bind('touchmove', function(event) {
 			event.preventDefault();
-		})
+		});
 
-		var $visualizer = $('#visualizer #page-explorer').append('<div class="container"><div class="row">');
-		var $fluidLayout = $visualizer.find('.row');
+		$.get('templates/page_explore.mst', function(template) {
+			var rendered = $(Mustache.render(template, {
+				width_attributes: 3,
+				width_graph: 9,
+				width_data: 12
+			}));
+			$('#visualizer #page-explorer').append(rendered);
 
-		// Create the attributes container
-		Attributes = new hyryx.explorer.Attributes($fluidLayout);
+			eventHandlers = {
+				'attributes': new hyryx.explorer.Attributes(rendered.find('#frame_attributes')),
+				'graph': new hyryx.explorer.Graph(rendered.find('#frame_graph')),
+				'data': new hyryx.explorer.Data(rendered.find('#frame_data'))
+			};
 
-		// Create the graph container
-		Graph = new hyryx.explorer.Graph($fluidLayout);
-
-		// Create data container
-		Data = new hyryx.explorer.Data($visualizer);
-
-		initUIElements();
+			initUIElements();
+		});
 	}
 
 	function initUIElements() {
-	    $('.dropdown-toggle').dropdown();
-	    $('.selectpicker').selectpicker();
+		$('.dropdown-toggle').dropdown();
+		$('.selectpicker').selectpicker();
 	}
 
 	function dispatch(event) {
 		if ('string' === typeof event) {
 			event = {
-				type : event,
-				options : {}
-			}
+				type: event,
+				options: {}
+			};
 		}
-		var config = (event.type||'').split('.'), target = config[0], command = config[1];
+		var config = (event.type || '').split('.'),
+			target = config[0],
+			command = config[1];
 
-		if (target === 'graph') {
-			Graph.handleEvent({
-				type	: command,
-				options	:event.options
-			});
-		}
-
-		if (target === 'data') {
-			Data.handleEvent({
-				type : command,
+		if (eventHandlers[target]) {
+			eventHandlers[target].handleEvent({
+				type    : command,
 				options : event.options
-			})
+			});
 		}
 	}
 
 	return {
-		setup			: setup,
-		dispatch		: dispatch,
-		loadAttributes	: function() { return Attributes.load(); },
-		loadTable		: function() { return Attributes.loadTable(); },
+		setup: setup,
+		dispatch: dispatch,
+		loadAttributes: function() {
+			return Attributes.load();
+		},
+		loadTable: function() {
+			return Attributes.loadTable();
+		},
 	}
 })();
