@@ -47,7 +47,7 @@
 			var result = {};
 
 			if (generation !== undefined) {
-				if (this.editor.isClean(this.generation)) {
+				if (this.editor.isClean(generation)) {
 					return false;
 				} else {
 					result.generation = this.editor.changeGeneration();

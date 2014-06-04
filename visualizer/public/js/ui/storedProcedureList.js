@@ -54,7 +54,7 @@
 							return;
 						}
 
-						this.save_generation = currentSource.generation;
+						self.save_generation = currentSource.generation;
 						hyryx.ProcedureStore.create(
 							procedureName,
 							currentSource.source
