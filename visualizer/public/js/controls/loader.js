@@ -93,7 +93,8 @@ window.addEventListener('load', function() {
 			// HELPERS
 			'js/helpers/extensions.js',
 			'js/helpers/utils.js',
-			
+			'js/helpers/procedureStore.js',
+
 			// CONTROLS
 			'js/controls/commands.js',
 
@@ -102,7 +103,7 @@ window.addEventListener('load', function() {
 			'loader!third-party/codemirror/codemirror.css',
 			'loader!third-party/codemirror/custom.css',
 			'loader!third-party/codemirror/mode.javascript.js',
-			
+
 			'loader!third-party/codemirror/addons/lint/jshint-2.1.11.js',
 			'loader!third-party/codemirror/addons/lint/jsonlint.js',
 			'loader!third-party/codemirror/addons/lint/lint.js',
@@ -116,9 +117,9 @@ window.addEventListener('load', function() {
 			// TIPSY
 			"loader!third-party/tipsy/tipsy.js",
 			"loader!third-party/tipsy/tipsy.css",
-			
+
 			// APPLICATION CODE
-			
+
 			'js/pages/1-explore.js',
 			'js/pages/2-debug.js',
 			'js/pages/4-editor.js',

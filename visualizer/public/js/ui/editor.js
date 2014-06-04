@@ -37,19 +37,11 @@
 
 		execute: function() {
 			console.log("Execute stored procedure...");
-			if (this.editor.isClean(this.generation)) {
+			if (!this.editor.isClean(this.generation)) {
 				this.generation = this.editor.changeGeneration();
 
 				var code = this.editor.getValue();
-				$.ajax({
-					url : hyryx.settings.database + '/JSProcedure',
-					type : 'POST',
-					dataType: 'json',
-					data : "procedure=" + JSON.stringify({
-						action: 'execute',
-						procedureSource: code
-					})
-				}).done(function(data) {
+				hyryx.ProcedureStore.executeSource(code).done(function(data) {
 					if (data.error) {
 						console.error("Error executing procedure:" + data.error);
 					} else {
