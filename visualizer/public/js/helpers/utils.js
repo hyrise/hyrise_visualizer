@@ -13,11 +13,11 @@ if ('undefined' === typeof hyryx) { var hyryx = {}; }
 
 		function showScreen(id) {
             var hash = (window.location.hash||'').trim().split('#')[1];
-            
-            id = (id||hash||'').trim() || 'explorer';
+
+            id = 'explorer';//(id||hash||'').trim() || 'explorer';
 			// var hash = window.location.hash;
 			// the default page
-			var $target = $('#tag a[href=#page-'+id+']');
+			var $target = $('.navbar-nav a[href=#page-'+id+']');
 
 			// if (hash.trim()) {
 			// 	var target = hash.replace('#', '#page-');
