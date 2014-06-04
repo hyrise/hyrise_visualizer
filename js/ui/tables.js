@@ -51,16 +51,13 @@
 		fetchTables : function() {
 			var me = this;
 
-			var metaOperator = {
-				operators: {
-					0: {
-						type: 'MetaData',
-						input: []
-					}
-				}
-			};
+			var query = new hyryx.Database.Query;
+			query.addOperator({
+				type: 'MetaData',
+				input: []
+			});
 
-			hyryx.Database.runQuery(metaOperator).then(function(result) {
+			hyryx.Database.runQuery(query).then(function(result) {
 				if (result.rows) {
 					var queries = [];
 					var tables = {};
@@ -76,22 +73,17 @@
 
 						// Get the smallest and the highest value for each column if type is 0 or 1
 						if (column.type < 2) {
-							var query = {
-								operators: {
-									0: {
-										type: 'ProjectionScan',
-										fields: [field],
-										input: [table]
-									},
-									1: {
-										type: 'SortScan',
-										fields: [0]
-									}
-								},
-								edges: [
-									[0, 1]
-								]
-							}
+							var query = new hyryx.Database.Query;
+							query.addOperator(0, {
+								type: 'ProjectionScan',
+								fields: [field],
+								input: [table]
+							});
+							query.addOperator(1, {
+								type: 'SortScan',
+								fields: [0]
+							});
+							query.addEdge(0, 1);
 
 							queries.push(hyryx.Database.runQuery(query).done(function(data) {
 								if (data.rows) {
@@ -181,15 +173,12 @@
 			var file = $form.find('#file').val();
 
 			if (table && file) {
-				var query = {
-					operators: {
-						0: {
-							type: 'TableLoad',
-							table: table,
-							filename: file
-						}
-					}
-				};
+				var query = new hyryx.Database.Query;
+				query.addOperator({
+					type: 'TableLoad',
+					table: table,
+					filename: file
+				});
 
 				hyryx.Database.runQuery(query).then(function() {
 					// update list of tables
