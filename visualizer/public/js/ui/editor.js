@@ -15,6 +15,9 @@
 					id: self.id,
 					submitbutton: true
 				});
+				self.targetEl.on(
+					'click', 'a.button-execute', self.execute.bind(self)
+				);
 				callback(rendered);
 			});
 		},
@@ -33,7 +36,38 @@
 		},
 
 		execute: function() {
-			alert('Execute!');
+			console.log("Execute stored procedure...");
+			if (this.editor.isClean(this.generation)) {
+				this.generation = this.editor.changeGeneration();
+
+				var code = this.editor.getValue();
+				$.ajax({
+					url : hyryx.settings.hyrisePath + '/jsprocedure',
+					type : 'POST',
+					dataType: 'json',
+					data : {
+						action: 'execute',	//TODO: verify this!
+						code: code
+					}
+				}).done(function(data) {
+					if (data.error) {
+						console.error("Error executing procedure:" + data.error);
+					} else {
+						console.log(data);
+
+						hyryx.editor.dispatch({
+							type : 'data.show',
+							options : {
+								data : data
+							}
+						});
+					}
+				}).fail(function(jqXHR, textStatus, errorThrown ) {
+					console.log("Couldn't post/execute jsprocedure: " + textStatus);
+				});
+			} else {
+				console.log("Nothing changed - nothing to do");
+			}
 		},
 
 		registerEditor: function() {
@@ -47,6 +81,7 @@
 				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true
 			});
+			this.generation = 0;
 		},
 
 		registerEvents: function() {
