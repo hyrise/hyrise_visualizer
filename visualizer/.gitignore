@@ -14,4 +14,4 @@
 /log/*.log
 /tmp
 
-config/hyrise.yml
+public/config.json

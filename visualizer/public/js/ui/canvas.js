@@ -84,7 +84,7 @@
 				
 				/*
 				$.ajax({
-					url : hyryx.settings.hyrisePath + '/jsonQuery',
+					url : hyryx.settings.database + '/jsonQuery',
 					type : 'POST',
 					dataType: 'json',
 					data : request,
