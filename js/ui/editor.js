@@ -66,7 +66,7 @@
 						console.log(data);
 
 						hyryx.editor.dispatch({
-							type : 'data.show',
+							type : 'procedureResults.show',
 							options : {
 								data : data
 							}

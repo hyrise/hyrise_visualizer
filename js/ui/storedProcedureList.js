@@ -72,6 +72,7 @@
 			var self = this;
 			this.targetEl.on("click", "a.list-group-item", function() {
 				self.loadStoredProcedure($(this).data('name'));
+				hyryx.editor.dispatch('procedureResults.clear');
 			});
 
 			this.targetEl.on("click", "button", function() {
