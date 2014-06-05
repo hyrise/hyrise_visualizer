@@ -559,10 +559,14 @@
 					var column = serie.yColumn;
 
 					var query = new hyryx.Database.Query;
-					query = this.composeFilterQuery(filters, query);
-					query = this.composeLocalFilterQuery(column, query);
-					query = this.composeProjectionQuery(xAxis, column, query);
-					query = this.composeAggregationQuery(xAxis, column, query);
+
+					this.composeAggregationQuery(xAxis, column, query,
+						this.composeProjectionQuery(xAxis, column, query,
+							this.composeLocalFilterQuery(column, query,
+								this.composeFilterQuery(filters, query)
+							)
+						)
+					);
 
 					queries.push(hyryx.Database.runQuery(query).then(function(result) {
 						if (result.rows) {
@@ -607,16 +611,16 @@
 			}
 		},
 
-		composeFilterQuery : function(filters, query) {
+		composeFilterQuery : function(filters, query, lastOp) {
 			if ( ! filters) {
-				return query;
+				return lastOp;
 			}
 
 			$.each(filters, function(index, filterColumn) {
-				query = this.composeLocalFilterQuery(filterColumn, query);
+				lastOp = this.composeLocalFilterQuery(filterColumn, query, lastOp);
 			}.bind(this));
 
-			return query;
+			return lastOp;
 		},
 
 		composeLocalFilterQuery : function(column, query, lastOp) {
@@ -686,28 +690,27 @@
 					fields: [xaxis.column]
 				});
 
-				// FIXME
 				switch (column.aggregation) {
 					case 'count':
-						group['function'] = {
+						query.getOperator(group).function = {
 							type: 1,
 							field: xaxis.column
 						};
 						break;
 					case 'count':
-						group['function'] = {
+						query.getOperator(group).function = {
 							type: 2,
 							field: column.column
 						};
 						break;
 					case 'count':
-						group['function'] = {
+						query.getOperator(group).function = {
 							type: 0,
 							field: column.column
 						};
 						break;
 					default:
-						group['function'] = {
+						query.getOperator(group).function = {
 							type: 1,
 							field: xaxis.column
 						};
@@ -729,7 +732,7 @@
 
 				query.addEdge(hash, group);
 				query.addEdge(group, sort);
-				
+
 				lastOp = sort;
 			}
 
