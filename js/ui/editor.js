@@ -2,6 +2,12 @@
 	// Extend the standard ui plugin
 	hyryx.editor.Editor = function() {
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
+
+		this.customAutoCompletes = [{
+			text: 'JSON',
+			displayText: 'JSON object',
+			className: 'interactiveJSON'
+		}];
 	};
 
 	hyryx.editor.Editor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
@@ -23,6 +29,7 @@
 		init: function() {
 			this.registerEditor();
 			this.registerEvents();
+			this.registerCustomAutoCompletes();
 		},
 
 		/** Make certain functions accessible for other plugins */
@@ -99,6 +106,37 @@
 			this.targetEl.on(
 				'click', 'button.button-execute', this.execute.bind(this)
 			);
+			this.targetEl.on(
+				'click', '.interactiveJSON', function() {
+					console.log('click on interactive JSON');
+				}
+			);
+		},
+
+		registerCustomAutoCompletes: function() {
+			var self = this;
+			var orig = CodeMirror.hint.javascript;
+			CodeMirror.hint.javascript = function(cm) {
+				var inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+				$.each(self.customAutoCompletes, function(idx, autoComplete) {
+					inner.list.push({
+						text: autoComplete.text,
+						displayText: autoComplete.displayText,
+						hint: function(cm, self, data) {
+							var widget = document.createElement('span');
+							widget.className = autoComplete.className;
+							widget.textContent = data.text;
+							cm.markText(self.from, self.to, {
+								handleMouseEvents: true,
+								replacedWith: widget,
+								shared: true,
+								addToHistory: true
+							});
+						}
+					});
+				});
+				return inner;
+			};
 		},
 
 		showContent: function(content) {

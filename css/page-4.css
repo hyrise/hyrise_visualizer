@@ -1,19 +1,14 @@
-#page-editor .button-execute {
-    display: inline-block;
-    text-align: center;
-    font-weight: 100;
-    font-style: normal;
-    text-decoration: none;
-    background: #010626;
-    color: #f2f2f2;
-    padding: 5px 10px;
-    border: 1px solid transparent;
-    transition: background-color 200ms;
-    -webkit-transition: background-color 200ms;
-    margin-left: 10px;
+span.interactiveJSON {
+    cursor: pointer;
+    color: #fff;
+    background-color: #2a5e8c;
+    border-color: #245178;
+    padding: 2px 4px 2px 3px;
+    border-radius: 4px;
 }
 
-#page-editor .button-execute:hover {
-    background: #2A5E8C;
-    cursor: pointer;
+span.interactiveJSON:hover {
+    color: #fff;
+    background-color: #21496d;
+    border-color: #163149;
 }
