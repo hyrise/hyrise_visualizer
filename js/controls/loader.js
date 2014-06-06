@@ -112,6 +112,9 @@ window.addEventListener('load', function() {
 			'loader!third-party/codemirror/addons/lint/lint.css',
 			'loader!third-party/codemirror/addons/lint/javascript-lint.js',
 			'loader!third-party/codemirror/addons/lint/json-lint.js',
+			'loader!third-party/codemirror/addons/hint/show-hint.js',
+			'loader!third-party/codemirror/addons/hint/javascript-hint.js',
+			'loader!third-party/codemirror/addons/hint/show-hint.css',
 
 			"loader!third-party/selectpicker/bootstrap-select.js",
 			"loader!third-party/selectpicker/bootstrap-select.css",

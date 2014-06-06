@@ -83,14 +83,13 @@
 		registerEditor: function() {
 			this.editor = CodeMirror(document.getElementById(this.id), {
 				value: '',
-				mode: {
-					name: 'javascript'
-				},
+				mode: 'javascript',
 				theme: 'custom',
 				lint: true,
 				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true,
-				minHeight: 500
+				minHeight: 500,
+				extraKeys: {"Ctrl-Space": "autocomplete"}
 			});
 			this.generation = 0;
 			this.editor.setSize(null, 500);
