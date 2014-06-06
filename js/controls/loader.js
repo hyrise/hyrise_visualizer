@@ -101,8 +101,8 @@ window.addEventListener('load', function() {
 			'js/controls/commands.js',
 
 			// THIRD-PARTY
-			'loader!third-party/codemirror/codemirror.js',
-			'loader!third-party/codemirror/codemirror.css',
+			'loader!third-party/codemirror/lib/codemirror.js',
+			'loader!third-party/codemirror/lib/codemirror.css',
 			'loader!third-party/codemirror/custom.css',
 			'loader!third-party/codemirror/mode.javascript.js',
 
