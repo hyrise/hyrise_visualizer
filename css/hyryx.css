@@ -279,30 +279,37 @@ a:hover {
   padding: 0;
 }
 
-div.storedProcedureList .list {
-  max-height: 392px;
+.item-list {
   overflow-x: hidden;
   overflow-y: auto;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-div.storedProcedureList .list .list-group {
+.item-list .list-group {
   margin: 0;
 }
 
-div.storedProcedureList .list .list-group-item {
+.item-list .list-group-item {
   border: none;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
 
-div.storedProcedureList .list .list-group-item:first-child {
+.item-list .list-group-item:first-child {
   border-top: none
 }
 
-div.storedProcedureList .list .list-group-item:last-child {
+.item-list .list-group-item:last-child {
   border-bottom: none
+}
+
+div.storedProcedureList .item-list {
+  max-height: 392px;
+}
+
+div.stencils .item-list {
+  max-height: 440px;
 }
 
 

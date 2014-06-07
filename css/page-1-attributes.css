@@ -1,11 +1,3 @@
-.tables, .stencils {
-  height: calc(100% - 40px);
-  position: relative;
-/*  box-shadow: 5px 0 20px -15px;*/
-  overflow: auto;
-  height: 460px;
-}
-
 .tables .subHeading {
   margin-top: 10px;
   text-transform: uppercase;

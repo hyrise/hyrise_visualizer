@@ -42,7 +42,8 @@
 		},
 
 		hide : function() {
-			this.el.hide();
+			//this.el.hide();
+			$('.sidebar').addClass('hideSidebar');
 		},
 
 		show : function(options) {
@@ -66,16 +67,16 @@
 
 			// show the form for the given node data
 			this.getCurrentMarkup().show(options.node);
-			this.el.show();
-
+			// this.el.show();
+			$('.sidebar').removeClass('hideSidebar');
 		},
 
 		createAttributesContainer : function() {
 			// create container for stencils
 			this.id = hyryx.utils.getID('Attributes');
-			var frame = $('<div class="area_frame"></div>').appendTo(this.targetEl);
+			var frame = $('<div></div>').appendTo(this.targetEl);
 			var $attributes = $('<div class="attributes" id="'+this.id+'"><h3>Attributes</h3></div>').appendTo(frame);
-			$attributes.append('<div class="panel-group form">');
+			$attributes.append('<div class="form">');
 
 			$attributes.on('change', 'input', this.handleInputChange.bind(this));
 
@@ -268,9 +269,9 @@
 		 * @return {HTMLElement} The fieldset containing the title of the field, the field and a list representing all values
 		 */
 		render : function() {
-			this.fieldset = $('<fieldset></fieldset>');
+			this.fieldset = $('<div class="form-group"></div>');
 
-			this.title = $('<span>'+this.id+'</span>').appendTo(this.fieldset);
+			this.title = $('<label for="field-' + this.id + '">' + this.id + '</label>').appendTo(this.fieldset);
 
 
 			if (this.complex) {

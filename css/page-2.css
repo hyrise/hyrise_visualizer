@@ -185,6 +185,10 @@ svg *::-webkit-selection {
     padding: 0px 8px;
 }
 
+.attributes {
+    padding: 8px;
+}
+
 .attributes .form fieldset {
     border: 1px solid #eee;
     padding: 5px;
@@ -200,9 +204,6 @@ svg *::-webkit-selection {
     float: right;
 }
 */
-.attributes {
-    display: none;
-}
 
 .attributes .form .valuelist {
     list-style: none;
@@ -214,16 +215,11 @@ svg *::-webkit-selection {
     float: right;
 }
 
-.attributes .form .form-control {
-    width: 100%;
-    margin-bottom: 5px;
-    border-radius: 0;
-    padding-left: 5px;
-}
-
 .attributes .form .form-complex {
     text-align: center;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .attributes .form .form-complex:hover {
@@ -263,3 +259,31 @@ svg *::-webkit-selection {
     padding: 5px 10px;
     border: 1px solid transparent;
 }
+
+div.sidebar > div:first-child {
+    float: right;
+    height: 100%;
+    background-color: #f7f7f7;
+    border-left: 1px solid #ccc;
+    width: 175px;
+    margin: -1px;
+    transition: width 0.25s ease-out;
+    -moz-transition: width 0.25s ease-out;
+    -webkit-transition: width 0.25s ease-out;
+}
+
+div.sidebar > div:nth-child(2) {
+    margin-right: 175px;
+    transition: margin-right 0.25s ease-out;
+    -moz-transition: margin-right 0.25s ease-out;
+    -webkit-transition: margin-right 0.25s ease-out;
+}
+
+div.sidebar.hideSidebar > div:first-child {
+    width: 0px;
+}
+
+div.sidebar.hideSidebar > div:nth-child(2) {
+    margin-right: 0px;
+}
+

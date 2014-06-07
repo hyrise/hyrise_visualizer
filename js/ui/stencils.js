@@ -17,8 +17,8 @@
 			// create container for stencils
 			this.id = hyryx.utils.getID('Stencils');
 			var frame = $('<div class="area_frame"></div>').appendTo(this.targetEl);
-			var $stencils = $('<div class="stencils" id="'+this.id+'"><h3>Stencils</h3></div>').appendTo(frame);
-			$stencils.append('<div class="panel-group list">');
+			var $stencils = $('<div class="stencils" id="'+this.id+'"><h3>Operations</h3></div>').appendTo(frame);
+			$stencils.append('<div class="list">');
 
 			return $stencils;
 		},
@@ -47,14 +47,8 @@
 
 			$('.stencils .list').html('');
 
-			var header = 'Operations';
-			var panel = ['<div class="panel panel-default">',
-							'<div class="panel-heading">',
-								'<h4 class="panel-title"><a class="accordion-toggle" data-toggle="collapse" data-parent=".stencils .list" href="#collapse-',header,'">',
-								header,
-								'</h4>',
-							'</div>',
-							'<div id="collapse-',header,'" class="panel-collapse collapse list-group">'];
+			// var header = 'Operations';
+			var panel = ['<div class="item-list">', '<div class="list-group">'];
 
 			$.each(hyryx.stencils, function(key, value) {
 

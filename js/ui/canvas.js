@@ -8,7 +8,7 @@
 	hyryx.debug.Canvas.prototype = extend(hyryx.screen.AbstractUIPlugin, {
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render : function() {
-			var frame = $('<div class="area_frame no_padding"></div>').appendTo(this.targetEl);
+			var frame = $('<div class="no_padding"></div>').appendTo(this.targetEl);
 			// create the canvas
 			this.activeScreen = this.screens.canvas = new hyryx.screen.CanvasScreen({
 				width : 7,
@@ -186,7 +186,8 @@
 
 		hideAttributesPanel : function() {
 			// todo use events or facade or stuff, this is evil
-			$('.attributes').hide();
+			// $('.attributes').hide();
+			$('.sidebar').addClass('hideSidebar');
 		},
 
 		loadPlan : function(plan) {

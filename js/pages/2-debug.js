@@ -5,8 +5,7 @@ hyryx.debug = (function() {
         $.get('templates/page_debug.mst', function(template) {
             var rendered = $(Mustache.render(template, {
                 width_stencils: 3,
-                width_canvas: 7,
-                width_attributes: 2,
+                width_canvas: 9,
                 width_data: 12
             }));
             $('#visualizer #page-debug').append(rendered);
