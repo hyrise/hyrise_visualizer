@@ -21,13 +21,21 @@
 				strong: strong
 			}));
 			$('.alerts').append($new_alert);
-			window.setTimeout(function() {
+			return window.setTimeout(function() {
 				$new_alert.fadeOut();
-			}, 2000);
+			}, 3000);
 		}
 
 	};
 
-
+	$.each(AVAIL_TYPES, function(index, value) {
+		// defines "addSuccess", "addInfo", ...
+		var functionName = "add" + value.charAt(0).toUpperCase() + value.slice(1);
+		hyryx.Alerts[functionName] = (function(){
+			return function(message, strong) {
+				return hyryx.Alerts.add(value, message, strong);
+			};
+		})();
+	});
 
 })();
