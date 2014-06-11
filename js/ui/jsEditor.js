@@ -103,7 +103,14 @@
 				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true,
 				minHeight: 500,
-				extraKeys: {"Ctrl-Space": function(cm) { server.complete(cm); }}
+				extraKeys: {
+					"Ctrl-Space": function(cm) { server.complete(cm); },
+					"Ctrl-I": function(cm) { server.showType(cm); },
+					"Alt-.": function(cm) { server.jumpToDef(cm); },
+					"Alt-,": function(cm) { server.jumpBack(cm); },
+					"Ctrl-Q": function(cm) { server.rename(cm); },
+					"Ctrl-.": function(cm) { server.selectName(cm); }
+				}
 			});
 			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
 			this.generation = 0;
