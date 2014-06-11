@@ -9,7 +9,7 @@ window.addEventListener('load', function() {
 		rect = hyryxProto.getBoundingClientRect();
 
 	Modernizr.addTest('standalone', function() {
-		return (window.navigator.standalone != false);
+		return (window.navigator.standalone !== false);
 	});
 
 	yepnope.addPrefix('preload', function(resource) {
@@ -30,7 +30,7 @@ window.addEventListener('load', function() {
 				image.src = resource.url;
 				hyryx.images[resource.url] = image;
 			}
-		}
+		};
 		return resource;
 	});
 
@@ -52,6 +52,7 @@ window.addEventListener('load', function() {
 			"js/libs/bootstrap.js",
 			"js/libs/highcharts.js",
 			"js/libs/d3.v3.js",
+			"js/libs/wildemitter.js",
 			"js/libs/mustache.js"
 		],
 
@@ -68,11 +69,11 @@ window.addEventListener('load', function() {
 
 			$('#tag a').on('click', function(event) {
 				event.preventDefault();
-				console.log('link clicked')
+				console.log('link clicked');
 				var $target = $(event.target);
 
 				$('#tag a').removeClass('active');
-            	$target.addClass('active');
+				$target.addClass('active');
 
 				window.location.hash = $target.attr('href').split('#page-')[1];
 			});
