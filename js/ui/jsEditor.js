@@ -12,6 +12,7 @@
 
 	hyryx.editor.JSEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 		id: hyryx.utils.getID('Editor'),
+		exampleCode: 'function hyrise_run_op(input)' + "\n" + '{' + "\n\t" + '// your code here...' + "\n" + '}',
 
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render: function(callback) {
@@ -107,6 +108,7 @@
 			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
 			this.generation = 0;
 			this.editor.setSize(null, 500);
+			this.editor.setValue(this.exampleCode);
 		},
 
 		registerEvents: function() {
