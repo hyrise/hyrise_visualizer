@@ -26,3 +26,18 @@ div.titlebar button.btn-link {
 	text-decoration: none;
 	outline: 0;
 }
+
+div#frame_queryEditor {
+	z-index: 3000;
+}
+
+div#frame_queryEditor {
+	margin-top: -515px;
+	transition: margin-top 0.4s ease-out;
+	-moz-transition: margin-top 0.4s ease-out;
+	-webkit-transition: margin-top 0.4s ease-out;
+}
+
+div#frame_queryEditor.hideQueryEditor {
+	margin-top: 0px;
+}

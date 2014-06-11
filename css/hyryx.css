@@ -312,6 +312,10 @@ div.stencils .item-list {
   max-height: 440px;
 }
 
+.row.equal-500.mask {
+  overflow: hidden;
+  height: 504px;
+}
 
 .row.equal-500 .area_frame {
   height: 500px;
