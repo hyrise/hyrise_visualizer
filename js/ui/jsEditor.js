@@ -125,7 +125,6 @@
 			);
 			this.targetEl.on(
 				'click', '.interactiveJSON', function() {
-					console.log('click on interactive JSON');
 					self.emit("editJsonQuery");
 				}
 			);
