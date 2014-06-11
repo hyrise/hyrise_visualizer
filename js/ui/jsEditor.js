@@ -90,7 +90,8 @@
 
 		execute: function() {
 			console.log("Execute stored procedure...");
-			var current = this.getCurrentSource(this.generation);
+			var self= this,
+				current = this.getCurrentSource(this.generation);
 			if (current) {
 				this.generation = current.generation;
 				hyryx.ProcedureStore.executeSource(current.source).done(function(data) {
@@ -101,12 +102,7 @@
 						hyryx.Alerts.addSuccess("Procedure executed");
 						console.log(data);
 
-						hyryx.editor.dispatch({
-							type : 'procedureResults.show',
-							options : {
-								data : data
-							}
-						});
+						self.emit("procedureExecuted", data);
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					hyryx.Alerts.addDanger("Error while executing procedure", textStatus + ' ' + errorThrown);

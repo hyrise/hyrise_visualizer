@@ -25,8 +25,8 @@
 
 		registerEvents : function () {
 			var self = this;
-			this.screens.procedureEditor.on("procedureLoaded", function(source) {
-				self.emit("procedureLoaded", source);
+			this.screens.procedureEditor.on("procedure*", function(eventName, data) {
+				self.emit(eventName, data);
 			});
 		},
 
