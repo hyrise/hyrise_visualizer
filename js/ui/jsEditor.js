@@ -103,6 +103,8 @@
 				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true,
 				minHeight: 500,
+				indentWithTabs: true,
+				indentUnit: 4,
 				extraKeys: {
 					"Ctrl-Space": function(cm) { server.complete(cm); },
 					"Ctrl-I": function(cm) { server.showType(cm); },
