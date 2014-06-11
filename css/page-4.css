@@ -12,3 +12,12 @@ span.interactiveJSON:hover {
     background-color: #21496d;
     border-color: #163149;
 }
+
+div.titlebar {
+	width: 100%;
+	background-color: #f7f7f7;
+	height: 39px;
+	line-height: 39px;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: -41px;
+}

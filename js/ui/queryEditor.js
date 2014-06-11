@@ -15,7 +15,10 @@
 
 				eventHandlers = {
 					'stencils': new hyryx.debug.Stencils(rendered.find('#frame_stencils')),
-					'canvas': new hyryx.debug.Canvas(rendered.find('#frame_canvas')),
+					'canvas': new hyryx.debug.Canvas(rendered.find('#frame_canvas'), {
+						showTitlebar: true,
+						showExecuteButton: false
+					}),
 				};
 
 				callback(rendered);

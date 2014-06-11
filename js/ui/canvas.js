@@ -1,7 +1,11 @@
 (function() {
 
 	// Extend the standard ui plugin
-	hyryx.debug.Canvas = function() {
+	hyryx.debug.Canvas = function(target, config) {
+		var config = (typeof config === "undefined") ? {} : config;
+		this.showTitlebar = (typeof config.showTitlebar === "undefined") ? false : config.showTitlebar;
+		this.showExecuteButton = (typeof config.showExecuteButton === "undefined") ? true : config.showExecuteButton;
+
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
 	}
 
@@ -9,6 +13,11 @@
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render : function() {
 			var frame = $('<div class="area_frame no_padding"></div>').appendTo(this.targetEl);
+
+
+			if (this.showTitlebar) {
+				frame.append('<div class="titlebar"><button type="button" class="btn btn-link"><span class="glyphicon glyphicon-chevron-down"></span> Back</button></div>');
+			}
 			// create the canvas
 			this.activeScreen = this.screens.canvas = new hyryx.screen.CanvasScreen({
 				width : 7,
@@ -77,7 +86,9 @@
 				'</label>' +
 			'</div>');
 
-			$controls.append('<a class="btn btn-primary button-execute">Execute<a>');
+			if (this.showExecuteButton) {
+				$controls.append('<a class="btn btn-primary button-execute">Execute<a>');
+			}
 
 			// $controls.append('<div class="execution-preview">');
 
