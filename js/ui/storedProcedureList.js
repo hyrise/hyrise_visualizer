@@ -23,14 +23,14 @@
 		},
 
 		updateProcedureList: function() {
-			$('.storedProcedureList .list').html('');
+			$('.storedProcedureList .item-list').html('');
 
 			$.get('templates/storedProcedureList_content.mst', function(template) {
 				hyryx.ProcedureStore.get().done(function(procedures) {
 					var rendered = Mustache.render(template, {
 						procedures: procedures
 					});
-					$('.storedProcedureList .list').html(rendered);
+					$('.storedProcedureList .item-list').html(rendered);
 				});
 			});
 		},
