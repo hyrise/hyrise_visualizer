@@ -21,3 +21,8 @@ div.titlebar {
 	border-bottom: 1px solid #ddd;
 	margin-bottom: -41px;
 }
+
+div.titlebar button.btn-link {
+	text-decoration: none;
+	outline: 0;
+}
