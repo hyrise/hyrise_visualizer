@@ -5,6 +5,12 @@ hyryx.debug = (function() {
         eventHandlers.stencil.on("initDragDrop", function(){
             eventHandlers.canvas.initDragDrop("#page-debug");
         });
+        eventHandlers.canvas.on("nodeSelected", function(node) {
+            eventHandlers.attributes.show(node);
+        });
+        eventHandlers.canvas.on("nodeDeselected", function() {
+            eventHandlers.attributes.hide();
+        });
     }
 
     function setup() {

@@ -39,8 +39,14 @@
 
 		/** Instantiate the Canvas and add the editor for the JSON representation */
 		init : function() {
+			this.registerEventHandlers();
 			this.registerCanvasControls();
 			this.registerKeyBindings();
+		},
+
+		registerEventHandlers : function() {
+			// bubble up node selection and deselection events
+			this.screens.canvas.on("node*", this.emit.bind(this));
 		},
 
 		/** Make certain functions accessible for other plugins */

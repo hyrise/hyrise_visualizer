@@ -20,14 +20,7 @@
 		},
 
 		/** Make certain functions accessible for other plugins */
-		handleEvent : function(event) {
-			if (attributes) {
-				switch (event.type) {
-					// Update drag drop handlers when updating the list of possible operations
-					case 'hide' : attributes.hide(); break;
-					case 'show' : attributes.show(event.options); break;
-				}
-			}
+		handleEvent : function() {
 		},
 
 		getCurrentMarkup : function() {
@@ -46,15 +39,15 @@
 			$('.sidebar').addClass('hideSidebar');
 		},
 
-		show : function(options) {
-			var id = options.node.type;
+		show : function(node) {
+			var id = node.type;
 
-			if (this.getCurrentMarkup().type !== options.node.type) {
+			if (this.getCurrentMarkup().type !== node.type) {
 
 				// if no markup exists for the given type of node, create a new one
 				if (!this.markups[id]) {
-					console.log('create new markup for ' + options.node.type);
-					this.markups[id] = new Markup(options.node, this.el);
+					console.log('create new markup for ' + node.type);
+					this.markups[id] = new Markup(node, this.el);
 				}
 
 				// hide existing forms
@@ -63,10 +56,10 @@
 			}
 
 			// reference to selected node
-			this.selection = options.node;
+			this.selection = node;
 
 			// show the form for the given node data
-			this.getCurrentMarkup().show(options.node);
+			this.getCurrentMarkup().show(node);
 			// this.el.show();
 			$('.sidebar').removeClass('hideSidebar');
 		},
