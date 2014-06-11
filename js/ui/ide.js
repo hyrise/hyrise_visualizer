@@ -3,7 +3,7 @@
 	// Extend the standard ui plugin
 	hyryx.editor.IDE = function() {
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
-	}
+	};
 
 	hyryx.editor.IDE.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 		render : function(callback) {
@@ -18,15 +18,8 @@
 				self.screens.queryEditor = new hyryx.editor.QueryEditor(rendered.find('#frame_queryEditor'));
 				self.activeScreen =  self.screens.procedureEditor;
 
-				eventHandlers = {
-					'procedureEditor': self.screens.procedureEditor,
-					'queryEditor': self.screens.queryEditor
-				};
-
 				callback(rendered);
 			});
-
-
 		},
 
 		init : function() {},

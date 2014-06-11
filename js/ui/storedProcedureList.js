@@ -91,12 +91,7 @@
 			//TODO: test if there are unsaved changes in currently open procedure
 			hyryx.ProcedureStore.get(procedureName).done(function(source) {
 				self.targetEl.find("input")[0].value = procedureName;
-				hyryx.editor.dispatch({
-					type: 'editor.show',
-					options: {
-						data: source
-					}
-				});
+				self.emit("procedureLoaded", source);
 			}).fail(function(jqXHR, textStatus, errorThrown ) {
 				hyryx.Alerts.addWarning("Couldn't load procedure", textStatus + ", " + errorThrown);
 				console.log("Couldn't load jsprocedure: " + textStatus + errorThrown);
