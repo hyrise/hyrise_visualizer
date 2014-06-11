@@ -32,8 +32,6 @@
 
 		init : function() {},
 
-		handleEvent : function(event) {},
-
 		switchView : function(to) {
 
 			var plan = this.getCurrentScreen().getValue();

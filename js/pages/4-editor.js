@@ -22,27 +22,7 @@ hyryx.editor = (function() {
         ide.on("procedureExecuted", procedureResults.showResults.bind(procedureResults));
     }
 
-    function dispatch(event) {
-        if ('string' === typeof event) {
-            event = {
-                type: event,
-                options: {}
-            };
-        }
-        var config = (event.type || '').split('.'),
-            target = config[0],
-            command = config[1];
-
-        if (eventHandlers[target]) {
-            eventHandlers[target].handleEvent({
-                type: command,
-                options: event.options
-            });
-        }
-    }
-
     return {
-        setup: setup,
-        dispatch: dispatch
+        setup: setup
     };
 })();

@@ -13,9 +13,6 @@
 
 		init: function() {},
 
-		handleEvent: function(event) {
-		},
-
 		showResults: function(data) {
 			var self = this;
 			data.joinedRows = function () {

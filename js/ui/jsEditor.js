@@ -33,17 +33,6 @@
 			this.registerCustomAutoCompletes();
 		},
 
-		/** Make certain functions accessible for other plugins */
-		handleEvent: function(event) {
-			if (event.type === "show") {
-				this.showContent(event.options.data);
-			} else if (event.type === "save") {
-				event.options.callback(
-					this.getCurrentSource(event.options.generation)
-				);
-			}
-		},
-
 		getCurrentSource: function(generation) {
 			// returns current content of the editor
 			// if generation is given:
