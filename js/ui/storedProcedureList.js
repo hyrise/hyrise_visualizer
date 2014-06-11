@@ -37,10 +37,11 @@
 
 		saveProcedure: function(procedureName) {
 			if(!procedureName || procedureName === "") {
-				// TODO: check if we would overwrite other procedure!
 				console.log("cannot save with empty name!");
+				hyryx.Alerts.addWarning("Please enter a name for the procedure!");
 				return;
 			}
+			// TODO: check if we would overwrite other procedure!
 
 			var self = this;
 
@@ -51,6 +52,7 @@
 					callback: function(currentSource) {
 						if(!currentSource) {
 							console.log("no need to save - source didn't changed");
+							hyryx.Alerts.addInfo("Procedure was not modified since last save.");
 							return;
 						}
 
@@ -60,8 +62,10 @@
 							currentSource.source
 						).done(function() {
 							console.log("success! procedure saved!");
+							hyryx.Alerts.addSuccess("Procedure successfully saved!");
 						}).fail(function(jqXHR, textStatus, errorThrown) {
 							console.log("Couldn't save procedure: " + textStatus + ", " + errorThrown);
+							hyryx.Alerts.addDanger("Couldn't save procedure", textStatus + ", " + errorThrown);
 						}).always(self.updateProcedureList);
 					}
 				}
@@ -91,6 +95,7 @@
 					}
 				});
 			}).fail(function(jqXHR, textStatus, errorThrown ) {
+				hyryx.Alerts.addWarning("Couldn't load procedure", textStatus + ", " + errorThrown);
 				console.log("Couldn't load jsprocedure: " + textStatus + errorThrown);
 			});
 		}

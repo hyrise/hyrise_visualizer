@@ -10,7 +10,7 @@
 			if (query instanceof this.Query) {
 				query = query.serialize();
 			}
-			
+
 			return $.ajax({
 				url : hyryx.settings.database + '/jsonQuery/',
 				type : 'POST',
@@ -21,6 +21,7 @@
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown ) {
 				console.log('Could not execute query: ' + textStatus + errorThrown);
+				hyryx.Alerts.addDanger("Database error:", textStatus + ", " + errorThrown);
 			});
 		},
 

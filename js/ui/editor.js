@@ -68,8 +68,10 @@
 				this.generation = current.generation;
 				hyryx.ProcedureStore.executeSource(current.source).done(function(data) {
 					if (data.error) {
+						hyryx.Alerts.addWarning("Error while executing procedure", data.error);
 						console.error("Error executing procedure:" + data.error);
 					} else {
+						hyryx.Alerts.addSuccess("Procedure executed");
 						console.log(data);
 
 						hyryx.editor.dispatch({
@@ -80,9 +82,11 @@
 						});
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {
+					hyryx.Alerts.addDanger("Error while executing procedure", textStatus + ' ' + errorThrown);
 					console.log("Couldn't post/execute jsprocedure: " + textStatus + errorThrown);
 				});
 			} else {
+				hyryx.Alerts.addInfo("Procedure didn't changed and won't be executed");
 				console.log("Nothing changed - nothing to do");
 			}
 		},
