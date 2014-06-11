@@ -75,7 +75,7 @@
 		registerEvents: function() {
 			var self = this;
 			this.targetEl.on("click", "a.list-group-item", function() {
-				self.loadStoredProcedure($(this).data('name'));
+				self.loadStoredProcedure.call(self, $(this).data('name'));
 				hyryx.editor.dispatch('procedureResults.clear');
 			});
 
@@ -87,7 +87,10 @@
 		},
 
 		loadStoredProcedure: function(procedureName) {
+			var self = this;
+			//TODO: test if there are unsaved changes in currently open procedure
 			hyryx.ProcedureStore.get(procedureName).done(function(source) {
+				self.targetEl.find("input")[0].value = procedureName;
 				hyryx.editor.dispatch({
 					type: 'editor.show',
 					options: {
