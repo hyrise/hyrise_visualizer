@@ -28,7 +28,15 @@
 			this.screens.procedureEditor.on("procedure*", function(eventName, data) {
 				self.emit(eventName, data);
 			});
-			this.screens.procedureEditor.on('showQueryEditor', function() {
+			this.screens.procedureEditor.on('showQueryEditor', function(widget) {
+				// dirty! user wildemitter methods
+				this.screens.queryEditor.handleEvent({
+					type: "loadPlan",
+					options: {
+						marker: widget,
+						data: widget.data('content')
+					}
+				});
 				$('#frame_queryEditor').removeClass('hideQueryEditor');
 			});
 			this.screens.queryEditor.on('hideQueryEditor', function() {

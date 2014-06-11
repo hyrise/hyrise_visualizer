@@ -5,6 +5,7 @@
 		var config = (typeof config === "undefined") ? {} : config;
 		this.showTitlebar = (typeof config.showTitlebar === "undefined") ? false : config.showTitlebar;
 		this.showExecuteButton = (typeof config.showExecuteButton === "undefined") ? true : config.showExecuteButton;
+		this.marker = null;
 
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
 	}
@@ -53,7 +54,10 @@
 		handleEvent : function(event) {
 			switch (event.type) {
 				case 'loadPlan' :
-					this.loadPlan(event.options);
+					if (event.options.marker) {
+						this.marker = event.options.marker;
+					};
+					this.loadPlan(event.options.data);
 					break;
 
 				case 'changeHeight' :
@@ -103,7 +107,7 @@
 
 			$('.canvas-controls .button-execute').on('click', function() {
 
-				var request = this.getSerializedQuery();
+				var request = "query=" + this.getSerializedQuery();
 
 				/*
 				$.ajax({
@@ -155,13 +159,16 @@
 
 		},
 
-		getSerializedQuery : function() {
-			var query = "query=";
+		storeJsonInMarker: function() {
+			if (this.marker) {
+				this.marker[0].dataset.content = this.getSerializedQuery();
+			}
+		},
 
+		getSerializedQuery : function() {
 			var plan = this.activeScreen.getValue();
 			this.flattenPlan(plan);
-
-			return query + JSON.stringify(plan, null, 4);
+			return JSON.stringify(plan, null);
 		},
 
 		/**

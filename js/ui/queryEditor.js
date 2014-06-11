@@ -39,10 +39,13 @@
 		registerEvents : function() {
 			var self = this;
 			$('button#hideQueryEditor').click(function() {
+				canvas.storeJsonInMarker();
 				self.emit('hideQueryEditor');
 			});
 		},
 
-		handleEvent : function(event) {}
+		handleEvent : function(event) {
+			canvas.handleEvent(event);
+		}
 	});
 })();

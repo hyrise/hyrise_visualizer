@@ -47,8 +47,28 @@
 					result.generation = this.editor.changeGeneration();
 				}
 			}
+			this.updateInteractiveJSONs();
 			result.source = this.editor.getValue();
 			return result;
+		},
+
+		updateInteractiveJSONs: function() {
+			var self = this;
+			$.each($.grep(this.editor.getAllMarks(), function(mark) {
+				return mark.className === 'interactiveJSON';
+			}), function(i, mark) {
+				var lineNumber = mark.doc.getLineNumber(mark.lines[0]);
+				$.each($.grep(mark.lines[0].markedSpans, function(span) {
+					return span.marker === mark;
+				}), function(j, span) {
+					var from = {line: lineNumber, ch: span.from};
+					var to = {line: lineNumber, ch: span.to};
+					var content = mark.widgetNode.firstChild.dataset.content;
+					var title = mark.widgetNode.firstChild.innerText;
+					var className = mark.className;
+					self.createInteractiveJSONWidget(mark.doc.cm, title, content, className, from, to)
+				});
+			});
 		},
 
 		save: function(procedureName) {
@@ -79,6 +99,7 @@
 
 		execute: function() {
 			console.log("Execute stored procedure...");
+
 			var self= this,
 				current = this.getCurrentSource(this.generation);
 			if (current) {
@@ -128,7 +149,7 @@
 			);
 			this.targetEl.on(
 				'click', '.interactiveJSON', function() {
-					self.emit("editJsonQuery");
+					self.emit("editJsonQuery", $(this));
 				}
 			);
 		},
@@ -142,21 +163,34 @@
 					inner.list.push({
 						text: autoComplete.text,
 						displayText: autoComplete.displayText,
-						hint: function(cm, self, data) {
-							var widget = document.createElement('span');
-							widget.className = autoComplete.className;
-							widget.textContent = data.text;
-							cm.markText(self.from, self.to, {
-								handleMouseEvents: true,
-								replacedWith: widget,
-								shared: true,
-								addToHistory: true
-							});
+						hint: function(cm, me, data) {
+							self.createInteractiveJSONWidget(cm, data.text, "", autoComplete.className, me.from, me.to);
 						}
 					});
 				});
 				return inner;
 			};
+		},
+
+		createInteractiveJSONWidget: function(cm, title, text, className, from, to) {
+			text = (text.length === 0) ? " " : text;
+
+			var widget = document.createElement('span');
+			widget.className = className;
+			widget.textContent = title;
+			widget.dataset.content = text;
+
+			cm.replaceRange(text, from, to);
+			cm.markText(from, {
+				line: from.line,
+				ch: from.ch + text.length
+			}, {
+				handleMouseEvents: true,
+				replacedWith: widget,
+				shared: true,
+				addToHistory: true,
+				className: className
+			});
 		},
 
 		showContent: function(content) {
