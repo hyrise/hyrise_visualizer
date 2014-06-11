@@ -2,6 +2,15 @@
 
 	hyryx.ProcedureApi = {
 		"!name": "hyrise",
+		"!define": {
+			"field": {
+				"type": "string",
+				"name": "string"
+			},
+			"table": {
+				"_isModifiable": "bool"
+			}
+		},
 		"getAttributeVectors": {
 			"!type": "fn()",
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
@@ -78,12 +87,12 @@
 			"!doc": "Log a string to the HYRISE logging facilities."
 		},
 		"buildTable": {
-			"!type": "fn(spec: [], groups: [])",
+			"!type": "fn(fields: [field], groups: [int]) -> table",
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
 			"!doc": "Create a custom output table."
 		},
 		"executeQuery": {
-			"!type": "fn(json: String)",
+			"!type": "fn(json: string)",
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
 			"!doc": "Execute a database query and return the results."
 		}
