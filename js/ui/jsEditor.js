@@ -112,7 +112,10 @@
 				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true,
 				minHeight: 500,
-				extraKeys: {"Ctrl-Space": "autocomplete"}
+				extraKeys: {
+					"Ctrl-Space": "autocomplete",
+					"Alt-Space": "autocomplete"
+				}
 			});
 			this.generation = 0;
 			this.editor.setSize(null, 500);

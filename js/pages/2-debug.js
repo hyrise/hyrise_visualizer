@@ -1,6 +1,12 @@
 hyryx.debug = (function() {
     var eventHandlers;
 
+    function registerEvents() {
+        eventHandlers.stencil.on("initDragDrop", function(){
+            eventHandlers.canvas.initDragDrop("#page-debug");
+        });
+    }
+
     function setup() {
         $.get('templates/page_debug.mst', function(template) {
             var rendered = $(Mustache.render(template, {
@@ -16,6 +22,7 @@ hyryx.debug = (function() {
                 'attributes': new hyryx.debug.Attributes(rendered.find('#frame_attributes')),
                 'data': new hyryx.explorer.Data(rendered.find('#frame_data'))
             };
+            registerEvents();
         });
     }
 

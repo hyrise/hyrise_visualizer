@@ -1,8 +1,16 @@
 (function() {
+	var stencils,
+		canvas;
 
 	// Extend the standard ui plugin
 	hyryx.editor.QueryEditor = function() {
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
+	};
+
+	function registerEvents() {
+		stencils.on("initDragDrop", function(){
+			//canvas.initDragDrop("#frame_queryEditor");
+		});
 	}
 
 	hyryx.editor.QueryEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
@@ -13,14 +21,13 @@
 					width_canvas: 9
 				}));
 
-				eventHandlers = {
-					'stencils': new hyryx.debug.Stencils(rendered.find('#frame_stencils')),
-					'canvas': new hyryx.debug.Canvas(rendered.find('#frame_canvas'), {
-						showTitlebar: true,
-						showExecuteButton: false
-					}),
-				};
+				stencils = new hyryx.debug.Stencils(rendered.find('#frame_stencils'));
+				canvas = new hyryx.debug.Canvas(rendered.find('#frame_canvas'), {
+					showTitlebar: true,
+					showExecuteButton: false
+				});
 
+				registerEvents();
 				callback(rendered);
 			});
 		},

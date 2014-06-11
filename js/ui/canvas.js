@@ -46,25 +46,6 @@
 		/** Make certain functions accessible for other plugins */
 		handleEvent : function(event) {
 			switch (event.type) {
-				// Update drag drop handlers when updating the list of possible operations
-				case 'initDragDrop' :
-
-					var me = this;
-
-					d3.selectAll('.stencils .list-group-item').call(d3.behavior.drag()
-					.on('dragstart', function(d) {
-						if (me.activeScreen.onDragStart instanceof Function) {
-							me.activeScreen.onDragStart.call(this, d);
-						}
-					})
-					.on('dragend', function(d) {
-						if (me.activeScreen.onDragEnd instanceof Function) {
-							me.activeScreen.onDragEnd.call(this, d);
-						}
-					}));
-
-					break;
-
 				case 'loadPlan' :
 					this.loadPlan(event.options);
 					break;
@@ -75,12 +56,29 @@
 			}
 		},
 
+		initDragDrop : function(parentSelector) {
+			// Update drag drop handlers when updating the list of possible operations
+			var self = this;
+
+			d3.selectAll(parentSelector + ' .stencils .list-group-item').call(d3.behavior.drag()
+			.on('dragstart', function(d) {
+				if (self.activeScreen.onDragStart instanceof Function) {
+					self.activeScreen.onDragStart.call(this, d);
+				}
+			})
+			.on('dragend', function(d) {
+				if (self.activeScreen.onDragEnd instanceof Function) {
+					self.activeScreen.onDragEnd.call(this, d);
+				}
+			}));
+		},
+
 		createCanvasControls : function(target) {
 			var $controls = $('<div class="canvas-controls pull-right">').appendTo(target.find('div.canvas'));
 			$controls.append('<div class="btn-group" data-toggle="buttons">' +
 				'<label class="btn btn-default active" data-control="canvas">' +
 					'<input type="radio" name="switchView" id="canvas"> Designer' +
-				 '</label>' +
+				'</label>' +
 				'<label class="btn btn-default" data-control="json">' +
 					'<input type="radio" name="switchView" id="json"> JSON' +
 				'</label>' +
