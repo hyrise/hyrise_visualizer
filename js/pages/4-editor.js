@@ -12,7 +12,7 @@ hyryx.editor = (function() {
 
             eventHandlers = {
                 'storedProcedureList': new hyryx.editor.StoredProcedureList(rendered.find('#frame_storedProcedureList')),
-                'editor': new hyryx.editor.Editor(rendered.find('#frame_editor')),
+                'editor': new hyryx.editor.JSEditor(rendered.find('#frame_editor')),
                 'procedureResults': new hyryx.editor.ProcedureResults(rendered.find('#frame_procedureResults'))
             };
         });

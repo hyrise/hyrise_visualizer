@@ -1,6 +1,6 @@
 (function() {
 	// Extend the standard ui plugin
-	hyryx.editor.Editor = function() {
+	hyryx.editor.JSEditor = function() {
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
 
 		this.customAutoCompletes = [{
@@ -10,13 +10,13 @@
 		}];
 	};
 
-	hyryx.editor.Editor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
+	hyryx.editor.JSEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 		id: hyryx.utils.getID('Editor'),
 
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render: function(callback) {
 			var self = this;
-			$.get('templates/editor.mst', function(template) {
+			$.get('templates/jsEditor.mst', function(template) {
 				var rendered = Mustache.render(template, {
 					id: self.id,
 					submitbutton: true
