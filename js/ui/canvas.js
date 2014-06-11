@@ -8,7 +8,7 @@
 	hyryx.debug.Canvas.prototype = extend(hyryx.screen.AbstractUIPlugin, {
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render : function() {
-			var frame = $('<div class="no_padding"></div>').appendTo(this.targetEl);
+			var frame = $('<div class="area_frame no_padding"></div>').appendTo(this.targetEl);
 			// create the canvas
 			this.activeScreen = this.screens.canvas = new hyryx.screen.CanvasScreen({
 				width : 7,
@@ -21,7 +21,7 @@
 				targetEl : frame
 			});
 
-			this.createCanvasControls();
+			this.createCanvasControls(this.targetEl);
 
 			this.resultPreview = new hyryx.screen.resultPreview({
 				target : $('.execution-preview')
@@ -66,8 +66,8 @@
 			}
 		},
 
-		createCanvasControls : function() {
-			var $controls = $('<div class="canvas-controls pull-right">').appendTo($('div.canvas'));
+		createCanvasControls : function(target) {
+			var $controls = $('<div class="canvas-controls pull-right">').appendTo(target.find('div.canvas'));
 			$controls.append('<div class="btn-group" data-toggle="buttons">' +
 				'<label class="btn btn-default active" data-control="canvas">' +
 					'<input type="radio" name="switchView" id="canvas"> Designer' +

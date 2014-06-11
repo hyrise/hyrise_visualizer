@@ -179,6 +179,12 @@ window.addEventListener('load', function() {
             'js/ui/procedureEditor.js',
             'js/ui/queryEditor.js',
             'js/ui/jsEditor.js',
+            'js/ui/stencils.js',
+			'js/ui/canvas.js',
+			'js/ui/canvas.svg.js',
+			'js/ui/canvas.svgElements.js',
+			'js/ui/canvas.json.js',
+			'js/ui/attributes.js',
             'js/ui/procedureResults.js'
         ],
         complete : function() {
