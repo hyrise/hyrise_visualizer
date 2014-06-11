@@ -9,7 +9,7 @@
 
 	function registerEvents() {
 		stencils.on("initDragDrop", function(){
-			//canvas.initDragDrop("#frame_queryEditor");
+			canvas.initDragDrop("#frame_queryEditor");
 		});
 	}
 
