@@ -78,9 +78,14 @@
 			"!doc": "Log a string to the HYRISE logging facilities."
 		},
 		"buildTable": {
-			"!type": "fn(spec: Array, groups: Array)",
+			"!type": "fn(spec: [], groups: [])",
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
 			"!doc": "Create a custom output table."
+		},
+		"executeQuery": {
+			"!type": "fn(json: String)",
+			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
+			"!doc": "Execute a database query and return the results."
 		}
 	};
 
