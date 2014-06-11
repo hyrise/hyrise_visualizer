@@ -34,6 +34,9 @@
 			this.jsEditor.on("procedureExecuted", function(results) {
 				self.emit("procedureExecuted", results);
 			});
+			this.jsEditor.on("editJsonQuery", function() {
+				self.emit("showQueryEditor");
+			});
 		},
 
 		init : function() {}

@@ -119,12 +119,14 @@
 		},
 
 		registerEvents: function() {
+			var self = this;
 			this.targetEl.on(
 				'click', 'button.button-execute', this.execute.bind(this)
 			);
 			this.targetEl.on(
 				'click', '.interactiveJSON', function() {
 					console.log('click on interactive JSON');
+					self.emit("editJsonQuery");
 				}
 			);
 		},

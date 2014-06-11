@@ -25,7 +25,16 @@
 			});
 		},
 
-		init : function() {},
+		init : function() {
+			this.registerEvents();
+		},
+
+		registerEvents : function() {
+			var self = this;
+			$('button#hideQueryEditor').click(function() {
+				self.emit('hideQueryEditor');
+			});
+		},
 
 		handleEvent : function(event) {}
 	});

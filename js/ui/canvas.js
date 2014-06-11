@@ -16,7 +16,7 @@
 
 
 			if (this.showTitlebar) {
-				frame.append('<div class="titlebar"><button type="button" class="btn btn-link"><span class="glyphicon glyphicon-chevron-down"></span> Back</button></div>');
+				frame.append('<div class="titlebar"><button type="button" id="hideQueryEditor" class="btn btn-link"><span class="glyphicon glyphicon-chevron-down"></span> Back</button></div>');
 			}
 			// create the canvas
 			this.activeScreen = this.screens.canvas = new hyryx.screen.CanvasScreen({

@@ -28,20 +28,14 @@
 			this.screens.procedureEditor.on("procedure*", function(eventName, data) {
 				self.emit(eventName, data);
 			});
+			this.screens.procedureEditor.on('showQueryEditor', function() {
+				$('#frame_queryEditor').removeClass('hideQueryEditor');
+			});
+			this.screens.queryEditor.on('hideQueryEditor', function() {
+				$('#frame_queryEditor').addClass('hideQueryEditor');
+			});
 		},
 
-		init : function() {},
-
-		switchView : function(to) {
-
-			var plan = this.getCurrentScreen().getValue();
-
-			if (this.screens[to]) {
-
-				this.getCurrentScreen().hide();
-				this.hideAttributesPanel();
-				this.setCurrentScreen(to).show(plan);
-			}
-		}
+		init : function() {}
 	});
 })();
