@@ -92,6 +92,8 @@
 		},
 
 		registerEditor: function() {
+			var server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
+
 			this.editor = CodeMirror(document.getElementById(this.id), {
 				value: '',
 				mode: 'javascript',
@@ -100,8 +102,9 @@
 				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true,
 				minHeight: 500,
-				extraKeys: {"Ctrl-Space": "autocomplete"}
+				extraKeys: {"Ctrl-Space": function(cm) { server.complete(cm); }}
 			});
+			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
 			this.generation = 0;
 			this.editor.setSize(null, 500);
 		},
