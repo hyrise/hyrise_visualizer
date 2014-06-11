@@ -30,9 +30,14 @@
 
 	$.each(AVAIL_TYPES, function(index, value) {
 		// defines "addSuccess", "addInfo", ...
+		// ([title,] message): title is bold
 		var functionName = "add" + value.charAt(0).toUpperCase() + value.slice(1);
 		hyryx.Alerts[functionName] = (function(){
-			return function(message, strong) {
+			return function(strong, message) {
+				if (arguments.length < 2) {
+					message = strong;
+					strong = undefined;
+				}
 				return hyryx.Alerts.add(value, message, strong);
 			};
 		})();
