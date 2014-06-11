@@ -1,7 +1,6 @@
 <div>
-	<div class="row equal-500">
-		<div id="frame_storedProcedureList" class="col-md-{{width_storedProcedureList}}"></div>
-		<div id="frame_editor" class="col-md-{{width_editor}}"></div>
+	<div class="row">
+		<div id="frame_ide" class="col-md-{{width_ide}}"></div>
 	</div>
 	<div class="row">
 		<div id="frame_procedureResults" class="col-md-{{width_procedureResults}}"></div>

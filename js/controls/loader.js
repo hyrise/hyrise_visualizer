@@ -175,6 +175,9 @@ window.addEventListener('load', function() {
         load : [
             // page 4 components
             'js/ui/storedProcedureList.js',
+            'js/ui/ide.js',
+            'js/ui/procedureEditor.js',
+            'js/ui/queryEditor.js',
             'js/ui/jsEditor.js',
             'js/ui/procedureResults.js'
         ],

@@ -1,0 +1,4 @@
+<div class="row">
+	<div id="frame_procedureEditor" class="col-md-{{width_procedureEditor}}"></div>
+	<div id="frame_queryEditor" class="col-md-{{width_queryEditor}}"></div>
+</div>
