@@ -12,6 +12,7 @@
 
 	hyryx.editor.JSEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 		id: hyryx.utils.getID('Editor'),
+		saveGeneration: 0,
 
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render: function(callback) {
@@ -59,6 +60,32 @@
 			}
 			result.source = this.editor.getValue();
 			return result;
+		},
+
+		save: function(procedureName) {
+			var currentSource = this.getCurrentSource(this.saveGeneration);
+
+			if(!currentSource) {
+				console.log("no need to save - source didn't changed");
+				hyryx.Alerts.addInfo("Procedure was not modified since last save.");
+				return;
+			}
+
+			this.saveGeneration = currentSource.generation;
+
+			var self = this;
+			hyryx.ProcedureStore.create(
+				procedureName,
+				currentSource.source
+			).done(function() {
+				console.log("success! procedure saved!");
+				hyryx.Alerts.addSuccess("Procedure successfully saved!");
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				console.log("Couldn't save procedure: " + textStatus + ", " + errorThrown);
+				hyryx.Alerts.addDanger("Couldn't save procedure", textStatus + ", " + errorThrown);
+			}).always(function() {
+				self.emit("procedureSaved", arguments);
+			});
 		},
 
 		execute: function() {

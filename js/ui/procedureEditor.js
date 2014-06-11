@@ -23,9 +23,14 @@
 			});
 		},
 
-		registerEvents : function (rendered) {
-			this.storedProcedureList.on("procedureLoaded", this.jsEditor.showContent.bind(this.jsEditor));
-
+		registerEvents : function () {
+			var self = this;
+			this.storedProcedureList.on("procedureLoaded", function(source) {
+				self.jsEditor.showContent(source);
+				self.emit("procedureLoaded", source);
+			});
+			this.storedProcedureList.on("saveProcedure", this.jsEditor.save.bind(this.jsEditor));
+			this.jsEditor.on("procedureSaved", this.storedProcedureList.updateProcedureList.bind(this.storedProcedureList));
 		},
 
 		init : function() {},

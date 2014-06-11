@@ -18,7 +18,15 @@
 				self.screens.queryEditor = new hyryx.editor.QueryEditor(rendered.find('#frame_queryEditor'));
 				self.activeScreen =  self.screens.procedureEditor;
 
+				self.registerEvents();
 				callback(rendered);
+			});
+		},
+
+		registerEvents : function () {
+			var self = this;
+			this.screens.procedureEditor.on("procedureLoaded", function(source) {
+				self.emit("procedureLoaded", source);
 			});
 		},
 

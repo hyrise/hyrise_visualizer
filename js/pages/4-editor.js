@@ -1,5 +1,6 @@
 hyryx.editor = (function() {
-    var eventHandlers;
+    var ide,
+        procedureResults;
 
     function setup() {
         $.get('templates/page_editor.mst', function(template) {
@@ -9,11 +10,15 @@ hyryx.editor = (function() {
             }));
             $('#visualizer #page-editor').append(rendered);
 
-            eventHandlers = {
-                'ide' : new hyryx.editor.IDE(rendered.find('#frame_ide')),
-                'procedureResults': new hyryx.editor.ProcedureResults(rendered.find('#frame_procedureResults'))
-            };
+            ide = new hyryx.editor.IDE(rendered.find('#frame_ide'));
+            procedureResults = new hyryx.editor.ProcedureResults(rendered.find('#frame_procedureResults'));
+
+            registerEvents();
         });
+    }
+
+    function registerEvents() {
+        ide.on("procedureLoaded", procedureResults.clearResults.bind(procedureResults));
     }
 
     function dispatch(event) {
