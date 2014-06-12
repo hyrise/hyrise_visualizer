@@ -214,6 +214,10 @@
 
 		loadPlan : function(plan) {
 			var screen = this.getCurrentScreen();
+			if (typeof plan === 'string') {
+				plan = (plan.trim().length === 0) ? '{"operators": {},"edges": []}' : plan;
+				plan = JSON.parse(plan);
+			}
 			if (screen) {
 				plan.hasChanged = true;
 				screen.show(plan);

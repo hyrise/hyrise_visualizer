@@ -173,7 +173,7 @@
 		},
 
 		createInteractiveJSONWidget: function(cm, title, text, className, from, to) {
-			text = (text.length === 0) ? " " : text;
+			text = (text.length === 0) ? '{"operators": {},"edges": []}' : text;
 
 			var widget = document.createElement('span');
 			widget.className = className;

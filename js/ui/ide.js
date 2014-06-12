@@ -34,7 +34,7 @@
 					type: "loadPlan",
 					options: {
 						marker: widget,
-						data: widget.data('content')
+						data: widget[0].dataset.content
 					}
 				});
 				$('#frame_queryEditor').removeClass('hideQueryEditor');
