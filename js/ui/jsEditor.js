@@ -4,9 +4,10 @@
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
 
 		this.customAutoCompletes = [{
-			text: 'JSON',
+			title: 'JSON',
 			displayText: 'JSON object',
-			className: 'interactiveJSON'
+			className: 'interactiveJSON',
+			content: '{"operators": {},"edges": []}'
 		}];
 	};
 
@@ -161,10 +162,10 @@
 				var inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
 				$.each(self.customAutoCompletes, function(idx, autoComplete) {
 					inner.list.push({
-						text: autoComplete.text,
+						text: autoComplete.title,
 						displayText: autoComplete.displayText,
 						hint: function(cm, me, data) {
-							self.createInteractiveJSONWidget(cm, data.text, "", autoComplete.className, me.from, me.to);
+							self.createInteractiveJSONWidget(cm, data.text, autoComplete.content, autoComplete.className, me.from, me.to);
 						}
 					});
 				});
@@ -173,7 +174,7 @@
 		},
 
 		createInteractiveJSONWidget: function(cm, title, text, className, from, to) {
-			text = (text.length === 0) ? '{"operators": {},"edges": []}' : text;
+			text = (text.length === 0) ? ' ' : text;
 
 			var widget = document.createElement('span');
 			widget.className = className;
