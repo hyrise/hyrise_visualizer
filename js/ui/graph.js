@@ -16,7 +16,7 @@
 		render : function() {
 			this.id = hyryx.utils.getID('Graph');
 			// Add graph options
-			var $graphOptions = this.targetEl.append('<div class="area_frame no_padding"><div id="'+this.id+'" class="graph col-md-10">').find('.graph');
+			var $graphOptions = this.targetEl.append('<div class="area_frame no_padding"><div id="'+this.id+'" class="graph">').find('.graph');
 
 			this.addDescription($graphOptions);
 			// createGlobalFilterMarkup($graphOptions);
@@ -65,7 +65,7 @@
 			});
 
 			// Add graph container
-			parent.append('<div id="graph" class="col-md-10" style="height:400px;"></div>');
+			parent.append('<div id="graph"></div>');
 
 			// opposite y-axis
 			this.createAxisMarkup(parent, {
@@ -85,7 +85,7 @@
 		// Create an axis based on the given config object and append it to the given parent object
 		createAxisMarkup : function(parent, config) {
 			var xAxis = config.configID[0]==='x';
-			var $axis = jQuery('<div class="axis axisDroppableContainer '+config.configID+(xAxis ? ' col-md-12':' col-md-1')+'" id="'+config.configID+'"></div>');
+			var $axis = jQuery('<div class="axis axisDroppableContainer '+config.configID+(xAxis ? ' axisX':' axisY')+'" id="'+config.configID+'"></div>');
 			var $settings = jQuery('<div class="axisSettings" id="'+config.id+'">').appendTo($axis);
 
 			$axis.append('<p class="drop-hint">'+(xAxis ? 'x-axis' : 'y-axis')+'</p>');
@@ -96,14 +96,15 @@
 			this.createAxisTypeSelectMarkup($settings, config);
 
 			$axis.appendTo(parent);
-				
+
 		},
 
 		// Create type selection
 		createAxisTypeSelectMarkup : function(parent, config) {
 			// var $div = jQuery('<div class="control-group"></div>');
-			
-			var $select = jQuery('<select class="selectpicker axisTypeSelect"></select>').appendTo(parent);
+
+			var oppositeYAxis = config.configID==='oppositeYSettings';
+			var $select = jQuery('<select class="selectpicker axisTypeSelect ' + (oppositeYAxis ? 'pull-right':'') + '"></select>').appendTo(parent);
 			// Add options
 			('linear logarithmic datetime categories'.split(' ')).each(function(type) {
 				jQuery('<option value="'+type+'">'+type.capitalize()+'</option>').appendTo($select);
@@ -123,7 +124,7 @@
 		// Add a selection for different graph types
 		createGraphTypeFilterMarkup : function(parent) {
 			var $div = jQuery('<div class="control-group"></div>');
-			
+
 			jQuery('<label class="control-label" for="graphTypeButton"> Graph Type: </label>').appendTo($div);
 			var $select = jQuery('<select class="selectpicker graphTypeButton show-tick"></select>').appendTo($div);
 			// Add options
@@ -227,7 +228,7 @@
 					var toggle = $(this).find('.popoverToggle'),
 						min = toggle.data('min'),
 						max = toggle.data('max');
-							
+
 
 					new hyryx.screen.popover({
 						container: $(this),
@@ -256,7 +257,7 @@
 					jQuery(this).removeClass("hoverDroppable");
 				},
 				drop: function(event, ui) {
-					if (jQuery(this).children('[data-id="' + jQuery(ui.draggable).data("id") + '"]').length <= 0) {         
+					if (jQuery(this).children('[data-id="' + jQuery(ui.draggable).data("id") + '"]').length <= 0) {
 						jQuery(this).append(jQuery(ui.draggable).clone());
 						helpers.reloadData();
 					}
@@ -274,14 +275,14 @@
 
 			$form.append('<div class="control-group aggregationControls">'+
 						'<label class="control-label" for="aggregationSelect">Aggregation</label>'+
-						
+
 						'<select class="selectpicker aggrSelect show-tick">' +
 							('none count average sum'.split(' ')).map(function(type) {
 								return '<option value="'+type+'">'+type.capitalize()+'</option>';
 							}).join('')+
-						'</select>'+					
+						'</select>'+
 					'</div>');
-					
+
 			$form.append('<div class="control-group typeControls">'+
 						'<label class="control-label" for="chartTypeSelect">Type</label>'+
 						'<select class="selectpicker typeSelect show-tick">' +
@@ -290,7 +291,7 @@
 							}).join('')+
 						'</select>'+
 					'</div>');
-					
+
 			if (Number(type) < 2) {
 				$form.append('<div class="control-group rangeControls">'+
 							'<label class="control-label" for="valueRangeSlider">Value range:</label>'+
@@ -300,7 +301,7 @@
 								'<div class="col-md-6 text-right">'+max+'</div>'+
 							// '</div>'+
 						'</div>');
-			} 
+			}
 
 			// initialize select picker plugin
 			// $form.find('.selectpicker').selectpicker();
@@ -340,10 +341,10 @@
 			// render slider
 			var lower = $li.attr('data-lower-value');
 			lower = (typeof lower === 'undefined' ? min : lower);
-			
+
 			var higher = $li.attr('data-higher-value');
 			higher = (typeof higher === 'undefined' ? max : higher);
-			
+
 			form.find('.valueRangeSlider').slider({
 				min		: min,
 				max		: max,
@@ -389,14 +390,14 @@
 				switch($(this).parents('.axisSettings').attr('id')) {
 					case 'yAxis':
 						chart.yAxis[0].update({type: $(this).val()});
-						break; 
-					case 'oAxis':
-						chart.yAxis[1].update({type: $(this).val()}); 
-						break; 
-					case 'xAxis':
-						chart.xAxis[0].update({type: $(this).val()}); 
 						break;
-				} 
+					case 'oAxis':
+						chart.yAxis[1].update({type: $(this).val()});
+						break;
+					case 'xAxis':
+						chart.xAxis[0].update({type: $(this).val()});
+						break;
+				}
 			});
 
 
@@ -416,7 +417,7 @@
 			$(".graphTypeButton").change( function() {
 				if (chart.series) {
 					for(var i = 0; i < chart.series.length; i++) {
-						chart.series[i].update({type: $(this).val()}); 
+						chart.series[i].update({type: $(this).val()});
 					}
 				}
 				$('.column').attr('data-chartType', $(this).val());
@@ -454,7 +455,7 @@
 					chart.series[indicesToRemove[i]].remove();
 					loadedSeries.splice(indicesToRemove[i], 1);
 				}
-			}  
+			}
 		},
 
 		collectSeries : function() {
@@ -541,7 +542,7 @@
 
 		reloadData : function() {
 			if ((jQuery('.ySettings .list-group-item').length > 0 || jQuery('.oppositeYSettings .list-group-item').length > 0) && jQuery('.xSettings .list-group-item').length > 0) {
-				
+
 				var newSeries = this.collectSeries();
 				var xAxisColumn = jQuery('.xSettings .list-group-item');
 				var xAxis = {
@@ -784,11 +785,11 @@
 					// var target = $('#highcharts-0 .highcharts-axis text');
 
 					// add a popover to edit the name of the axis
-					
+
 				}
 
 				if (chart.xAxis[0].axisTitle) {
-					helpers.registerAxisPopover(chart.xAxis[0].axisTitle.element);	
+					helpers.registerAxisPopover(chart.xAxis[0].axisTitle.element);
 				}
 
 				hyryx.explorer.dispatch({
@@ -805,7 +806,7 @@
 				try {
 					var query = JSON.parse(content[0].query);
 					// console.log(query);
-				
+
 					if (!$('.btn-debug')[0]) {
 						$('.graph').append('<a class="btn-debug col-md-10"><div>Debug query &raquo;</div></a>');
 					}
@@ -817,7 +818,7 @@
 						});
 						hyryx.utils.showScreen('debug');
 					});
-					
+
 				} catch (e) {
 					console.log('query could not be parsed', content[0].query);
 				}
