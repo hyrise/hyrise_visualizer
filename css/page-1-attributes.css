@@ -48,24 +48,14 @@
   border-bottom-left-radius: 0;
 }*/
 
-.list .panel-heading {
-  padding: 0;
+.tables .list {
+  overflow: auto;
+  max-height: 443px;
+  margin: 0;
 }
 
-.list .panel-title {
-  display: block;
+.tables .list .panel-heading {
+  background-color: #2A5E8C;
+  color: #FFFFFF;
   text-align: center;
-  font-style: normal;
-  background: #010626;
-  color: #F2F2F2;
-  padding: 10px 0px;
-}
-
-.list .panel-title a {
-  font-weight: 100;
-}
-
-.list div.panel, .list div.panel div {
-  border-radius: 0;
-  border: 0;
 }

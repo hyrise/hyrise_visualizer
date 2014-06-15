@@ -134,7 +134,7 @@
 				$(panel.join('')).appendTo('.tables .list');
 			});
 
-			$('.tables .list .collapse.panel-collapse:first').addClass('in');
+			// $('.tables .list .collapse.panel-collapse:first').addClass('in');
 
 			//initilaize the options popover
 
