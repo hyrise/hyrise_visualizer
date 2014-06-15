@@ -1,5 +1,6 @@
 .graph {
 	height: 100%;
+	overflow: hidden;
 }
 
 #graph {

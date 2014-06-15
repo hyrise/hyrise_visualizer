@@ -597,8 +597,8 @@
 							}
 
 							// Replace names like COUNT(xaxis) with COUNT(yaxis)
-							if (finalResult.name[xaxis.column]) {
-								finalResult.name[xaxis.column] = column.column;
+							if (finalResult.name[xAxis.column]) {
+								finalResult.name[xAxis.column] = column.column;
 							}
 						}
 					}.bind(this)));
