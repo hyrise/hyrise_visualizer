@@ -294,6 +294,7 @@ a:hover {
   border: none;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
+  cursor: pointer;
 }
 
 .item-list .list-group-item:first-child {
