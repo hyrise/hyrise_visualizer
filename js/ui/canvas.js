@@ -6,6 +6,8 @@
 		this.showTitlebar = (typeof config.showTitlebar === "undefined") ? false : config.showTitlebar;
 		this.showExecuteButton = (typeof config.showExecuteButton === "undefined") ? true : config.showExecuteButton;
 		this.marker = null;
+		this.newQueryPlan = '{"operators": {},"edges": []}';
+		this.initialQueryPlan = this.newQueryPlan;
 
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
 	}
@@ -17,7 +19,9 @@
 
 
 			if (this.showTitlebar) {
-				frame.append('<div class="titlebar"><button type="button" id="hideQueryEditor" class="btn btn-link"><span class="glyphicon glyphicon-chevron-down"></span> Back</button></div>');
+				frame.append('<div class="titlebar">'
+					+ '<button type="button" id="hideQueryEditor" class="btn btn-link"><span class="glyphicon glyphicon-chevron-down"></span> Back</button>'
+					+ '<button type="button" id="revertQueryPlan" class="btn btn-link pull-right"><span class="glyphicon glyphicon-repeat"></span> Revert</button></div>');
 			}
 			// create the canvas
 			this.activeScreen = this.screens.canvas = new hyryx.screen.CanvasScreen({
@@ -57,7 +61,7 @@
 					if (event.options.marker) {
 						this.marker = event.options.marker;
 					};
-					this.loadPlan(event.options.data);
+					this.loadPlan(event.options.data, event.options.initial);
 					break;
 
 				case 'changeHeight' :
@@ -159,6 +163,10 @@
 
 		},
 
+		revertToInitialQueryPlan: function() {
+			this.loadPlan(this.initialQueryPlan, false);
+		},
+
 		storeJsonInMarker: function() {
 			if (this.marker) {
 				this.marker[0].dataset.content = this.getSerializedQuery();
@@ -212,11 +220,14 @@
 			$('.sidebar').addClass('hideSidebar');
 		},
 
-		loadPlan : function(plan) {
+		loadPlan : function(plan, initial) {
 			var screen = this.getCurrentScreen();
 			if (typeof plan === 'string') {
-				plan = (plan.trim().length === 0) ? '{"operators": {},"edges": []}' : plan;
+				plan = (plan.trim().length === 0) ? this.newQueryPlan : plan;
 				plan = JSON.parse(plan);
+			}
+			if (initial) {
+				this.initialQueryPlan = plan;
 			}
 			if (screen) {
 				plan.hasChanged = true;

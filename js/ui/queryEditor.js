@@ -42,6 +42,9 @@
 				canvas.storeJsonInMarker();
 				self.emit('hideQueryEditor');
 			});
+			$('button#revertQueryPlan').click(function() {
+				canvas.revertToInitialQueryPlan();
+			});
 		},
 
 		handleEvent : function(event) {

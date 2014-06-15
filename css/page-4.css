@@ -27,6 +27,11 @@ div.titlebar button.btn {
 	outline: 0 !important;
 }
 
+div.titlebar .pull-right {
+	padding-top: 9px;
+	padding-bottom: 3px;
+}
+
 div#frame_queryEditor {
 	z-index: 3000;
 }
