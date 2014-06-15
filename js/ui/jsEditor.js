@@ -7,7 +7,9 @@
 			title: 'JSON',
 			displayText: 'JSON object',
 			className: 'interactiveJSON',
-			content: '{"operators": {},"edges": []}'
+			content: '{"operators": {},"edges": []}',
+			regex: /\{"operators".*"edges"[^\}]*\}/g,
+			func: this.createInteractiveJSONWidget
 		}];
 	};
 
@@ -165,7 +167,7 @@
 						text: autoComplete.title,
 						displayText: autoComplete.displayText,
 						hint: function(cm, me, data) {
-							self.createInteractiveJSONWidget(cm, data.text, autoComplete.content, autoComplete.className, me.from, me.to);
+							autoComplete.func(cm, data.text, autoComplete.content, autoComplete.className, me.from, me.to);
 						}
 					});
 				});
@@ -195,7 +197,18 @@
 		},
 
 		showContent: function(content) {
+			var self = this;
 			this.editor.setValue(content);
+			this.editor.eachLine(function(line) {
+				var lineNumber = self.editor.getLineNumber(line);
+				$.each(self.customAutoCompletes, function(i, autoComplete) {
+					$.each(line.text.allRegexMatches(autoComplete.regex), function(j, match) {
+						autoComplete.func(self.editor, autoComplete.title, match.content,
+							autoComplete.className, {line: lineNumber, ch: match.from},
+							{line: lineNumber, ch: match.to});
+					});
+				});
+			});
 		}
 	});
 })();
