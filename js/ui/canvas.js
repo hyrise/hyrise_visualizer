@@ -70,11 +70,11 @@
 			}
 		},
 
-		initDragDrop : function(parentSelector) {
+		initDragDrop : function(stencils) {
 			// Update drag drop handlers when updating the list of possible operations
 			var self = this;
 
-			d3.selectAll(parentSelector + ' .stencils .list-group-item').call(d3.behavior.drag()
+			d3.selectAll(stencils).call(d3.behavior.drag()
 			.on('dragstart', function(d) {
 				if (self.activeScreen.onDragStart instanceof Function) {
 					self.activeScreen.onDragStart.call(this, d);

@@ -8,8 +8,8 @@
 	};
 
 	function registerEvents() {
-		stencils.on("initDragDrop", function(){
-			canvas.initDragDrop("#frame_queryEditor");
+		stencils.on("initDragDrop", function(stencils){
+			canvas.initDragDrop(stencils);
 		});
 	}
 

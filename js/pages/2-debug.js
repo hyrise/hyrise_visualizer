@@ -2,8 +2,8 @@ hyryx.debug = (function() {
     var eventHandlers;
 
     function registerEvents() {
-        eventHandlers.stencil.on("initDragDrop", function(){
-            eventHandlers.canvas.initDragDrop("#page-debug");
+        eventHandlers.stencil.on("initDragDrop", function(stencils){
+            eventHandlers.canvas.initDragDrop(stencils);
         });
         eventHandlers.canvas.on("nodeSelected", function(node) {
             eventHandlers.attributes.show(node);
