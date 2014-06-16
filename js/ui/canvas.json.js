@@ -7,7 +7,7 @@
 
 		this.isActiveScreen = false;
 		this.id = hyryx.utils.getID('JSON');
-		
+
 		this.el = this.render();
 		this.init();
 		return this;

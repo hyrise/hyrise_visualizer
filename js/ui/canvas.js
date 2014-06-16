@@ -60,7 +60,7 @@
 				case 'loadPlan' :
 					if (event.options.marker) {
 						this.marker = event.options.marker;
-					};
+					}
 					this.loadPlan(event.options.data, event.options.initial);
 					break;
 
@@ -109,7 +109,7 @@
 		registerCanvasControls : function() {
 			var me = this;
 
-			$('.canvas-controls .button-execute').on('click', function() {
+			this.targetEl.on('click', '.canvas-controls .button-execute', function() {
 
 				var request = "query=" + this.getSerializedQuery();
 
@@ -142,23 +142,9 @@
 
 			}.bind(this));
 
-			$('.canvas-controls label').on({
-				// mouseover : function(d) {
-				// 	var $this = $(this);
-				// 	if (!$this.hasClass('active')) {
-				// 		$this.addClass('hover');
-				// 	}
-				// },
-				// mouseout : function(d) {
-				// 	$(this).removeClass('hover');
-				// },
-				click : function(d) {
-					// $('.canvas-controls li.active').removeClass('active');
-					// $(this).addClass('active');
-
-					me.switchView($(this).data('control'));
-				}
-			})
+			this.targetEl.on('click', '.canvas-controls label', function(d) {
+				me.switchView($(this).data('control'));
+			});
 
 
 		},
