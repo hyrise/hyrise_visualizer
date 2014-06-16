@@ -9,6 +9,10 @@
 			},
 			"table": {
 				"_isModifiable": "bool"
+			},
+			"query": {
+				"operators": "object",
+				"edges": "Array"
 			}
 		},
 		"getAttributeVectors": {
@@ -95,6 +99,10 @@
 			"!type": "fn(json: string)",
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
 			"!doc": "Execute a database query and return the results."
+		},
+		"query": {
+			"!type": "fn() -> query",
+			"!doc": "Create a query object."
 		}
 	};
 

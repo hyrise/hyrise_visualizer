@@ -148,13 +148,26 @@
 					"Alt-.": function(cm) { server.jumpToDef(cm); },
 					"Alt-,": function(cm) { server.jumpBack(cm); },
 					"Ctrl-Q": function(cm) { server.rename(cm); },
-					"Ctrl-.": function(cm) { server.selectName(cm); }
+					"Ctrl-.": function(cm) { server.selectName(cm); },
+					"Ctrl-E": function(cm) { this.editObject(cm, server); }.bind(this),
 				}
 			});
 			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
 			this.generation = 0;
 			this.editor.setSize(null, 500);
 			this.editor.setValue(this.exampleCode);
+		},
+
+		editObject: function(cm, server) {
+			server.request(cm, "type", function(error, data) {
+				if (error) return hyryx.Alerts.addDanger(error);
+				console.log(data);
+				var type = data.origin + '.' + data.type;
+				console.log(type);
+				if (type !== '[doc].{edges, operators}') return;
+
+				this.emit('editJsonQuery', {});
+			}.bind(this));
 		},
 
 		registerEvents: function() {
