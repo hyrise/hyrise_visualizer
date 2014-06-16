@@ -4,12 +4,13 @@
 	}
 
 	hyryx.screen.AbstractUIPlugin = function(targetEl) {
+		WildEmitter.call(this);
 		this.targetEl = targetEl;
 		this.create();
 		return this;
-	}
+	};
 
-	hyryx.screen.AbstractUIPlugin.prototype = {
+	hyryx.screen.AbstractUIPlugin.prototype = extend(WildEmitter, {
 
 		screens: {},
 		activeScreen: null,
@@ -37,5 +38,5 @@
 			this.activeScreen = this.screens[id];
 			return this.activeScreen;
 		}
-	}
+	});
 })();

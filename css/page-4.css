@@ -12,3 +12,37 @@ span.interactiveJSON:hover {
     background-color: #21496d;
     border-color: #163149;
 }
+
+div.titlebar {
+	width: 100%;
+	background-color: #f7f7f7;
+	height: 39px;
+	line-height: 39px;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: -41px;
+}
+
+div.titlebar button.btn {
+	text-decoration: none;
+	outline: 0 !important;
+}
+
+div.titlebar .pull-right {
+	padding-top: 9px;
+	padding-bottom: 3px;
+}
+
+div#frame_queryEditor {
+	z-index: 3000;
+}
+
+div#frame_queryEditor {
+	margin-top: -515px;
+	transition: margin-top 0.3s ease-in-out;
+	-moz-transition: margin-top 0.3s ease-in-out;
+	-webkit-transition: margin-top 0.3s ease-in-out;
+}
+
+div#frame_queryEditor.hideQueryEditor {
+	margin-top: 0px;
+}

@@ -3,6 +3,7 @@
 	var gNodes, gEdges, radius, me, svg, width, height, startNode, endNode, drag_line;
 
 	hyryx.screen.CanvasScreen = function(config) {
+		WildEmitter.call(this);
 		this.width = config.width || 12;
 		this.targetEl = config.targetEl;
 		this.cls = config.cls || 'canvas';
@@ -13,11 +14,11 @@
 		this.el = this.render();
 		this.init();
 		return this;
-	}
+	};
 
 	height = 500;
 
-	hyryx.screen.CanvasScreen.prototype = {
+	hyryx.screen.CanvasScreen.prototype = extend(WildEmitter, {
 
 		nodes : [],
 
@@ -74,10 +75,10 @@
 
 			// line displayed when dragging new nodes
 			drag_line = svg.append('svg:path')
-			    .attr({
-			        'class' : 'dragline hidden',
-			        'd'     : 'M0,0L0,0'
-			    })
+				.attr({
+					'class' : 'dragline hidden',
+					'd'     : 'M0,0L0,0'
+				})
 			;
 
 			svg.append('text').attr({
@@ -539,19 +540,13 @@
 		},
 
 		handleNodeSelectionChange : function(select, node) {
-
 			if (select) {
-				hyryx.debug.dispatch({
-					type : 'attributes.show',
-					options : {
-						node : node
-					}
-				});
+				this.emit('nodeSelected', node);
 			} else {
-				hyryx.debug.dispatch('attributes.hide');
+				this.emit('nodeDeselected');
 			}
 		},
-	};
+	});
 
 	var edges = function() {
 		return me.nodes.reduce(function(initial, node) {
@@ -561,7 +556,7 @@
 				})
 			);
 		}, []);
-	}
+	};
 
 	var transformEdgeEndpoints = function(d, i) {
 		var endPoints = d.endPoints();

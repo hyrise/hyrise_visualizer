@@ -294,6 +294,7 @@ a:hover {
   border: none;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
+  cursor: pointer;
 }
 
 .item-list .list-group-item:first-child {
@@ -312,6 +313,10 @@ div.stencils .item-list {
   max-height: 440px;
 }
 
+.row.equal-500.mask {
+  overflow: hidden;
+  height: 504px;
+}
 
 .row.equal-500 .area_frame {
   height: 500px;

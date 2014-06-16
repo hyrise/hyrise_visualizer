@@ -1,44 +1,28 @@
 hyryx.editor = (function() {
-    var eventHandlers;
+    var ide,
+        procedureResults;
 
     function setup() {
         $.get('templates/page_editor.mst', function(template) {
             var rendered = $(Mustache.render(template, {
-                width_storedProcedureList: 3,
-                width_editor: 9,
+                width_ide: 12,
                 width_procedureResults: 12
             }));
             $('#visualizer #page-editor').append(rendered);
 
-            eventHandlers = {
-                'storedProcedureList': new hyryx.editor.StoredProcedureList(rendered.find('#frame_storedProcedureList')),
-                'editor': new hyryx.editor.JSEditor(rendered.find('#frame_editor')),
-                'procedureResults': new hyryx.editor.ProcedureResults(rendered.find('#frame_procedureResults'))
-            };
+            ide = new hyryx.editor.IDE(rendered.find('#frame_ide'));
+            procedureResults = new hyryx.editor.ProcedureResults(rendered.find('#frame_procedureResults'));
+
+            registerEvents();
         });
     }
 
-    function dispatch(event) {
-        if ('string' === typeof event) {
-            event = {
-                type: event,
-                options: {}
-            };
-        }
-        var config = (event.type || '').split('.'),
-            target = config[0],
-            command = config[1];
-
-        if (eventHandlers[target]) {
-            eventHandlers[target].handleEvent({
-                type: command,
-                options: event.options
-            });
-        }
+    function registerEvents() {
+        ide.on("procedureLoaded", procedureResults.clearResults.bind(procedureResults));
+        ide.on("procedureExecuted", procedureResults.showResults.bind(procedureResults));
     }
 
     return {
-        setup: setup,
-        dispatch: dispatch
+        setup: setup
     };
 })();

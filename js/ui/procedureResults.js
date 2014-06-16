@@ -13,20 +13,12 @@
 
 		init: function() {},
 
-		handleEvent: function(event) {
-			if (event.type === "show") {
-				this.showResults(event.options.data);
-			} else if (event.type === "clear") {
-				this.clearResults();
-			}
-		},
-
 		showResults: function(data) {
 			var self = this;
 			data.joinedRows = function () {
 				return function (text, render) {
 					return "<tr><td>" + render(text).split(",").join("</td><td>") + "</td></tr>";
-				}
+				};
 			};
 			$.each(data.performanceData, function(idx, perfData) {
 				perfData.index = idx;

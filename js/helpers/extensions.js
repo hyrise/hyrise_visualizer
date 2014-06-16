@@ -5,6 +5,7 @@
 //
 // String >>
 //   capitalize
+//   allRegexMatches
 //
 // Array >>
 //   each
@@ -36,6 +37,19 @@ var $break = { };
 
 String.prototype.capitalize = function() {
 	return this.charAt(0).toUpperCase() + this.substring(1).toLowerCase();
+}
+
+String.prototype.allRegexMatches = function(regex) {
+	var data = [];
+	var getKeyValue = function() {
+		data.push({
+			from: arguments[arguments.length-2],
+			to: arguments[arguments.length-2]+arguments[0].length,
+			content: arguments[0]
+		});
+	};
+	this.replace(regex, getKeyValue);
+	return data;
 }
 
 Array.prototype.each = function(iterator, context) {

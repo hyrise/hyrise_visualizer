@@ -1,0 +1,4 @@
+<div class="row equal-500">
+	<div id="frame_stencils" class="col-md-{{width_stencils}}"></div>
+	<div id="frame_canvas" class="col-md-{{width_canvas}}"></div>
+</div>

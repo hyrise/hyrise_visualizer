@@ -1,5 +1,17 @@
 .graph {
-	margin-top: 15px;
+	height: 100%;
+	overflow: hidden;
+}
+
+#graph {
+	height: calc(100% - 50px);
+	width: calc(100% - 100px);
+	float: left;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
 }
 
 #graph-container .row {
@@ -9,6 +21,7 @@
 .graphTypeButton {
 	margin: 2px 0;
 }
+
 #graphTitle {
 	border: 1px solid transparent;
 	margin-left: -24px;
@@ -18,26 +31,16 @@
 
 /*AXIS*/
 
-.ySettings {
-	border-left: 1px solid #eee;
-}
-
-.oppositeYSettings {
-	border-right: 1px solid #eee;
-}
-
 .xSettings {
-	border-bottom: 1px solid #eee;
 	float: left;
-	border-left: 1px solid #eee;
-	border-right: 1px solid #eee;
 	height: 32px;
-	width: calc(91.666666% - 16px);
+	width: 100%;
 }
 
 .ySettings, .oppositeYSettings {
-	height: 400px;
-	width: 32px;
+	float: left;
+	height: calc(100% - 50px);
+	width: 50px;
 	padding: 0;
 }
 
@@ -100,25 +103,20 @@
 }
 
 .axisDroppableContainer.ySettings .drop-hint,
-.axisDroppableContainer.ySettings .list-group-item {
-	-webkit-transform: translate(-180px)rotate(90deg)translate(130px,-130px);
-	-moz-transform: translate(-180px)rotate(90deg)translate(130px,-130px);
-	-o-transform: translate(-180px)rotate(90deg)translate(130px,-130px);
+.axisDroppableContainer.ySettings .list-group-item,
+.axisDroppableContainer.oppositeYSettings .drop-hint,
+.axisDroppableContainer.oppositeYSettings .list-group-item {
+	-webkit-transform: rotate(90deg)translate(150px,46px);
+	-moz-transform: rotate(90deg)translate(150px,46px);
+	-o-transform: rotate(90deg)translate(150px,46px);
 }
 
 .axisDroppableContainer.xSettings .drop-hint,
 .axisDroppableContainer.xSettings .list-group-item {
-	-webkit-transform: translate(-250px,-10px);
-	-moz-transform: translate(-250px,-10px);
-	-o-transform: translate(-250px,-10px);
+	-webkit-transform: translate(-250px, 0px);
+	-moz-transform: translate(-250px, 0px);
+	-o-transform: translate(-250px, 0px);
 	text-align: right;
-}
-
-.axisDroppableContainer.oppositeYSettings .drop-hint,
-.axisDroppableContainer.oppositeYSettings .list-group-item {
-	-webkit-transform: translate(-180px)rotate(90deg)translate(130px,-120px);
-	-moz-transform: translate(-180px)rotate(90deg)translate(130px,-120px);
-	-o-transform: translate(-180px)rotate(90deg)translate(130px,-120px);
 }
 
 .axisDroppableContainer .drop-hint.zone {
@@ -219,7 +217,8 @@
 
 div.axisTypeSelect.btn-group button.btn {
 	width: 26px;
-	margin-left: -3px;
+	margin-left: 12px;
+	margin-right: 12px;
 	border-radius: 0;
 	margin-top: 5px;
 	border: 1px solid #eee;
@@ -227,14 +226,16 @@ div.axisTypeSelect.btn-group button.btn {
 	padding: 0;
 	background: url(../img/glyphicons-halflings.png) no-repeat scroll -355px -139px white;
 	opacity: .7;
+	border: 0;
+	text-decoration: none;
 }
 
 div.axisTypeSelect.btn-group button.btn:hover {
 	opacity: 1;
 }
 
-.oppositeYSettings div.axisTypeSelect.btn-group button.btn {
-	margin-left: 8px;
+div.bootstrap-select.pull-right button.dropdown-toggle {
+	float: right !important;
 }
 
 div.axisTypeSelect.btn-group button.btn .filter-option,

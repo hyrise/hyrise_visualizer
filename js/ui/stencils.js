@@ -1,7 +1,7 @@
 (function() {
 	hyryx.debug.Stencils = function() {
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
-	}
+	};
 
 	hyryx.debug.Stencils.prototype = extend(hyryx.screen.AbstractUIPlugin, {
 
@@ -30,11 +30,11 @@
 			$.getJSON('operations.json', function(data) {
 				$.each(data, function(k, v) {
 					var i=0;
-					for (op in v) { ++i; };
+					for (var op in v) { ++i; }
 
 					if (i > 0) {
 						hyryx.stencils[k] = v;
-					};
+					}
 				});
 
 				me.updateOpList();
@@ -62,7 +62,7 @@
 
 			$('.stencils .list .collapse.panel-collapse:first').addClass('in');
 
-			hyryx.debug.dispatch('canvas.initDragDrop');
+			this.emit("initDragDrop");
 		},
 
 		getStencilButtonMarkup : function(config) {

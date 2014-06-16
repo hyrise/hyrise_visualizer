@@ -1,6 +1,18 @@
 hyryx.debug = (function() {
     var eventHandlers;
 
+    function registerEvents() {
+        eventHandlers.stencil.on("initDragDrop", function(){
+            eventHandlers.canvas.initDragDrop("#page-debug");
+        });
+        eventHandlers.canvas.on("nodeSelected", function(node) {
+            eventHandlers.attributes.show(node);
+        });
+        eventHandlers.canvas.on("nodeDeselected", function() {
+            eventHandlers.attributes.hide();
+        });
+    }
+
     function setup() {
         $.get('templates/page_debug.mst', function(template) {
             var rendered = $(Mustache.render(template, {
@@ -16,6 +28,7 @@ hyryx.debug = (function() {
                 'attributes': new hyryx.debug.Attributes(rendered.find('#frame_attributes')),
                 'data': new hyryx.explorer.Data(rendered.find('#frame_data'))
             };
+            registerEvents();
         });
     }
 

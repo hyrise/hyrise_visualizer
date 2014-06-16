@@ -5,7 +5,6 @@
 
 	hyryx.editor.StoredProcedureList.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 		id: hyryx.utils.getID('StoredProcedureList'),
-		save_generation: 0,	// used to check if source changed since last saving
 
 		render: function(callback) {
 			var self = this;
@@ -45,38 +44,13 @@
 
 			var self = this;
 
-			hyryx.editor.dispatch({
-				type: 'editor.save',
-				options: {
-					generation: this.save_generation,
-					callback: function(currentSource) {
-						if(!currentSource) {
-							console.log("no need to save - source didn't changed");
-							hyryx.Alerts.addInfo("Procedure was not modified since last save.");
-							return;
-						}
-
-						self.save_generation = currentSource.generation;
-						hyryx.ProcedureStore.create(
-							procedureName,
-							currentSource.source
-						).done(function() {
-							console.log("success! procedure saved!");
-							hyryx.Alerts.addSuccess("Procedure successfully saved!");
-						}).fail(function(jqXHR, textStatus, errorThrown) {
-							console.log("Couldn't save procedure: " + textStatus + ", " + errorThrown);
-							hyryx.Alerts.addDanger("Couldn't save procedure", textStatus + ", " + errorThrown);
-						}).always(self.updateProcedureList);
-					}
-				}
-			});
+			this.emit("saveProcedure", procedureName);
 		},
 
 		registerEvents: function() {
 			var self = this;
 			this.targetEl.on("click", "a.list-group-item", function() {
 				self.loadStoredProcedure.call(self, $(this).data('name'));
-				hyryx.editor.dispatch('procedureResults.clear');
 			});
 
 			this.targetEl.on("click", "button", function() {
@@ -91,12 +65,7 @@
 			//TODO: test if there are unsaved changes in currently open procedure
 			hyryx.ProcedureStore.get(procedureName).done(function(source) {
 				self.targetEl.find("input")[0].value = procedureName;
-				hyryx.editor.dispatch({
-					type: 'editor.show',
-					options: {
-						data: source
-					}
-				});
+				self.emit("procedureLoaded", source);
 			}).fail(function(jqXHR, textStatus, errorThrown ) {
 				hyryx.Alerts.addWarning("Couldn't load procedure", textStatus + ", " + errorThrown);
 				console.log("Couldn't load jsprocedure: " + textStatus + errorThrown);
