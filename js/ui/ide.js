@@ -30,7 +30,7 @@
 			});
 			this.screens.procedureEditor.on('showQueryEditor', function(widget) {
 				// dirty! user wildemitter methods
-				this.screens.queryEditor.handleEvent({
+				self.screens.queryEditor.handleEvent({
 					type: "loadPlan",
 					options: {
 						marker: widget,
