@@ -132,7 +132,7 @@
 			var server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
 
 			this.editor = CodeMirror(document.getElementById(this.id), {
-				value: '',
+				value: this.exampleCode,
 				mode: 'javascript',
 				theme: 'solarized light',
 				lint: true,
@@ -155,7 +155,6 @@
 			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
 			this.generation = 0;
 			this.editor.setSize(null, 500);
-			this.editor.setValue(this.exampleCode);
 		},
 
 		editObject: function(cm, server) {
