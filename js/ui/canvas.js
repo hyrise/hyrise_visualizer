@@ -166,7 +166,6 @@
 		},
 
 		queryEdited: function() {
-			console.log('canvas.queryEdited');
 			this.emit('queryEdited', this.getSerializedQuery(), this.marker);
 		},
 
@@ -211,8 +210,8 @@
 		},
 
 		registerEvents : function() {
-			$(document).on('click', 'button#hideQueryEditor', this.queryEdited.bind(this));
-			$(document).on('click', 'button#revertQueryPlan', this.revertToInitialQueryPlan.bind(this));
+			$(this.targetEl).on('click', 'button#hideQueryEditor', this.queryEdited.bind(this));
+			$(this.targetEl).on('click', 'button#revertQueryPlan', this.revertToInitialQueryPlan.bind(this));
 		},
 
 		hideAttributesPanel : function() {
