@@ -21,6 +21,7 @@
 					showTitlebar: true,
 					showExecuteButton: false
 				});
+				self.attributes = new hyryx.debug.Attributes(rendered.find('#frame_attributes'));
 
 				callback(rendered);
 			});
@@ -40,10 +41,15 @@
 			this.canvas.on('queryEdited', function(query, widget) {
 				self.emit('queryEdited', query, widget);
 			});
-		},
-
-		handleEvent : function(event) {
-			this.canvas.handleEvent(event);
+			this.canvas.on("nodeSelected", function(node) {
+				self.attributes.show(node);
+			});
+			this.canvas.on("nodeDeselected", function() {
+				self.attributes.hide();
+			});
+			this.canvas.on("switchingView", function() {
+				self.attributes.hide();
+			});
 		},
 
 		loadPlan : function(query, widget) {

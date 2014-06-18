@@ -200,12 +200,6 @@
 			$(this.targetEl).on('click', 'button#revertQueryPlan', this.revertToInitialQueryPlan.bind(this));
 		},
 
-		hideAttributesPanel : function() {
-			// todo use events or facade or stuff, this is evil
-			// $('.attributes').hide();
-			$('.sidebar').addClass('hideSidebar');
-		},
-
 		loadPlan : function(plan, marker) {
 			if (marker) {
 				this.marker = marker;
@@ -229,9 +223,8 @@
 			var plan = this.getCurrentScreen().getValue();
 
 			if (this.screens[to]) {
-
+				this.emit('switchingView', to);
 				this.getCurrentScreen().hide();
-				this.hideAttributesPanel();
 				this.setCurrentScreen(to).show(plan);
 			}
 		}
