@@ -7,6 +7,8 @@
 
 		this.saveGeneration = 0;
 		this.id = hyryx.utils.getID('Editor');
+
+		this.highlightedLines = {};
 	};
 
 	hyryx.editor.JSEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
@@ -97,8 +99,8 @@
 		execute: function() {
 			console.log("Execute stored procedure...");
 
-			var self= this,
-				current = this.getCurrentSource(this.generation);
+			var self = this;
+			var current = this.getCurrentSource(this.generation);
 			if (current) {
 				this.generation = current.generation;
 				hyryx.ProcedureStore.executeSource(current.source).done(function(data) {
@@ -110,6 +112,7 @@
 						console.log(data);
 
 						self.emit("procedureExecuted", data);
+						self.showPerformanceData(data);
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					hyryx.Alerts.addDanger("Error while executing procedure", textStatus + ' ' + errorThrown);
@@ -217,6 +220,7 @@
 		},
 
 		showContent: function(content) {
+			this.clearOverlays();
 			this.editor.setValue(content);
 			this.editor.eachLine(this.parseLine.bind(this));
 		},
@@ -237,6 +241,46 @@
 					{line: lineNumber, ch: match.to}
 				);
 			});
+		},
+
+		clearOverlays: function() {
+			this.removeAllHighlightedLines();
+		},
+
+		highlightLine: function(lineNumber, text, className) {
+			var msg = document.createElement("div");
+		    msg.appendChild(document.createTextNode(text));
+		    msg.className = className;
+		    var widget = this.editor.addLineWidget(lineNumber, msg, {coverGutter: false});
+			this.highlightedLines[lineNumber] = widget;
+		},
+
+		removeHighlightedLine: function(lineNumber, safe) {
+			safe = (safe === undefined) ? true : safe;
+			if (!safe || this.highlightedLines[lineNumber]) {
+				this.highlightedLines[lineNumber].clear();
+				delete this.highlightedLines[lineNumber];
+			}
+		},
+
+		removeAllHighlightedLines: function() {
+			for (lineNumber in this.highlightedLines) {
+				this.removeHighlightedLine(lineNumber, false);
+			}
+		},
+
+		showPerformanceData: function(data) {
+			var self = this;
+			if (data && data.performanceData) {
+				data.performanceData.forEach(function(perf) {
+					for (lineNumber in perf.subQueryPerformanceData) {
+						var content = perf.subQueryPerformanceData[lineNumber].reduce(function(prev, value) {
+							return prev + value.duration;
+						}, 0);
+						self.highlightLine(lineNumber-1, content.toString() + ' cycles', "performance-time");
+					}
+				});
+			}
 		}
 
 	});
