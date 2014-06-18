@@ -38,9 +38,12 @@ http://ethanschoonover.com/solarized/img/solarized-palette.png
   text-shadow: #002b36 0 1px;
 }
 .cm-s-solarized.cm-s-light {
-  background-color: #fdf6e3;
+  /* original color*/
+/*  background-color: #fdf6e3;
+  text-shadow: #eee8d5 0 1px;*/
+  background-color: #fff;
+  text-shadow: #f7f7f7 0 1px;
   color: #657b83;
-  text-shadow: #eee8d5 0 1px;
 }
 
 .cm-s-solarized .CodeMirror-widget {
@@ -137,8 +140,11 @@ http://ethanschoonover.com/solarized/img/solarized-palette.png
 
 /* Light */
 .cm-s-solarized.cm-s-light .CodeMirror-gutters {
-  background-color: #fdf6e3;
-  border-color: #eee8d5;
+/* original colors */
+/*  background-color: #fdf6e3;
+  border-color: #eee8d5;*/
+  background-color: #f7f7f7;
+  border-color: #ddd;
 }
 
 /* Common */
