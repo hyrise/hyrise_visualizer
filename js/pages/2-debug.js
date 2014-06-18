@@ -11,6 +11,9 @@ hyryx.debug = (function() {
         eventHandlers.canvas.on("nodeDeselected", function() {
             eventHandlers.attributes.hide();
         });
+        eventHandlers.canvas.on("switchingView", function() {
+            eventHandlers.attributes.hide();
+        });
     }
 
     function setup() {

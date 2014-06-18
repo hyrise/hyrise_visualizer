@@ -1,27 +1,23 @@
 (function() {
 	hyryx.debug.Attributes = function() {
+		this.markups = {};
+		this.currentMarkup = null;
+		this.container = null;
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
-	}
-
-	var attributes;
+	};
 
 	hyryx.debug.Attributes.prototype = extend(hyryx.screen.AbstractUIPlugin, {
-		markups : {},
-		currentMarkup : null,
 
 		render : function() {
-			attributes = this.createAttributesContainer();
+			this.container = this.createAttributesContainer();
 
-			return attributes.el;
+			return this.container.el;
 		},
 
-		init : function() {
-
-		},
+		init : function() {},
 
 		/** Make certain functions accessible for other plugins */
-		handleEvent : function() {
-		},
+		handleEvent : function() {},
 
 		getCurrentMarkup : function() {
 			return this.currentMarkup || {
@@ -35,8 +31,7 @@
 		},
 
 		hide : function() {
-			//this.el.hide();
-			$('.sidebar').addClass('hideSidebar');
+			this.targetEl.parent().addClass('hideSidebar');
 		},
 
 		show : function(node) {
@@ -60,8 +55,7 @@
 
 			// show the form for the given node data
 			this.getCurrentMarkup().show(node);
-			// this.el.show();
-			$('.sidebar').removeClass('hideSidebar');
+			this.targetEl.parent().removeClass('hideSidebar');
 		},
 
 		createAttributesContainer : function() {
@@ -112,7 +106,7 @@
 		this.type = data.type;
 
 		this.el = this.render();
-	}
+	};
 
 	Markup.prototype = {
 		render : function() {
@@ -133,19 +127,19 @@
 					if (config.type === 'predicate') {
 						config.listFieldRenderer = function(v) {
 							return [v.type, v.f, v.value].join(' ');
-						}
+						};
 						config.placeholder = 'add predicate';
 						config.complex = true;
 					} else if (config.type === 'function') {
 						config.listFieldRenderer = function(v) {
 							return [v.type, v.field].join(' ');
-						}
+						};
 						config.complex = true;
 						config.placeholder = 'add function';
 					} else if (config.type === 'custom') {
 						config.listFieldRenderer = function(v) {
 							return 'custom function';
-						}
+						};
 						config.placeholder = 'Set custom function';
 						config.complex = true;
 					}
@@ -187,8 +181,6 @@
 		}
 	};
 
-	var tables = [], columns = [], expressions = [];
-
 	var Input = function(config, id) {
 
 		this.value = (config.isList ? [].concat(config.value||[]) : config.value);
@@ -214,7 +206,7 @@
 		this.list = null;
 		// the CodeMirror instance
 		this.codeMirror = null;
-	}
+	};
 
 	Input.prototype = {
 		getValue : function() {
@@ -297,7 +289,7 @@
 
 					var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, me.selection, me.id);
 					hyryx.command.do(command);
-				}
+				};
 
 				// create a form for the attribute
 				this.createForm(applyClb);
@@ -409,7 +401,7 @@
 
 				$(this).parent().detach();
 
-				var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, attributes.selection, me.id);
+				var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, me.container.selection, me.id);
 				hyryx.command.do(command);
 			}
 
@@ -420,13 +412,13 @@
 				list.delButton.appendTo(li);
 				list.delButton.show();
 
-			};
+			}
 
 			function hideButtons() {
 				if (list.delButton) {
 					list.delButton.hide();
 				}
-			};
+			}
 
 			list.on('mouseover', 'li', function(e) {
 				showButtonsOnEntry(e.target, list.children().index(e.target));
