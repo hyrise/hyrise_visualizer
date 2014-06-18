@@ -3,15 +3,6 @@
 	hyryx.editor.JSEditor = function() {
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
 
-		this.customAutoCompletes = [{
-			title: 'QUERY',
-			displayText: 'Query object',
-			className: 'interactiveQuery',
-			content: 'buildQuery({}, [])',
-			regex: /buildQuery\([^)]*\)/g,
-			func: this.createInteractiveQueryWidget
-		}];
-
 		this.saveGeneration = 0;
 		this.id = hyryx.utils.getID('Editor');
 	};
@@ -35,7 +26,6 @@
 		init: function() {
 			this.registerEditor();
 			this.registerEvents();
-			this.registerCustomAutoCompletes();
 		},
 
 		getCurrentSource: function(generation) {
@@ -71,7 +61,7 @@
 					var content = mark.widgetNode.firstChild.dataset.content;
 					var title = mark.widgetNode.firstChild.innerText;
 					var className = mark.className;
-					self.createInteractiveQueryWidget(mark.doc.cm, title, content, className, from, to)
+					self.createInteractiveQueryWidget(mark.doc.cm, content, from, to)
 				});
 			});
 		},
@@ -188,26 +178,11 @@
 			widget.dataset.content = methodCall;
 		},
 
-		registerCustomAutoCompletes: function() {
-			var self = this;
-			var orig = CodeMirror.hint.javascript;
-			CodeMirror.hint.javascript = function(cm) {
-				var inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-				$.each(self.customAutoCompletes, function(idx, autoComplete) {
-					inner.list.push({
-						text: autoComplete.title,
-						displayText: autoComplete.displayText,
-						hint: function(cm, me, data) {
-							autoComplete.func(cm, data.text, autoComplete.content, autoComplete.className, me.from, me.to);
-						}
-					});
-				});
-				return inner;
-			};
-		},
-
-		createInteractiveQueryWidget: function(cm, title, text, className, from, to) {
+		createInteractiveQueryWidget: function(cm, text, from, to) {
 			text = (text.length === 0) ? ' ' : text;
+
+			var title = 'QUERY';
+			var className = 'interactiveQuery';
 
 			var widget = document.createElement('span');
 			widget.className = className;
@@ -228,18 +203,25 @@
 		},
 
 		showContent: function(content) {
-			var self = this;
 			this.editor.setValue(content);
-			this.editor.eachLine(function(line) {
-				var lineNumber = self.editor.getLineNumber(line);
-				$.each(self.customAutoCompletes, function(i, autoComplete) {
-					$.each(line.text.allRegexMatches(autoComplete.regex), function(j, match) {
-						autoComplete.func(self.editor, autoComplete.title, match.content,
-							autoComplete.className, {line: lineNumber, ch: match.from},
-							{line: lineNumber, ch: match.to});
-					});
-				});
+			this.editor.eachLine(this.parseLine.bind(this));
+		},
+
+		parseLine: function(line) {
+			var self = this;
+			var lineNumber = self.editor.getLineNumber(line);
+
+			var regex = /buildQuery\([^)]*\)/g;
+
+			$.each(line.text.allRegexMatches(regex), function(j, match) {
+				self.createInteractiveQueryWidget(
+					self.editor,
+					match.content,
+					{line: lineNumber, ch: match.from},
+					{line: lineNumber, ch: match.to}
+				);
 			});
 		}
+
 	});
 })();
