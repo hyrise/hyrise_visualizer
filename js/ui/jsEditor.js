@@ -1,4 +1,6 @@
 (function() {
+	var disableChanges = false;
+
 	// Extend the standard ui plugin
 	hyryx.editor.JSEditor = function() {
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
@@ -143,6 +145,7 @@
 				}
 			});
 			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
+			this.editor.on('change', this.handleChanges.bind(this));
 			this.generation = 0;
 			this.editor.setSize(null, 500);
 		},
@@ -170,6 +173,13 @@
 			);
 		},
 
+		handleChanges: function(cm, change) {
+			if (disableChanges) return;
+
+			var lineHandle = this.editor.getLineHandle(change.to.line);
+			this.parseLine(lineHandle);
+		},
+
 		updateWidget: function(widget, query) {
 			var operators = JSON.stringify(query.operators);
 			var edges = JSON.stringify(query.edges);
@@ -189,6 +199,8 @@
 			widget.textContent = title;
 			widget.dataset.content = text;
 
+			disableChanges = true;
+
 			cm.replaceRange(text, from, to);
 			cm.markText(from, {
 				line: from.line,
@@ -200,6 +212,8 @@
 				addToHistory: true,
 				className: className
 			});
+
+			disableChanges = false;
 		},
 
 		showContent: function(content) {
