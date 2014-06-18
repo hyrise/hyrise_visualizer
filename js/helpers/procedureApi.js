@@ -97,7 +97,7 @@
 			"!doc": "Create a custom output table."
 		},
 		"executeQuery": {
-			"!type": "fn(json: string)",
+			"!type": "fn(query: query, input: table) -> table",
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
 			"!doc": "Execute a database query and return the results."
 		},
