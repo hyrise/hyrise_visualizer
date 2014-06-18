@@ -38,17 +38,17 @@
 
 		registerEvents : function() {
 			var self = this;
-			$('button#hideQueryEditor').click(function() {
-				canvas.storeJsonInMarker();
-				self.emit('hideQueryEditor');
-			});
-			$('button#revertQueryPlan').click(function() {
-				canvas.revertToInitialQueryPlan();
+			canvas.on('queryEdited', function(query, widget) {
+				self.emit('queryEdited', query, widget);
 			});
 		},
 
 		handleEvent : function(event) {
 			canvas.handleEvent(event);
+		},
+
+		loadPlan : function(query, widget) {
+			canvas.loadPlan(query, widget);
 		}
 	});
 })();

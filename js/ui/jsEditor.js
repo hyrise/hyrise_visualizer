@@ -173,10 +173,19 @@
 							edges: args[1] || []
 						}
 
-						self.emit('editJsonQuery', query);
+						self.emit('editJsonQuery', this, query);
 					}
 				}
 			);
+		},
+
+		updateWidget: function(widget, query) {
+			var operators = JSON.stringify(query.operators);
+			var edges = JSON.stringify(query.edges);
+
+			var methodCall = 'buildQuery(' + operators + ', ' + edges + ')';
+			console.log(methodCall);
+			widget.dataset.content = methodCall;
 		},
 
 		registerCustomAutoCompletes: function() {
