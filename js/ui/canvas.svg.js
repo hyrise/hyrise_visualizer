@@ -444,17 +444,17 @@
 			gEdges.exit().remove();
 		},
 
-		onDragStart : function(d) {
+		onDragStart : function(source, d) {
 			// the dom node representing a new stencil
-			var gStencil = d3.select(this);
+			var gStencil = d3.select(source);
 
-			gStencil.style('opacity', .4);
+			gStencil.style('opacity', 0.4);
 
 			d3.event.sourceEvent.stopPropagation();
 		},
 
-		onDragEnd : function(d) {
-			var gStencil = d3.select(this);
+		onDragEnd : function(source, d) {
+			var gStencil = d3.select(source);
 			gStencil.style('opacity', 1);
 
 			if (d3.event.sourceEvent.toElement.firstChild.tagName == 'svg') {

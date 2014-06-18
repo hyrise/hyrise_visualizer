@@ -11,9 +11,7 @@
 		this.el = this.render();
 		this.init();
 		return this;
-	}
-
-	var jsonEditor;
+	};
 
 	hyryx.screen.JSONScreen.prototype = {
 
@@ -50,17 +48,17 @@
 			this.registerEditor();
 		},
 
-		onDragStart : function(d) {
+		onDragStart : function(source, d) {
 			// the dom node representing a new stencil
-			var gStencil = d3.select(this);
+			var gStencil = d3.select(source);
 
-			gStencil.style('opacity', .4);
+			gStencil.style('opacity', 0.4);
 
 			d3.event.sourceEvent.stopPropagation();
 		},
 
-		onDragEnd : function(d) {
-			var gStencil = d3.select(this);
+		onDragEnd : function(source, d) {
+			var gStencil = d3.select(source);
 			gStencil.style('opacity', 1);
 
 			if (d3.event.sourceEvent.toElement.tagName.toLowerCase() == 'pre') {
@@ -68,7 +66,7 @@
 				var name = $(gStencil[0]).data('type');
 				var node = new hyryx.debug.Canvas.Node([0,0], name);
 
-				CodeMirror.signal(jsonEditor, 'drop', jsonEditor, node, {left : p.x, top : p.y});
+				CodeMirror.signal(this.editor, 'drop', this.editor, node, {left : p.x, top : p.y});
 			}
 		},
 
@@ -76,7 +74,7 @@
 		 * Create a custom text editor where the pretty print container is located, so the user can directly modify the JSON
 		 */
 		registerEditor : function() {
-			jsonEditor = this.editor = CodeMirror(this.el[0], {
+			this.editor = CodeMirror(this.el[0], {
 				value : '',
 				mode : {
 					name : 'javascript',

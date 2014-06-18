@@ -77,12 +77,12 @@
 			d3.selectAll(stencils).call(d3.behavior.drag()
 			.on('dragstart', function(d) {
 				if (self.activeScreen.onDragStart instanceof Function) {
-					self.activeScreen.onDragStart.call(this, d);
+					self.activeScreen.onDragStart(this, d);
 				}
 			})
 			.on('dragend', function(d) {
 				if (self.activeScreen.onDragEnd instanceof Function) {
-					self.activeScreen.onDragEnd.call(this, d);
+					self.activeScreen.onDragEnd(this, d);
 				}
 			}));
 		},
