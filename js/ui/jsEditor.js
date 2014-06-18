@@ -222,6 +222,8 @@
 		},
 
 		parseLine: function(line) {
+			if ( ! line) return;
+
 			var self = this;
 			var lineNumber = self.editor.getLineNumber(line);
 
