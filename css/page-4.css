@@ -55,6 +55,12 @@ div.performance-time {
 	text-shadow: 0px 1px black;
 }
 
+div.performance-time.invalid {
+	background-image: -webkit-gradient( linear, left center, right center, from(rgba(0,0,0,0)), to(rgba(180,180,180,0.7)));
+	color: #777;
+	text-shadow: 0px 1px #ddd;
+}
+
 .CodeMirror-linewidget {
 	top: -20px;
 	margin-bottom: -20px;

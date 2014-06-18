@@ -9,6 +9,7 @@
 		this.id = hyryx.utils.getID('Editor');
 
 		this.highlightedLines = {};
+		this.performanceData = undefined;
 	};
 
 	hyryx.editor.JSEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
@@ -113,6 +114,7 @@
 
 						self.emit("procedureExecuted", data);
 						self.showPerformanceData(data);
+						self.performanceData = data;
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					hyryx.Alerts.addDanger("Error while executing procedure", textStatus + ' ' + errorThrown);
@@ -125,6 +127,7 @@
 		},
 
 		registerEditor: function() {
+			var self = this;
 			var server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
 
 			this.editor = CodeMirror(document.getElementById(this.id), {
@@ -148,6 +151,7 @@
 				}
 			});
 			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
+			this.editor.on('change', function(cm) { self.invalidatePerformanceData(); });
 			this.editor.on('change', this.handleChanges.bind(this));
 			this.generation = 0;
 			this.editor.setSize(null, 500);
@@ -220,6 +224,7 @@
 		},
 
 		showContent: function(content) {
+			this.performanceData = undefined;
 			this.clearOverlays();
 			this.editor.setValue(content);
 			this.editor.eachLine(this.parseLine.bind(this));
@@ -281,6 +286,11 @@
 					}
 				});
 			}
+		},
+
+		invalidatePerformanceData: function() {
+			console.log('invalidate perf data');
+			$('.performance-time').addClass('invalid');
 		}
 
 	});
