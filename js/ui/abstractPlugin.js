@@ -6,14 +6,13 @@
 	hyryx.screen.AbstractUIPlugin = function(targetEl) {
 		WildEmitter.call(this);
 		this.targetEl = targetEl;
+		this.screens = {};
+		this.activeScreen = null;
 		this.create();
 		return this;
 	};
 
 	hyryx.screen.AbstractUIPlugin.prototype = extend(WildEmitter, {
-
-		screens: {},
-		activeScreen: null,
 
 		create: function() {
 			if (($(this.targetEl)[0] instanceof Element)) {

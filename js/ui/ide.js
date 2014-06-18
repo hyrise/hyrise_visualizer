@@ -28,10 +28,12 @@
 			this.screens.procedureEditor.on("procedure*", function(eventName, data) {
 				self.emit(eventName, data);
 			});
+
 			this.screens.procedureEditor.on('showQueryEditor', function(widget, query) {
 				self.screens.queryEditor.loadPlan(query, widget);
 				$('#frame_queryEditor').removeClass('hideQueryEditor');
 			});
+
 			this.screens.queryEditor.on('queryEdited', function(query, widget) {
 				$('#frame_queryEditor').addClass('hideQueryEditor');
 				self.screens.procedureEditor.updateQuery(query, widget);

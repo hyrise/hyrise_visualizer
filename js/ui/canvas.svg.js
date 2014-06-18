@@ -1,10 +1,12 @@
 (function() {
 
-	var gNodes, gEdges, radius, me, svg, width, height, startNode, endNode, drag_line;
+	var HEIGHT = 500,
+		OUTERHEIGHT= 500,
+		RADIUS = 40;
 
 	hyryx.screen.CanvasScreen = function(config) {
 		WildEmitter.call(this);
-		this.width = config.width || 12;
+		this.nodes = [];
 		this.targetEl = config.targetEl;
 		this.cls = config.cls || 'canvas';
 
@@ -16,11 +18,7 @@
 		return this;
 	};
 
-	height = 500;
-
 	hyryx.screen.CanvasScreen.prototype = extend(WildEmitter, {
-
-		nodes : [],
 
 		show : function(data) {
 			this.isActiveScreen = true;
@@ -43,94 +41,90 @@
 		},
 
 		setHeight : function(newHeight) {
-			svg.style('height', Math.max(height, newHeight) + 'px');
+			this.svg.style('height', Math.max(HEIGHT, newHeight) + 'px');
 		},
 
 		init : function() {
-
-			me = this;
-
-			radius = 40;
-			outerHeight = 500;
+			var self = this;
 
 			var container = d3.select(this.el[0]).append('div')
 				.attr({
 					'class' : 'canvas-scroll',
 				})
 				.style({
-					height	: outerHeight + 'px',
+					height	: OUTERHEIGHT + 'px',
 					// overflow: 'auto',
 					padding : 0,
 					display : 'block'
 				});
 
-			svg = container.append('svg')
+			this.svg = container.append('svg')
 				.attr('class', 'screen stencilgraph')
-				.style('height', height+'px')
+				.style('height', HEIGHT+'px')
 				.style('display', 'block')
 				// .attr('width', width)
 				;
 
-			width = $('svg.stencilgraph').width();
+			this.width = $('svg.stencilgraph').width();
 
 			// line displayed when dragging new nodes
-			drag_line = svg.append('svg:path')
+			this.drag_line = this.svg.append('svg:path')
 				.attr({
 					'class' : 'dragline hidden',
 					'd'     : 'M0,0L0,0'
 				})
 			;
 
-			svg.append('text').attr({
+			this.svg.append('text').attr({
 				'class' : 'emptytext visible',
-				x : width/2,
-				y : height /3,
+				x : this.width/2,
+				y : HEIGHT /3,
 				dy : '.35em',
 				'text-anchor' : 'middle'
 			}).text('Create a new plan by dragging operations onto the canvas...');
 
-			svg.append('text').attr({
+			this.svg.append('text').attr({
 				'class' : 'emptytext visible',
-				x : width/2,
-				y : height /3*2,
+				x : this.width/2,
+				y : HEIGHT /3*2,
 				dy : '.35em',
 				'text-anchor' : 'middle'
 			}).text('... or drag an existing plan to continue.');
 
 
-			this.createDefs(svg);
+			this.createDefs();
 
-			gEdges = svg.append('g').selectAll('path.edge');
-			gNodes = svg.append('g').selectAll('g.node');
+			this.gEdges = this.svg.append('g').selectAll('path.edge');
+			this.gNodes = this.svg.append('g').selectAll('g.node');
 
-			svg.on({
+			this.svg.on({
 				mousedown : function() {
 					if (d3.event.target.tagName == 'svg') {
 						if (!d3.event.shiftKey) {
 							d3.selectAll('g.selected').classed('selected', false);
-							me.handleNodeSelectionChange(false);
+							self.handleNodeSelectionChange(false);
 						}
 					}
 				},
 				mousemove : function() {
 					var p = d3.mouse(this);
 
-					if(startNode) {
-						drag_line.attr('d', 'M' + startNode.getPosition() + 'L' + p);
+					if(self.startNode) {
+						self.drag_line.attr('d', 'M' + self.startNode.getPosition() + 'L' + p);
 
 						var node = d3.select('g.node .inner.hover');
-						endNode = (!node.empty() && node.data()[0]) || undefined;
+						self.endNode = (!node.empty() && node.data()[0]) || undefined;
 					}
 				},
 
 				mouseup : function() {
 					d3.selectAll('g.node.selection').classed('selection', false);
 
-					if (startNode) {
+					if (self.startNode) {
 
-						me.createConnection(startNode, endNode);
+						self.createConnection(self.startNode, self.endNode);
 
-						startNode = endNode = undefined;
+						self.startNode = self.endNode = undefined;
 
 						d3.event.stopPropagation();
 					}
@@ -146,7 +140,7 @@
 				}
 			});
 
-			me.update();
+			this.update();
 		},
 
 		/**
@@ -157,7 +151,7 @@
 		 */
 		createConnection : function(startNode, endNode) {
 			// HACK: FF
-			drag_line
+			this.drag_line
 				.classed('hidden', true)
 				.style('marker-end', '');
 
@@ -201,29 +195,32 @@
 		 * Full rerender of the canvas (THIS IS EXPENSIVE, USE CAREFULLY)
 		 */
 		update : function(nodes) {
+			var self = this;
+
 			if (nodes) {
 				this.nodes = nodes;
 			}
 
-			gNodes = gNodes.data(me.nodes, function(d) {
-				return me.nodes.indexOf(d);
+			this.gNodes = this.gNodes.data(this.nodes, function(d) {
+				return self.nodes.indexOf(d);
 			});
 			this.renderNodes();
 
-			var _edges = edges();
-			gEdges = gEdges.data(_edges, function(d) {
+			var _edges = this.edges();
+			this.gEdges = this.gEdges.data(_edges, function(d) {
 				return _edges.indexOf(d);
 			});
 
 			this.renderEdges();
 
 			// if no nodes exist, display hints
-			this.toggleLoading(!gNodes.size());
+			this.toggleLoading(!this.gNodes.size());
 		},
 
 		renderNodes : function() {
+			var self = this;
 
-			var gNode = gNodes.enter().append('g').attr({
+			var gNode = this.gNodes.enter().append('g').attr({
 				transform : function(d) {
 					return 'translate(' + d.getPosition() + ')';
 				},
@@ -234,14 +231,14 @@
 
 				})
 				.on('dragend', function(d) {
-					delete me.isDragging;
+					delete self.isDragging;
 				})
 				.on('drag', function(d) {
-				if (startNode) {
+				if (self.startNode) {
 					return;
 				}
 
-				me.isDragging = true;
+				self.isDragging = true;
 
 				var selection = d3.selectAll('.stencilgraph .selected');
 
@@ -250,7 +247,7 @@
 					selection = d3.select(this);
 					selection.classed('selected', true);
 
-					me.handleNodeSelectionChange(selection.length === 1, selection.data()[0]);
+					self.handleNodeSelectionChange(selection.length === 1, selection.data()[0]);
 				}
 
 				selection.attr({
@@ -259,8 +256,8 @@
 						if (!d) { return; }
 
 						// limit movement to canvas boundaries
-						var x = Math.max(radius, Math.min(width - radius, d.getPosition()[0] + d3.event.dx));
-						var y = Math.max(radius, Math.min(height - radius, d.getPosition()[1] + d3.event.dy));
+						var x = Math.max(RADIUS, Math.min(self.width - RADIUS, d.getPosition()[0] + d3.event.dx));
+						var y = Math.max(RADIUS, Math.min(HEIGHT - RADIUS, d.getPosition()[1] + d3.event.dy));
 
 						return 'translate(' + d.setPosition(x, y) + ')';
 					}
@@ -286,15 +283,15 @@
 					this.parentNode.appendChild(this);
 				});
 
-				gEdges.selectAll('path').attr({
+				self.gEdges.selectAll('path').attr({
 					d : computeEdgePath
 				});
 
-				gEdges.selectAll('circle.endpoint').attr({
+				self.gEdges.selectAll('circle.endpoint').attr({
 					transform : transformEdgeEndpoints
 				});
 
-				gEdges.selectAll('circle.point').attr({
+				self.gEdges.selectAll('circle.point').attr({
 					transform : transformEdgePoints
 				});
 
@@ -302,13 +299,13 @@
 			}));
 
 			gNode.append('circle').attr({
-				r : radius + 4,
+				r : RADIUS + 4,
 				'class' : 'outer'
 			}).on({
 				mousedown : function(d) {
-					startNode = d, endNode;
+					self.startNode = d, self.endNode;
 
-					drag_line
+					self.drag_line
 						.style('marker-end', 'url(#end-arrow)')
 						.classed('hidden', false)
 						.attr('d', 'M' + d.getPosition() + 'L' + d.getPosition())
@@ -327,11 +324,11 @@
 			});
 
 			gNode.append('circle').attr({
-				r : radius,
+				r : RADIUS,
 				'class' : 'inner'
 			}).on({
 				mouseup : function(d) {
-					if (me.isDragging) { return; }
+					if (self.isDragging) { return; }
 
 
 					var e = d3.event,
@@ -344,7 +341,7 @@
 
 					d3.select(g).classed('selected', !isSelected);
 
-					me.handleNodeSelectionChange(!isSelected, d);
+					self.handleNodeSelectionChange(!isSelected, d);
 					// put back on top
 					// g.parentNode.appendChild(g);
 				},
@@ -357,7 +354,7 @@
 				dblclick : function() {
 					var d = d3.select(this.parentNode).datum();
 
-					var command = new hyryx.command.removeNodeCommand(d, me.nodes, me.update.bind(me));
+					var command = new hyryx.command.removeNodeCommand(d, self.nodes, self.update.bind(self));
 					hyryx.command.do(command);
 				}
 			});
@@ -374,12 +371,13 @@
 				.text(function(d) { return d.type; })
 			;
 
-			gNodes.exit().remove();
+			this.gNodes.exit().remove();
 		},
 
 		renderEdges : function() {
 
-			var gEdge = gEdges.enter().append('g')
+			var self = this,
+				gEdge = this.gEdges.enter().append('g')
 			// .style('marker-start', 'url(#start-arrow)')
 			.attr({
 				'class' : 'edge'
@@ -388,7 +386,7 @@
 					d3.selectAll('g.node.selection').classed('selection', false);
 					d3.selectAll('g.selected').classed('selected', false);
 
-					me.handleNodeSelectionChange(false);
+					self.handleNodeSelectionChange(false);
 
 					d3.select(this).classed('selected', true);
 					// d3.event.stopPropagation();
@@ -416,7 +414,7 @@
 					// 		y : p[1]
 					// 	});
 
-					// 	renderEdgeMidPoints(gEdge, d);
+					// 	renderEdgeMidPoints(gEdge, gEdges);
 					// 	gEdge.selectAll('path').attr({
 					// 		d : computeEdgePath
 					// 	});
@@ -424,7 +422,7 @@
 					gEdge = d3.select(d3.event.target.parentElement);
 					var edge = gEdge.datum();
 
-					var command = new hyryx.command.removeEdgeCommand(edge, me.update.bind(me));
+					var command = new hyryx.command.removeEdgeCommand(edge, self.update.bind(self));
 					hyryx.command.do(command);
 
 					d3.event.stopPropagation();
@@ -439,31 +437,31 @@
 			.style('marker-end', 'url(#end-arrow)');
 
 			renderEdgePoints(gEdge);
-			renderEdgeMidPoints(gEdge);
+			renderEdgeMidPoints(gEdge, this.gEdges);
 
-			gEdges.exit().remove();
+			this.gEdges.exit().remove();
 		},
 
-		onDragStart : function(d) {
+		onDragStart : function(source, d) {
 			// the dom node representing a new stencil
-			var gStencil = d3.select(this);
+			var gStencil = d3.select(source);
 
-			gStencil.style('opacity', .4);
+			gStencil.style('opacity', 0.4);
 
 			d3.event.sourceEvent.stopPropagation();
 		},
 
-		onDragEnd : function(d) {
-			var gStencil = d3.select(this);
+		onDragEnd : function(source, d) {
+			var gStencil = d3.select(source);
 			gStencil.style('opacity', 1);
 
 			if (d3.event.sourceEvent.toElement.firstChild.tagName == 'svg') {
 				var p = d3.mouse(d3.event.sourceEvent.toElement.firstChild);
-				var x = p[0]-radius,
-					y = p[1]-radius,
+				var x = p[0] - RADIUS,
+					y = p[1] - RADIUS,
 					name = $(gStencil[0]).data('type');
 
-				var command = new hyryx.command.createNodeCommand([x, y], name, me.nodes, me.update.bind(me));
+				var command = new hyryx.command.createNodeCommand([x, y], name, this.nodes, this.update.bind(this));
 				hyryx.command.do(command);
 			}
 		},
@@ -472,9 +470,9 @@
 		 * Create an SVG arrow as a line marker, can be addressed via url(#end-arrow)
 		 * @param  {d3Element} svg
 		 */
-		createDefs : function(svg) {
+		createDefs : function() {
 			// create an arrow marker
-			svg.append('svg:defs').append('svg:marker')
+			this.svg.append('svg:defs').append('svg:marker')
 				.attr('id', 'end-arrow')
 				.attr('viewBox', '0 -5 10 10')
 				.attr('refX', 4)
@@ -486,7 +484,7 @@
 				.attr('class', 'end-arrow')
 			;
 
-			svg.append('svg:defs').append('svg:marker')
+			this.svg.append('svg:defs').append('svg:marker')
 				.attr('id', 'start-arrow')
 				.attr('viewBox', '0 -5 10 10')
 				.attr('refX', 4)
@@ -546,17 +544,17 @@
 				this.emit('nodeDeselected');
 			}
 		},
-	});
 
-	var edges = function() {
-		return me.nodes.reduce(function(initial, node) {
+		edges: function() {
+		return this.nodes.reduce(function(initial, node) {
 			return initial.concat(
 				node.edges.map(function(o) {
 					return {source : node, edge : o};
 				})
 			);
 		}, []);
-	};
+		},
+	});
 
 	var transformEdgeEndpoints = function(d, i) {
 		var endPoints = d.endPoints();
@@ -585,11 +583,11 @@
 				deltaX = target.getPosition()[0] - source.getPosition()[0],
 				deltaY = target.getPosition()[1] - source.getPosition()[1],
 				dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
-	            normX = deltaX / dist,
-	            normY = deltaY / dist,
-	            sourcePadding = radius + 4,
-	            sourceX = source.getPosition()[0] + (sourcePadding * normX),
-	            sourceY = source.getPosition()[1] + (sourcePadding * normY);
+				normX = deltaX / dist,
+				normY = deltaY / dist,
+				sourcePadding = RADIUS + 4,
+				sourceX = source.getPosition()[0] + (sourcePadding * normX),
+				sourceY = source.getPosition()[1] + (sourcePadding * normY);
 
 			source = d.edge.points.length && d.edge.points[ d.edge.points.length-1] || d.source;
             target = d.edge.target;
@@ -598,23 +596,23 @@
             dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
             normX = deltaX / dist;
             normY = deltaY / dist;
-            var targetPadding = radius + 8,
-	            targetX = target.getPosition()[0] - (targetPadding * normX),
-	            targetY = target.getPosition()[1] - (targetPadding * normY);
+            var targetPadding = RADIUS + 8,
+				targetX = target.getPosition()[0] - (targetPadding * normX),
+				targetY = target.getPosition()[1] - (targetPadding * normY);
 
-	        var points = [{
-	        	x : sourceX,
-	        	y : sourceY
-	        }].concat(d.edge.points, [{
-	        	x : targetX,
-	        	y : targetY
-	        }]);
+			var points = [{
+				x : sourceX,
+				y : sourceY
+			}].concat(d.edge.points, [{
+				x : targetX,
+				y : targetY
+			}]);
 
-	        return line(points);
-		}
+			return line(points);
+		};
 	})();
 
-	var renderEdgeMidPoints = function(gEdge) {
+	var renderEdgeMidPoints = function(gEdge, gEdges) {
 		gEdge.each(function(edge) {
 			var edgePoints = d3.select(this)
 				.selectAll('circle.point')
@@ -644,7 +642,7 @@
 					// 		d : computeEdgePath
 					// 	});
 
-					// 	renderEdgeMidPoints(gEdge);
+					// 	renderEdgeMidPoints(gEdge, gEdges);
 
 					// 	gEdge.selectAll('circle.endpoint').attr({
 					// 		transform : transformEdgeEndpoints
@@ -656,9 +654,9 @@
 				var gEdgePoint = d3.select(this);
 
 				gEdgePoint.attr('transform', function(d) {
-				    d.x += d3.event.dx;
-			        d.y += d3.event.dy;
-			        return "translate(" + [ d.x,d.y ] + ")";
+					d.x += d3.event.dx;
+					d.y += d3.event.dy;
+					return "translate(" + [ d.x,d.y ] + ")";
 				});
 
 				gEdges.selectAll('path')
@@ -681,30 +679,31 @@
 	};
 
 	var renderEdgePoints = function(gEdge) {
+		var self = this;
 		gEdge.each(function(d) {
 			var endPoints = function() {
 				var source = d.source,
-		            target = d.edge.points.length && d.edge.points[0] || d.edge.target,
-		            deltaX = target.getPosition()[0] - source.getPosition()[0],
-		            deltaY = target.getPosition()[1] - source.getPosition()[1],
-		            dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
-		            normX = deltaX / dist,
-		            normY = deltaY / dist,
-		            sourceX = source.getPosition()[0] + (radius * normX),
-		            sourceY = source.getPosition()[1] + (radius * normY);
+					target = d.edge.points.length && d.edge.points[0] || d.edge.target,
+					deltaX = target.getPosition()[0] - source.getPosition()[0],
+					deltaY = target.getPosition()[1] - source.getPosition()[1],
+					dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+					normX = deltaX / dist,
+					normY = deltaY / dist,
+					sourceX = source.getPosition()[0] + (RADIUS * normX),
+					sourceY = source.getPosition()[1] + (RADIUS * normY);
 
-	            source = d.edge.points.length && d.edge.points[ d.edge.points.length-1] || d.source;
-	            target = d.edge.target;
-	            deltaX = target.getPosition()[0] - source.getPosition()[0];
-	            deltaY = target.getPosition()[1] - source.getPosition()[1];
-	            dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-	            normX = deltaX / dist;
-	            normY = deltaY / dist;
-		        var targetPadding = radius + 8,
-		            targetX = target.getPosition()[0] - (radius * normX),
-		            targetY = target.getPosition()[1] - (radius * normY);
+				source = d.edge.points.length && d.edge.points[ d.edge.points.length-1] || d.source;
+				target = d.edge.target;
+				deltaX = target.getPosition()[0] - source.getPosition()[0];
+				deltaY = target.getPosition()[1] - source.getPosition()[1];
+				dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+				normX = deltaX / dist;
+				normY = deltaY / dist;
+				var targetPadding = RADIUS + 8,
+					targetX = target.getPosition()[0] - (RADIUS * normX),
+					targetY = target.getPosition()[1] - (RADIUS * normY);
 
-		        return [ { x : sourceX, y : sourceY}, { x : targetX, y : targetY}];
+				return [ { x : sourceX, y : sourceY}, { x : targetX, y : targetY}];
 			};
 
 			var edgeEndPoints = d3.select(this).selectAll('circle.endpoint').data([{

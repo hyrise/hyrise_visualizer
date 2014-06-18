@@ -11,12 +11,13 @@
 			regex: /buildQuery\([^)]*\)/g,
 			func: this.createInteractiveQueryWidget
 		}];
+
+		this.saveGeneration = 0;
+		this.id = hyryx.utils.getID('Editor');
 	};
 
 	hyryx.editor.JSEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
-		id: hyryx.utils.getID('Editor'),
 		exampleCode: 'function hyrise_run_op(input)' + "\n" + '{' + "\n\t" + '// your code here...' + "\n" + '}',
-		saveGeneration: 0,
 
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render: function(callback) {

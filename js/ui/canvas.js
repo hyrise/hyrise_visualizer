@@ -68,19 +68,19 @@
 			}
 		},
 
-		initDragDrop : function(parentSelector) {
+		initDragDrop : function(stencils) {
 			// Update drag drop handlers when updating the list of possible operations
 			var self = this;
 
-			d3.selectAll(parentSelector + ' .stencils .list-group-item').call(d3.behavior.drag()
+			d3.selectAll(stencils).call(d3.behavior.drag()
 			.on('dragstart', function(d) {
 				if (self.activeScreen.onDragStart instanceof Function) {
-					self.activeScreen.onDragStart.call(this, d);
+					self.activeScreen.onDragStart(this, d);
 				}
 			})
 			.on('dragend', function(d) {
 				if (self.activeScreen.onDragEnd instanceof Function) {
-					self.activeScreen.onDragEnd.call(this, d);
+					self.activeScreen.onDragEnd(this, d);
 				}
 			}));
 		},
@@ -107,7 +107,7 @@
 		registerCanvasControls : function() {
 			var me = this;
 
-			$('.canvas-controls .button-execute').on('click', function() {
+			this.targetEl.on('click', '.canvas-controls .button-execute', function() {
 
 				var request = "query=" + this.getSerializedQuery();
 
@@ -140,23 +140,9 @@
 
 			}.bind(this));
 
-			$('.canvas-controls label').on({
-				// mouseover : function(d) {
-				// 	var $this = $(this);
-				// 	if (!$this.hasClass('active')) {
-				// 		$this.addClass('hover');
-				// 	}
-				// },
-				// mouseout : function(d) {
-				// 	$(this).removeClass('hover');
-				// },
-				click : function(d) {
-					// $('.canvas-controls li.active').removeClass('active');
-					// $(this).addClass('active');
-
-					me.switchView($(this).data('control'));
-				}
-			})
+			this.targetEl.on('click', '.canvas-controls label', function(d) {
+				me.switchView($(this).data('control'));
+			});
 
 
 		},

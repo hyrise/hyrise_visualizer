@@ -43,9 +43,10 @@
 
 		updateOpList : function() {
 
-			var me = this;
+			var me = this,
+				$stencil_list = this.targetEl.find('.stencils .list');
 
-			$('.stencils .list').html('');
+			$stencil_list.html('');
 
 			// var header = 'Operations';
 			var panel = ['<div class="item-list">', '<div class="list-group">'];
@@ -58,11 +59,11 @@
 			});
 
 			panel.push('</div></div>');
-			$(panel.join('')).appendTo('.stencils .list');
+			$(panel.join('')).appendTo($stencil_list);
 
-			$('.stencils .list .collapse.panel-collapse:first').addClass('in');
+			$stencil_list.find('.collapse.panel-collapse:first').addClass('in');
 
-			this.emit("initDragDrop");
+			this.emit("initDragDrop", $stencil_list.find('.list-group-item'));
 		},
 
 		getStencilButtonMarkup : function(config) {
