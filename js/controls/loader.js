@@ -96,6 +96,7 @@ window.addEventListener('load', function() {
 			'js/helpers/utils.js',
 			'js/helpers/database.js',
 			'js/helpers/procedureStore.js',
+			'js/helpers/procedureApi.js',
 			'js/helpers/alerts.js',
 
 			// CONTROLS
@@ -107,6 +108,16 @@ window.addEventListener('load', function() {
 			'loader!third-party/codemirror/custom.css',
 			'loader!third-party/codemirror/mode.javascript.js',
 
+			'loader!third-party/acorn/acorn.js',
+			'loader!third-party/acorn/acorn_loose.js',
+			'loader!third-party/acorn/util/walk.js',
+
+			'loader!third-party/tern/lib/signal.js',
+			'loader!third-party/tern/lib/tern.js',
+			'loader!third-party/tern/lib/def.js',
+			'loader!third-party/tern/lib/comment.js',
+			'loader!third-party/tern/lib/infer.js',
+
 			'loader!third-party/codemirror/addons/lint/jshint-2.1.11.js',
 			'loader!third-party/codemirror/addons/lint/jsonlint.js',
 			'loader!third-party/codemirror/addons/lint/lint.js',
@@ -116,6 +127,8 @@ window.addEventListener('load', function() {
 			'loader!third-party/codemirror/addons/hint/show-hint.js',
 			'loader!third-party/codemirror/addons/hint/javascript-hint.js',
 			'loader!third-party/codemirror/addons/hint/show-hint.css',
+			'loader!third-party/codemirror/addons/tern/tern.js',
+			'loader!third-party/codemirror/addons/tern/tern.css',
 
 			"loader!third-party/selectpicker/bootstrap-select.js",
 			"loader!third-party/selectpicker/bootstrap-select.css",

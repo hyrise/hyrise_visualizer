@@ -1,4 +1,4 @@
-span.interactiveJSON {
+span.interactiveQuery {
     cursor: pointer;
     color: #fff;
     background-color: #2a5e8c;
@@ -7,7 +7,7 @@ span.interactiveJSON {
     border-radius: 4px;
 }
 
-span.interactiveJSON:hover {
+span.interactiveQuery:hover {
     color: #fff;
     background-color: #21496d;
     border-color: #163149;

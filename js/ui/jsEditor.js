@@ -4,12 +4,12 @@
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
 
 		this.customAutoCompletes = [{
-			title: 'JSON',
-			displayText: 'JSON object',
-			className: 'interactiveJSON',
-			content: '{"operators": {},"edges": []}',
-			regex: /\{"operators".*"edges"[^\}]*\}/g,
-			func: this.createInteractiveJSONWidget
+			title: 'QUERY',
+			displayText: 'Query object',
+			className: 'interactiveQuery',
+			content: 'buildQuery({}, [])',
+			regex: /buildQuery\([^)]*\)/g,
+			func: this.createInteractiveQueryWidget
 		}];
 
 		this.saveGeneration = 0;
@@ -17,6 +17,7 @@
 	};
 
 	hyryx.editor.JSEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
+		exampleCode: 'function hyrise_run_op(input)' + "\n" + '{' + "\n\t" + '// your code here...' + "\n" + '}',
 
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render: function(callback) {
@@ -51,15 +52,15 @@
 					result.generation = this.editor.changeGeneration();
 				}
 			}
-			this.updateInteractiveJSONs();
+			this.updateInteractiveQuerys();
 			result.source = this.editor.getValue();
 			return result;
 		},
 
-		updateInteractiveJSONs: function() {
+		updateInteractiveQuerys: function() {
 			var self = this;
 			$.each($.grep(this.editor.getAllMarks(), function(mark) {
-				return mark.className === 'interactiveJSON';
+				return mark.className === 'interactiveQuery';
 			}), function(i, mark) {
 				var lineNumber = mark.doc.getLineNumber(mark.lines[0]);
 				$.each($.grep(mark.lines[0].markedSpans, function(span) {
@@ -70,7 +71,7 @@
 					var content = mark.widgetNode.firstChild.dataset.content;
 					var title = mark.widgetNode.firstChild.innerText;
 					var className = mark.className;
-					self.createInteractiveJSONWidget(mark.doc.cm, title, content, className, from, to);
+					self.createInteractiveQueryWidget(mark.doc.cm, title, content, className, from, to)
 				});
 			});
 		},
@@ -129,19 +130,29 @@
 		},
 
 		registerEditor: function() {
+			var server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
+
 			this.editor = CodeMirror(document.getElementById(this.id), {
-				value: '',
+				value: this.exampleCode,
 				mode: 'javascript',
-				theme: 'custom',
+				theme: 'solarized light',
 				lint: true,
 				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true,
 				minHeight: 500,
+				indentWithTabs: true,
+				indentUnit: 4,
 				extraKeys: {
-					"Ctrl-Space": "autocomplete",
-					"Alt-Space": "autocomplete"
+					"Ctrl-Space": function(cm) { server.complete(cm); },
+					"Alt-Space": function(cm) { server.complete(cm); },
+					"Ctrl-I": function(cm) { server.showType(cm); },
+					"Alt-.": function(cm) { server.jumpToDef(cm); },
+					"Alt-,": function(cm) { server.jumpBack(cm); },
+					"Ctrl-Q": function(cm) { server.rename(cm); },
+					"Ctrl-.": function(cm) { server.selectName(cm); }
 				}
 			});
+			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
 			this.generation = 0;
 			this.editor.setSize(null, 500);
 		},
@@ -152,10 +163,30 @@
 				'click', 'button.button-execute', this.execute.bind(this)
 			);
 			this.targetEl.on(
-				'click', '.interactiveJSON', function() {
-					self.emit("editJsonQuery", $(this));
+				'click', '.interactiveQuery', function() {
+					var content = this.dataset.content;
+					var matcher = /^buildQuery\((.*)\)$/g;
+
+					if (match = matcher.exec(content)) {
+						var args = JSON.parse('[' + match[1] + ']');
+						var query = {
+							operators: args[0] || {},
+							edges: args[1] || []
+						}
+
+						self.emit('editJsonQuery', this, query);
+					}
 				}
 			);
+		},
+
+		updateWidget: function(widget, query) {
+			var operators = JSON.stringify(query.operators);
+			var edges = JSON.stringify(query.edges);
+
+			var methodCall = 'buildQuery(' + operators + ', ' + edges + ')';
+			console.log(methodCall);
+			widget.dataset.content = methodCall;
 		},
 
 		registerCustomAutoCompletes: function() {
@@ -176,7 +207,7 @@
 			};
 		},
 
-		createInteractiveJSONWidget: function(cm, title, text, className, from, to) {
+		createInteractiveQueryWidget: function(cm, title, text, className, from, to) {
 			text = (text.length === 0) ? ' ' : text;
 
 			var widget = document.createElement('span');

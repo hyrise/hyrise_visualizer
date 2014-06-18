@@ -37,17 +37,17 @@
 				self.canvas.initDragDrop(stencils);
 			});
 
-			$('button#hideQueryEditor').click(function() {
-				self.canvas.storeJsonInMarker();
-				self.emit('hideQueryEditor');
-			});
-			$('button#revertQueryPlan').click(function() {
-				self.canvas.revertToInitialQueryPlan();
+			this.canvas.on('queryEdited', function(query, widget) {
+				self.emit('queryEdited', query, widget);
 			});
 		},
 
 		handleEvent : function(event) {
 			this.canvas.handleEvent(event);
+		},
+
+		loadPlan : function(query, widget) {
+			this.canvas.loadPlan(query, widget);
 		}
 	});
 })();

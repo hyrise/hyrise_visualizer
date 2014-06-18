@@ -6,7 +6,7 @@
 		this.showTitlebar = (typeof config.showTitlebar === "undefined") ? false : config.showTitlebar;
 		this.showExecuteButton = (typeof config.showExecuteButton === "undefined") ? true : config.showExecuteButton;
 		this.marker = null;
-		this.newQueryPlan = '{"operators": {},"edges": []}';
+		this.newQueryPlan = {operators: {}, edges: []};
 		this.initialQueryPlan = this.newQueryPlan;
 
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
@@ -47,6 +47,7 @@
 			this.registerEventHandlers();
 			this.registerCanvasControls();
 			this.registerKeyBindings();
+			this.registerEvents();
 		},
 
 		registerEventHandlers : function() {
@@ -58,10 +59,7 @@
 		handleEvent : function(event) {
 			switch (event.type) {
 				case 'loadPlan' :
-					if (event.options.marker) {
-						this.marker = event.options.marker;
-					}
-					this.loadPlan(event.options.data, event.options.initial);
+					this.loadPlan(event.options.data, event.options.marker);
 					break;
 
 				case 'changeHeight' :
@@ -150,19 +148,19 @@
 		},
 
 		revertToInitialQueryPlan: function() {
-			this.loadPlan(this.initialQueryPlan, false);
+			this.loadPlan(this.initialQueryPlan);
 		},
 
-		storeJsonInMarker: function() {
-			if (this.marker) {
-				this.marker[0].dataset.content = this.getSerializedQuery();
-			}
+		queryEdited: function() {
+			console.log('canvas.queryEdited');
+			this.emit('queryEdited', this.getSerializedQuery(), this.marker);
 		},
 
 		getSerializedQuery : function() {
 			var plan = this.activeScreen.getValue();
 			this.flattenPlan(plan);
-			return JSON.stringify(plan, null);
+			console.log(plan);
+			return plan;
 		},
 
 		/**
@@ -200,21 +198,25 @@
 			});
 		},
 
+		registerEvents : function() {
+			$(document).on('click', 'button#hideQueryEditor', this.queryEdited.bind(this));
+			$(document).on('click', 'button#revertQueryPlan', this.revertToInitialQueryPlan.bind(this));
+		},
+
 		hideAttributesPanel : function() {
 			// todo use events or facade or stuff, this is evil
 			// $('.attributes').hide();
 			$('.sidebar').addClass('hideSidebar');
 		},
 
-		loadPlan : function(plan, initial) {
+		loadPlan : function(plan, marker) {
+			if (marker) {
+				this.marker = marker;
+			}
+
+			this.initialQueryPlan = plan;
+
 			var screen = this.getCurrentScreen();
-			if (typeof plan === 'string') {
-				plan = (plan.trim().length === 0) ? this.newQueryPlan : plan;
-				plan = JSON.parse(plan);
-			}
-			if (initial) {
-				this.initialQueryPlan = plan;
-			}
 			if (screen) {
 				plan.hasChanged = true;
 				screen.show(plan);
