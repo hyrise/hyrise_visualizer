@@ -7,6 +7,7 @@
 
 		this.isActiveScreen = false;
 		this.id = hyryx.utils.getID('JSON');
+		this.data = {};
 
 		this.el = this.render();
 		this.init();
@@ -14,8 +15,6 @@
 	};
 
 	hyryx.screen.JSONScreen.prototype = {
-
-		data : {},
 
 		show : function(data) {
 			this.isActiveScreen = true;

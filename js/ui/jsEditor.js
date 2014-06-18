@@ -11,11 +11,12 @@
 			regex: /\{"operators".*"edges"[^\}]*\}/g,
 			func: this.createInteractiveJSONWidget
 		}];
+
+		this.saveGeneration = 0;
+		this.id = hyryx.utils.getID('Editor');
 	};
 
 	hyryx.editor.JSEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
-		id: hyryx.utils.getID('Editor'),
-		saveGeneration: 0,
 
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render: function(callback) {
@@ -69,7 +70,7 @@
 					var content = mark.widgetNode.firstChild.dataset.content;
 					var title = mark.widgetNode.firstChild.innerText;
 					var className = mark.className;
-					self.createInteractiveJSONWidget(mark.doc.cm, title, content, className, from, to)
+					self.createInteractiveJSONWidget(mark.doc.cm, title, content, className, from, to);
 				});
 			});
 		},

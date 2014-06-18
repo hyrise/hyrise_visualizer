@@ -7,13 +7,6 @@
 		this.canvas = undefined;
 	};
 
-	function registerEvents() {
-		var self = this;
-		this.stencils.on("initDragDrop", function(stencils){
-			self.canvas.initDragDrop(stencils);
-		});
-	}
-
 	hyryx.editor.QueryEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 		render : function(callback) {
 			var self = this;
@@ -29,7 +22,6 @@
 					showExecuteButton: false
 				});
 
-				registerEvents();
 				callback(rendered);
 			});
 		},
@@ -40,6 +32,11 @@
 
 		registerEvents : function() {
 			var self = this;
+
+			this.stencils.on("initDragDrop", function(stencils){
+				self.canvas.initDragDrop(stencils);
+			});
+
 			$('button#hideQueryEditor').click(function() {
 				self.canvas.storeJsonInMarker();
 				self.emit('hideQueryEditor');
@@ -50,7 +47,7 @@
 		},
 
 		handleEvent : function(event) {
-			canvas.handleEvent(event);
+			this.canvas.handleEvent(event);
 		}
 	});
 })();
