@@ -108,37 +108,27 @@
 			var me = this;
 
 			this.targetEl.on('click', '.canvas-controls .button-execute', function() {
+				hyryx.Database.runQuery(
+					me.getSerializedQuery()
+				).done((function(data, status, xhr) {
+					if (data.error) {
+						hyryx.Alerts.addWarning("Error while executing query", data.error);
+						me.resultPreview.showError(data.error);
+					} else {
+						hyryx.Alerts.addSuccess("Query executed");
+						console.log(data);
+						me.resultPreview.update(data.performanceData);
 
-				var request = "query=" + this.getSerializedQuery();
-
-				/*
-				$.ajax({
-					url : hyryx.settings.database + '/jsonQuery',
-					type : 'POST',
-					dataType: 'json',
-					data : request,
-					success : function(data, status, xhr) {
-						if (data.error) {
-							this.resultPreview.showError(data.error);
-						} else {
-							console.log(data);
-							this.resultPreview.update(data.performanceData);
-
-							hyryx.debug.dispatch({
-								type : 'data.reload',
-								options : {
-									all : true,
-									data : data
-								}
-							});
-						}
-
-						// $('.execution-preview')
-					}.bind(this)
-				});
-				*/
-
-			}.bind(this));
+						hyryx.debug.dispatch({
+							type : 'data.reload',
+							options : {
+								all : true,
+								data : data
+							}
+						});
+					}
+				}).bind(me));
+			});
 
 			this.targetEl.on('click', '.canvas-controls label', function(d) {
 				me.switchView($(this).data('control'));
