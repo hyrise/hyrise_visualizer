@@ -4,12 +4,12 @@
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
 
 		this.customAutoCompletes = [{
-			title: 'JSON',
-			displayText: 'JSON object',
-			className: 'interactiveJSON',
-			content: '{"operators": {},"edges": []}',
-			regex: /\{"operators".*"edges"[^\}]*\}/g,
-			func: this.createInteractiveJSONWidget
+			title: 'QUERY',
+			displayText: 'Query object',
+			className: 'interactiveQuery',
+			content: 'buildQuery({}, [])',
+			regex: /buildQuery\([^)]*\)/g,
+			func: this.createInteractiveQueryWidget
 		}];
 	};
 
@@ -51,15 +51,15 @@
 					result.generation = this.editor.changeGeneration();
 				}
 			}
-			this.updateInteractiveJSONs();
+			this.updateInteractiveQuerys();
 			result.source = this.editor.getValue();
 			return result;
 		},
 
-		updateInteractiveJSONs: function() {
+		updateInteractiveQuerys: function() {
 			var self = this;
 			$.each($.grep(this.editor.getAllMarks(), function(mark) {
-				return mark.className === 'interactiveJSON';
+				return mark.className === 'interactiveQuery';
 			}), function(i, mark) {
 				var lineNumber = mark.doc.getLineNumber(mark.lines[0]);
 				$.each($.grep(mark.lines[0].markedSpans, function(span) {
@@ -70,7 +70,7 @@
 					var content = mark.widgetNode.firstChild.dataset.content;
 					var title = mark.widgetNode.firstChild.innerText;
 					var className = mark.className;
-					self.createInteractiveJSONWidget(mark.doc.cm, title, content, className, from, to)
+					self.createInteractiveQueryWidget(mark.doc.cm, title, content, className, from, to)
 				});
 			});
 		},
@@ -148,25 +148,12 @@
 					"Alt-.": function(cm) { server.jumpToDef(cm); },
 					"Alt-,": function(cm) { server.jumpBack(cm); },
 					"Ctrl-Q": function(cm) { server.rename(cm); },
-					"Ctrl-.": function(cm) { server.selectName(cm); },
-					"Ctrl-E": function(cm) { this.editObject(cm, server); }.bind(this),
+					"Ctrl-.": function(cm) { server.selectName(cm); }
 				}
 			});
 			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
 			this.generation = 0;
 			this.editor.setSize(null, 500);
-		},
-
-		editObject: function(cm, server) {
-			server.request(cm, "type", function(error, data) {
-				if (error) return hyryx.Alerts.addDanger(error);
-				console.log(data);
-				var type = data.origin + '.' + data.type;
-				console.log(type);
-				if (type !== '[doc].{edges, operators}') return;
-
-				this.emit('editJsonQuery', {});
-			}.bind(this));
 		},
 
 		registerEvents: function() {
@@ -175,8 +162,19 @@
 				'click', 'button.button-execute', this.execute.bind(this)
 			);
 			this.targetEl.on(
-				'click', '.interactiveJSON', function() {
-					self.emit("editJsonQuery", $(this));
+				'click', '.interactiveQuery', function() {
+					var content = this.dataset.content;
+					var matcher = /^buildQuery\((.*)\)$/g;
+
+					if (match = matcher.exec(content)) {
+						var args = JSON.parse('[' + match[1] + ']');
+						var query = {
+							operators: args[0] || {},
+							edges: args[1] || []
+						}
+
+						self.emit('editJsonQuery', query);
+					}
 				}
 			);
 		},
@@ -199,7 +197,7 @@
 			};
 		},
 
-		createInteractiveJSONWidget: function(cm, title, text, className, from, to) {
+		createInteractiveQueryWidget: function(cm, title, text, className, from, to) {
 			text = (text.length === 0) ? ' ' : text;
 
 			var widget = document.createElement('span');
