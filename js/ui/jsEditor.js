@@ -184,7 +184,6 @@
 			var edges = JSON.stringify(query.edges);
 
 			var methodCall = 'buildQuery(' + operators + ', ' + edges + ')';
-			console.log(methodCall);
 			widget.dataset.content = methodCall;
 		},
 

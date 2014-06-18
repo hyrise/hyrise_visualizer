@@ -173,7 +173,6 @@
 		getSerializedQuery : function() {
 			var plan = this.activeScreen.getValue();
 			this.flattenPlan(plan);
-			console.log(plan);
 			return plan;
 		},
 
@@ -182,7 +181,6 @@
 		 * @param  {Object} plan A plan with operators and edges
 		 */
 		flattenPlan : function(plan) {
-
 			$.each(plan.operators, function(opID, v) {
 				var data = v.data;
 				if (data) {
