@@ -316,6 +316,7 @@ div.stencils .item-list {
 .row.equal-500.mask {
   overflow: hidden;
   height: 504px;
+  margin-bottom: 11px;
 }
 
 .row.equal-500 .area_frame {
