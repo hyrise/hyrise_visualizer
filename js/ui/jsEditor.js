@@ -342,6 +342,7 @@
 
 		showPerformanceData: function(data) {
 			var self = this;
+			this.clearOverlays();
 			if (data && data.performanceData) {
 				data.performanceData.forEach(function(perf) {
 					for (lineNumber in perf.subQueryPerformanceData) {
