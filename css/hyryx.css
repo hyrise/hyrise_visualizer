@@ -333,7 +333,7 @@ div.stencils .item-list {
 /******  alerts on top of page  *********/
 
 .alerts {
-  position: absolute;
+  position: fixed;
   z-index: 1000;
   left: 50%;
   width: 450px;
