@@ -381,11 +381,17 @@
 		},
 
 		calculatePerformanceClasses: function(minDuration, maxDuration) {
-			var section_duration = (maxDuration - minDuration) / 9;
-			return function(duration) {
-				var section = Math.round((duration - minDuration) / section_duration);
-				return 'performance-section-' + section;
-			};
+			if(maxDuration !== minDuration) {
+				var section_duration = (maxDuration - minDuration) / 9;
+				return function(duration) {
+					var section = Math.round((duration - minDuration) / section_duration);
+					return 'performance-section-' + section;
+				};
+			} else {
+				return function() {
+					return 'performance-section-5';
+				};
+			}
 		},
 
 		invalidatePerformanceData: function() {
