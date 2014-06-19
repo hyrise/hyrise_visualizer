@@ -52,8 +52,8 @@
 			});
 		},
 
-		loadPlan : function(query, widget) {
-			this.canvas.loadPlan(query, widget);
+		loadPlan : function(query, widget, performanceData) {
+			this.canvas.loadPlan(query, widget, performanceData);
 		}
 	});
 })();

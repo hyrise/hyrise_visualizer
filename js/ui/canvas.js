@@ -190,7 +190,7 @@
 			$(this.targetEl).on('click', 'button#revertQueryPlan', this.revertToInitialQueryPlan.bind(this));
 		},
 
-		loadPlan : function(plan, marker) {
+		loadPlan : function(plan, marker, performanceData) {
 			if (marker) {
 				this.marker = marker;
 			}
@@ -200,7 +200,7 @@
 			var screen = this.getCurrentScreen();
 			if (screen) {
 				plan.hasChanged = true;
-				screen.show(plan);
+				screen.show(plan, performanceData);
 			}
 		},
 

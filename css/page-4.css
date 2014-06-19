@@ -61,7 +61,36 @@ div.performance-time.invalid {
 	text-shadow: 0px 1px #ddd;
 }
 
+div.performance-time span {
+	margin-left: 8px;
+}
+
+div.performance-time span.glyphicon {
+	top: 2px;
+}
+
+div.performance-time:not(.invalid) span.stepInto {
+	cursor: pointer;
+}
+
+div.performance-time:not(.invalid) span.stepInto:hover {
+	color: #ccc;
+}
+
+
 .CodeMirror-linewidget {
 	top: -20px;
 	margin-bottom: -20px;
+}
+
+.CodeMirror-vscrollbar {
+	pointer-events: none;
+}
+
+.CodeMirror-code > div > pre {
+	pointer-events: none;
+}
+
+.CodeMirror-code > div > pre > span{
+	pointer-events: all;
 }

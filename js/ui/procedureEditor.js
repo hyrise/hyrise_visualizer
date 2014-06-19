@@ -34,8 +34,8 @@
 			this.jsEditor.on("procedureExecuted", function(results) {
 				self.emit("procedureExecuted", results);
 			});
-			this.jsEditor.on("editJsonQuery", function(widget, query) {
-				self.emit("showQueryEditor", widget, query);
+			this.jsEditor.on("editJsonQuery", function(widget, query, performanceData) {
+				self.emit("showQueryEditor", widget, query, performanceData);
 			});
 		},
 

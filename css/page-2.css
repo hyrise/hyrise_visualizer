@@ -69,6 +69,17 @@ g.node text {
     pointer-events      : none;
 }
 
+g.node g.performance_info text {
+    fill: #2a5e8c;
+    fill-opacity: 0.6;
+    font-style: italic;
+}
+
+g.node g.performance_info.hide {
+    display: none !important;
+}
+
+
 g.edge path,
 path.dragline {
     fill        : none;

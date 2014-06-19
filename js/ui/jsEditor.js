@@ -8,8 +8,11 @@
 		this.saveGeneration = 0;
 		this.id = hyryx.utils.getID('Editor');
 
+		this.server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
+
+		this.queryWidgets = {};
 		this.highlightedLines = {};
-		this.performanceData = undefined;
+		this.resultData = undefined;
 	};
 
 	hyryx.editor.JSEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
@@ -64,9 +67,7 @@
 					var from = {line: lineNumber, ch: span.from};
 					var to = {line: lineNumber, ch: span.to};
 					var content = mark.widgetNode.firstChild.dataset.content;
-					var title = mark.widgetNode.firstChild.innerText;
-					var className = mark.className;
-					self.createInteractiveQueryWidget(mark.doc.cm, content, from, to)
+					self.createInteractiveQueryWidget(self, mark.doc.cm, content, from, to)
 				});
 			});
 		},
@@ -114,7 +115,7 @@
 
 						self.emit("procedureExecuted", data);
 						self.showPerformanceData(data);
-						self.performanceData = data;
+						self.renewResultData(data);
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					hyryx.Alerts.addDanger("Error while executing procedure", textStatus + ' ' + errorThrown);
@@ -126,9 +127,22 @@
 			}
 		},
 
+		renewResultData: function(data) {
+			var self = this;
+			this.resultData = {};
+			if (data.performanceData) {
+				data.performanceData.forEach(function(perf) {
+					if (perf.subQueryPerformanceData) {
+						for (line in perf.subQueryPerformanceData) {
+							self.resultData[line] = perf.subQueryPerformanceData[line];
+						}
+					}
+				});
+			}
+		},
+
 		registerEditor: function() {
 			var self = this;
-			var server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
 
 			this.editor = CodeMirror(document.getElementById(this.id), {
 				value: this.exampleCode,
@@ -141,16 +155,16 @@
 				indentWithTabs: true,
 				indentUnit: 4,
 				extraKeys: {
-					"Ctrl-Space": function(cm) { server.complete(cm); },
-					"Alt-Space": function(cm) { server.complete(cm); },
-					"Ctrl-I": function(cm) { server.showType(cm); },
-					"Alt-.": function(cm) { server.jumpToDef(cm); },
-					"Alt-,": function(cm) { server.jumpBack(cm); },
-					"Ctrl-Q": function(cm) { server.rename(cm); },
-					"Ctrl-.": function(cm) { server.selectName(cm); }
+					"Ctrl-Space": function(cm) { self.server.complete(cm); },
+					"Alt-Space": function(cm) { self.server.complete(cm); },
+					"Ctrl-I": function(cm) { self.server.showType(cm); },
+					"Alt-.": function(cm) { self.server.jumpToDef(cm); },
+					"Alt-,": function(cm) { self.server.jumpBack(cm); },
+					"Ctrl-Q": function(cm) { self.server.rename(cm); },
+					"Ctrl-.": function(cm) { self.server.selectName(cm); }
 				}
 			});
-			this.editor.on('cursorActivity', function(cm) { server.updateArgHints(cm); });
+			this.editor.on('cursorActivity', function(cm) { self.server.updateArgHints(cm); });
 			this.editor.on('change', function(cm) { self.invalidatePerformanceData(); });
 			this.editor.on('change', this.handleChanges.bind(this));
 			this.generation = 0;
@@ -162,8 +176,14 @@
 			this.targetEl.on(
 				'click', 'button.button-execute', this.execute.bind(this)
 			);
+			this.targetEl.on('click', '.performance-time span.stepInto', function() {
+				var lineNumber = $(this).closest('.performance-time').data('line-number')
+				var varName = $(this).closest('.CodeMirror-linewidget').siblings('pre').find('.cm-variable-2:first').text();
+				self.showExecutedQueryPlan(lineNumber, varName);
+			})
 			this.targetEl.on(
-				'click', '.interactiveQuery', function() {
+				'click', '.interactiveQuery', function(event, data) {
+					data = (typeof data === 'object') ? [data] : data;
 					var content = this.dataset.content;
 					var matcher = /^buildQuery\((.*)\)$/g;
 
@@ -174,10 +194,46 @@
 							edges: args[1] || []
 						}
 
-						self.emit('editJsonQuery', this, query);
+						self.emit('editJsonQuery', this, query, data);
 					}
 				}
 			);
+		},
+
+		showExecutedQueryPlan: function(lineNumber, varName) {
+			var self = this;
+			var lineHandle = self.editor.getLineHandle(lineNumber);
+			var start = {line: lineNumber, ch: lineHandle.text.indexOf(varName)};
+			var end = {line: lineNumber, ch: start.ch+varName.length};
+
+			// find definition of variable
+			self.server.request(self.editor, {type: 'definition', start: start, end: end}, function(err, definition) {
+				if (!err) {
+					// find references of variable
+					self.server.request(self.editor, {type: 'refs', start: start, end: end}, function(err, refs) {
+						if (!err) {
+							// determine last assignment of variable
+							var last = _.reduce(refs.refs, function(prev, value) {
+								if ((value.start.line > prev.start.line || (value.start.line == prev.start.line && value.start.ch > prev.start.ch))
+									&& self.editor.getLineHandle(value.start.line).text.indexOf('buildQuery') !== -1
+									&& value.start.line <= lineNumber)
+									return value;
+								return prev;
+							}, definition);
+							// find interactive query object in code line
+							var bubble = $('.CodeMirror-code > div:nth-child(' + (last.start.line+1) + ') .interactiveQuery:first-child');
+							// determine performance data for interactive query object
+							var perfData = (self.resultData && self.resultData[lineNumber+1]) ? self.resultData[lineNumber+1] : undefined;
+							// click on bubble with performance data
+							bubble.trigger('click', perfData);
+						} else {
+							console.error('Could not determine query object refs:', err)
+						}
+					});
+				} else {
+					console.error('Could not determine query object definition:', err)
+				}
+			});
 		},
 
 		handleChanges: function(cm, change) {
@@ -195,7 +251,7 @@
 			widget.dataset.content = methodCall;
 		},
 
-		createInteractiveQueryWidget: function(cm, text, from, to) {
+		createInteractiveQueryWidget: function(self, cm, text, from, to) {
 			text = (text.length === 0) ? ' ' : text;
 
 			var title = 'QUERY';
@@ -205,11 +261,12 @@
 			widget.className = className;
 			widget.textContent = title;
 			widget.dataset.content = text;
+			widget.id = hyryx.utils.getID('QueryWidget');
 
 			disableChanges = true;
 
 			cm.replaceRange(text, from, to);
-			cm.markText(from, {
+			var marker = cm.markText(from, {
 				line: from.line,
 				ch: from.ch + text.length
 			}, {
@@ -221,6 +278,7 @@
 			});
 
 			disableChanges = false;
+			self.queryWidgets[widget.id] = marker;
 		},
 
 		showContent: function(content) {
@@ -240,6 +298,7 @@
 
 			$.each(line.text.allRegexMatches(regex), function(j, match) {
 				self.createInteractiveQueryWidget(
+					self,
 					self.editor,
 					match.content,
 					{line: lineNumber, ch: match.from},
@@ -252,11 +311,18 @@
 			this.removeAllHighlightedLines();
 		},
 
-		highlightLine: function(lineNumber, text, className) {
+		highlightLine: function(lineNumber, text, className, widget) {
 			var msg = document.createElement("div");
-		    msg.appendChild(document.createTextNode(text));
-		    msg.className = className;
-		    var widget = this.editor.addLineWidget(lineNumber, msg, {coverGutter: false});
+			msg.appendChild(document.createTextNode(text));
+			msg.className = className;
+			msg.dataset.lineNumber = lineNumber;
+			if (widget !== undefined) {
+				msg.appendChild(widget);
+			}
+			var widget = this.editor.addLineWidget(lineNumber, msg, {
+				coverGutter: false,
+				handleMouseEvents: true
+			});
 			this.highlightedLines[lineNumber] = widget;
 		},
 
@@ -282,14 +348,15 @@
 						var content = perf.subQueryPerformanceData[lineNumber].reduce(function(prev, value) {
 							return prev + value.duration;
 						}, 0);
-						self.highlightLine(lineNumber-1, content.toString() + ' cycles', "performance-time");
+						var widget = document.createElement("span");
+						widget.className = 'glyphicon glyphicon-circle-arrow-right stepInto';
+						self.highlightLine(lineNumber-1, content.toString() + ' cycles', "performance-time", widget);
 					}
 				});
 			}
 		},
 
 		invalidatePerformanceData: function() {
-			console.log('invalidate perf data');
 			$('.performance-time').addClass('invalid');
 		}
 

@@ -20,11 +20,14 @@
 
 	hyryx.screen.CanvasScreen.prototype = extend(WildEmitter, {
 
-		show : function(data) {
+		show : function(data, performanceData) {
 			this.isActiveScreen = true;
 			this.setValue(data);
 			this.update();
 			$(this.el).find('.canvas-scroll').show();
+			if (performanceData) {
+				this.showPerformanceData(performanceData);
+			}
 		},
 
 		hide : function() {
@@ -141,6 +144,14 @@
 			});
 
 			this.update();
+		},
+
+		showPerformanceData: function(data) {
+			data.forEach(function(perf) {
+				d3.select('#node' + perf.id + ' .performance_info text.cycles')
+					.text(perf.duration + ' cycles');
+			});
+			d3.selectAll('.performance_info').classed('hide', false);
 		},
 
 		/**
@@ -370,6 +381,21 @@
 			gNode.append('title')
 				.text(function(d) { return d.type; })
 			;
+
+			// add performance info node
+			gNode.append('g').classed({
+				'performance_info': true
+			}).append('text').classed({
+				'cycles': true
+			}).attr({
+				'text-anchor': 'middle',
+				'y': 20
+			});
+
+			// add id tag
+			gNode.attr('id', function(d) {
+				return 'node' + d.id;
+			});
 
 			this.gNodes.exit().remove();
 		},

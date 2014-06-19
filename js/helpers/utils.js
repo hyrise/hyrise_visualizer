@@ -8,7 +8,7 @@ if ('undefined' === typeof hyryx) { var hyryx = {}; }
 		  if (!this.uniqueId) {
 		    this.uniqueId = (new Date()).getTime();
 		  }
-		  return '' + (this.uniqueId++) + '#' + (cls||'Object');
+		  return '' + (this.uniqueId++) + '-' + (cls||'Object');
 		};
 
 		function showScreen(id) {
