@@ -47,6 +47,10 @@ div#frame_queryEditor.hideQueryEditor {
 	margin-top: 0px;
 }
 
+div.highlighted-line {
+	margin-top: -20px
+}
+
 div.performance-time {
 	text-align: right;
 	padding-right: 8px;
@@ -75,12 +79,6 @@ div.performance-time:not(.invalid) span.stepInto {
 
 div.performance-time:not(.invalid) span.stepInto:hover {
 	color: #ccc;
-}
-
-
-.CodeMirror-linewidget {
-	top: -20px;
-	margin-bottom: -20px;
 }
 
 .CodeMirror-vscrollbar {

@@ -178,7 +178,7 @@
 			);
 			this.targetEl.on('click', '.performance-time span.stepInto', function() {
 				var lineNumber = $(this).closest('.performance-time').data('line-number')
-				var varName = $(this).closest('.CodeMirror-linewidget').siblings('pre').find('.cm-variable-2:first').text();
+				var varName = $(this).closest('.highlighted-line').siblings('pre').find('.cm-variable-2:first').text();
 				self.showExecutedQueryPlan(lineNumber, varName);
 			})
 			this.targetEl.on(
@@ -314,22 +314,22 @@
 		highlightLine: function(lineNumber, text, className, widget) {
 			var msg = document.createElement("div");
 			msg.appendChild(document.createTextNode(text));
-			msg.className = className;
+			msg.className = 'highlighted-line ' + className;
 			msg.dataset.lineNumber = lineNumber;
 			if (widget !== undefined) {
 				msg.appendChild(widget);
 			}
-			var widget = this.editor.addLineWidget(lineNumber, msg, {
-				coverGutter: false,
-				handleMouseEvents: true
-			});
-			this.highlightedLines[lineNumber] = widget;
+
+			var line = $('.CodeMirror-code > div:nth-child(' + (lineNumber+1) + ')');
+			line.append(msg);
+
+			this.highlightedLines[lineNumber] = msg;
 		},
 
 		removeHighlightedLine: function(lineNumber, safe) {
 			safe = (safe === undefined) ? true : safe;
 			if (!safe || this.highlightedLines[lineNumber]) {
-				this.highlightedLines[lineNumber].clear();
+				$(this.highlightedLines[lineNumber]).remove();
 				delete this.highlightedLines[lineNumber];
 			}
 		},
