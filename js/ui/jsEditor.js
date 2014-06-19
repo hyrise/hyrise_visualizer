@@ -183,7 +183,7 @@
 			})
 			this.targetEl.on(
 				'click', '.interactiveQuery', function(event, data) {
-					data = (typeof data === 'object') ? [data] : data;
+					data = (typeof data !== 'undefined') ? data.data : data;
 					var content = this.dataset.content;
 					var matcher = /^buildQuery\((.*)\)$/g;
 
@@ -225,7 +225,7 @@
 							// determine performance data for interactive query object
 							var perfData = (self.resultData && self.resultData[lineNumber+1]) ? self.resultData[lineNumber+1] : undefined;
 							// click on bubble with performance data
-							bubble.trigger('click', perfData);
+							bubble.trigger('click', {data: perfData});
 						} else {
 							console.error('Could not determine query object refs:', err)
 						}
