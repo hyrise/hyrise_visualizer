@@ -31,18 +31,14 @@
 			"isList": true,
 			"value": []
 		},
-		"instances": {
-			"type" : "number",
-			"value": 3
-		},
 		"functions": {
 			"type" : "function",
 			"isList": true,
 			"value": [],
 			"valueConfig": {
 				"type" : {
-					"type" : "number",
-					"value" : 3
+					"type" : "string",
+					"value" : ""
 				},
 				"field" : {
 					"type" : "string",
@@ -53,10 +49,6 @@
 	},
 	"HashBuild" : {
 		"type": "HashBuild",
-		"instances": {
-				"type" : "number",
-				"value": 3
-			},
 		"fields": {
 				"type": "column",
 				"isList": true,
@@ -111,7 +103,7 @@
 		"fields" : {
 			"type" : "column",
 			"isList" : true,
-			"value" : ["quarter", "amount"]
+			"value" : []
 		}
 	},
 	"RadixCluster" : {},
