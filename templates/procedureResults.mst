@@ -11,11 +11,6 @@
 				<dd>{{.}}</dd>
 				{{/generatedKeys}}
 
-				<dt>header</dt>
-				{{#header}}
-				<dd>{{.}}</dd>
-				{{/header}}
-
 				<dt>real size</dt>
 				<dd>{{real_size}}</dd>
 
@@ -74,6 +69,11 @@
 			<h4>Rows</h4>
 			<div class="table-responsive">
 				<table class="table table-bordered">
+					<tr>
+						{{#header}}
+						<th>{{.}}</th>
+						{{/header}}
+					</tr>
 					{{#rows}}
 					{{#joinedRows}}{{.}}{{/joinedRows}}
 					{{/rows}}
