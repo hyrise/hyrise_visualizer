@@ -1,6 +1,6 @@
 <div class="area_frame">
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-6">
 			<h4>General</h4>
 			<dl class="dl-horizontal">
 				<dt>affected rows</dt>
@@ -19,7 +19,7 @@
 			</dl>
 		</div>
 
-		<div class="col-md-4">
+		<div class="col-md-6">
 			<h4>Performance Data</h4>
 			<div class="panel-group" id="performanceData">
 				{{#performanceData}}
@@ -65,8 +65,15 @@
 				{{/performanceData}}
 			</div>
 		</div>
-		<div class="col-md-4">
-			<h4>Rows</h4>
+
+	</div>
+</div>
+
+<div class="area_frame">
+	<div class="row">
+
+		<div class="col-md-12">
+			<h4>Results</h4>
 			<div class="table-responsive">
 				<table class="table table-bordered">
 					<tr>
