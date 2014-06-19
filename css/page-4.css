@@ -91,6 +91,14 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 	pointer-events: none;
 }
 
-.CodeMirror-code > div > pre > span{
+.CodeMirror-code > div > pre > span {
+	pointer-events: all;
+}
+
+.CodeMirror-linewidget {
+	pointer-events: none;
+}
+
+.CodeMirror-linewidget span {
 	pointer-events: all;
 }
