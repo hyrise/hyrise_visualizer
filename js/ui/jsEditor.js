@@ -335,7 +335,7 @@
 		},
 
 		removeAllHighlightedLines: function() {
-			for (lineNumber in this.highlightedLines) {
+			for (var lineNumber in this.highlightedLines) {
 				this.removeHighlightedLine(lineNumber, false);
 			}
 		},
@@ -344,17 +344,48 @@
 			var self = this;
 			this.clearOverlays();
 			if (data && data.performanceData) {
+				var f_duration_class = self.calculateDurations(data.performanceData);
 				data.performanceData.forEach(function(perf) {
-					for (lineNumber in perf.subQueryPerformanceData) {
-						var content = perf.subQueryPerformanceData[lineNumber].reduce(function(prev, value) {
-							return prev + value.duration;
-						}, 0);
-						var widget = document.createElement("span");
+					for (var lineNumber in perf.subQueryPerformanceData) {
+						var duration = perf.subQueryPerformanceData[lineNumber].duration,
+							widget = document.createElement("span");
 						widget.className = 'glyphicon glyphicon-circle-arrow-right stepInto';
-						self.highlightLine(lineNumber-1, content.toString() + ' cycles', "performance-time", widget);
+						self.highlightLine(lineNumber-1, duration.toString() + ' cycles', 'performance-time ' + f_duration_class(duration), widget);
 					}
 				});
 			}
+		},
+
+		calculateDurations: function(performanceData) {
+			var duration,
+				maxDuration = 0,
+				minDuration = null,
+				f_sum_durations = function(prev, value) {
+				return prev + value.duration;
+			};
+
+			performanceData.forEach(function(perf) {
+				for (var lineNumber in perf.subQueryPerformanceData) {
+					duration = perf.subQueryPerformanceData[lineNumber].reduce(f_sum_durations, 0);
+					perf.subQueryPerformanceData[lineNumber].duration = duration;
+					if(duration > maxDuration) {
+						maxDuration = duration;
+					}
+					if(!minDuration || duration < minDuration) {
+						minDuration = duration;
+					}
+				}
+			});
+
+			return this.calculatePerformanceClasses(minDuration, maxDuration);
+		},
+
+		calculatePerformanceClasses: function(minDuration, maxDuration) {
+			var section_duration = (maxDuration - minDuration) / 9;
+			return function(duration) {
+				var section = Math.round((duration - minDuration) / section_duration);
+				return 'performance-section-' + section;
+			};
 		},
 
 		invalidatePerformanceData: function() {
