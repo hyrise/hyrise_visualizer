@@ -35,14 +35,10 @@
 			var json = options.data;
 
 			// load the simple data table on bottom of page
-			container.children().each(function(){
-				$(this).remove();
-			});
-
-			var headers = '<thead><tr>';
+			container.html('');
 
 			if (json.header && json.rows) {
-				headers += '<th>' + json.header.join('</th><th>') + '</th>';
+				var headers = '<thead><tr><th>' + json.header.join('</th><th>') + '</th>';
 
 				headers += '</tr></thead>';
 				container.append(headers);
