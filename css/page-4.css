@@ -54,13 +54,43 @@ div.highlighted-line {
 div.performance-time {
 	text-align: right;
 	padding-right: 8px;
-	background-image: -webkit-gradient( linear, left center, right center, from(rgba(0,0,0,0)), to(rgba(42,94,140,1)));
 	color: white;
-	text-shadow: 0px 1px black;
+	text-shadow: 0px 0px 4px rgba(0,0,0,0.75);
+}
+
+div.performance-time.performance-section-0 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(23,137,129,0.7));
+}
+div.performance-time.performance-section-1 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(81,165,96,0.7));
+}
+div.performance-time.performance-section-2 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(137,196,53,0.7));
+}
+div.performance-time.performance-section-3 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(172,219,58,0.7));
+}
+div.performance-time.performance-section-4 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(202,232,140,0.7));
+}
+div.performance-time.performance-section-5 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(207,190,39,0.7));
+}
+div.performance-time.performance-section-6 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(196,120,20,0.7));
+}
+div.performance-time.performance-section-7 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(201,74,16,0.7));
+}
+div.performance-time.performance-section-8 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(178,53,28,0.7));
+}
+div.performance-time.performance-section-9 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(153,44,26,0.7));
 }
 
 div.performance-time.invalid {
-	background-image: -webkit-gradient( linear, left center, right center, from(rgba(0,0,0,0)), to(rgba(180,180,180,0.7)));
+	background-image: -webkit-gradient( linear, left center, right center, from(rgba(0,0,0,0)), to(rgba(180,180,180,0.7))) !important;
 	color: #777;
 	text-shadow: 0px 1px #ddd;
 }
