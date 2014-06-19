@@ -137,6 +137,9 @@ window.addEventListener('load', function() {
 			"loader!third-party/tipsy/tipsy.js",
 			"loader!third-party/tipsy/tipsy.css",
 
+			// underscore
+			"loader!third-party/underscore/underscore-min.js",
+
 			// APPLICATION CODE
 
 			'js/pages/1-explore.js',
