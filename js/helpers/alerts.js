@@ -8,6 +8,10 @@
 		Mustache.parse(template);
 	});
 
+	$('.alerts').on('click', '.alert', function(event) {
+		$(this).remove();
+	});
+
 	hyryx.Alerts = {
 
 		add: function(type, message, strong) {
@@ -22,7 +26,11 @@
 			}));
 			$('.alerts').append($new_alert);
 			return window.setTimeout(function() {
-				$new_alert.fadeOut();
+				if ($new_alert) {
+					$new_alert.fadeOut(function() {
+						$new_alert.remove();
+					});
+				}
 			}, 3000);
 		}
 

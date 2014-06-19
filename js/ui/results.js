@@ -4,6 +4,8 @@
 		var self = this;
 		$.get('templates/queryResultTable.mst', function(template) {
 			self.tableTemplate = template;
+			// speed up later rendering
+			Mustache.parse(self.tableTemplate);
 		});
 	};
 
