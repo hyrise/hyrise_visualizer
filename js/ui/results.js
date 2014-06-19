@@ -1,24 +1,35 @@
 (function() {
 	hyryx.explorer.Data = function() {
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
+		var self = this;
+		$.get('templates/queryResultTable.mst', function(template) {
+			self.tableTemplate = template;
+		});
 	};
 
-	hyryx.explorer.Data.prototype = extend(hyryx.screen.AbstractUIPlugin, {
+	hyryx.explorer.Data.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 
-		render: function() {
+		render: function(callback) {
+			var self = this;
 
-			this.table = this.createDataContainerMarkup();
-			return this.table;
+			this.id = hyryx.utils.getID('Data');
+
+
+			$.get('templates/queryResults.mst', function(template) {
+				var rendered = Mustache.render(template, {
+					id: self.id
+				});
+				callback($(rendered));
+			});
 		},
 
-		createDataContainerMarkup : function() {
-			this.id = hyryx.utils.getID('Data');
-			var frame = $('<div class="area_frame"></div>').appendTo(this.targetEl);
-			var $div = jQuery('<div class="data" id="'+this.id+'"><h3>Retrieved Data</h3></div>');
-			jQuery('<table width="100%" class="table table-condensed table-striped table-responsive"></table>').appendTo($div);
-			$div.appendTo(frame);
-
-			return $div;
+		renderTable: function(data) {
+			return Mustache.render(this.tableTemplate, {
+				header: data.header,
+				rows: data.rows,
+				no_content: (data.rows.length === 0),
+				column_count: data.header.length
+			});
 		},
 
 		handleEvent : function(event) {
@@ -27,30 +38,17 @@
 			}
 		},
 
-		reload : function(options) {
-			var container = this.table.find('table');
-			if (options.all) {
+		reload : function(queryResult) {
+			// load the simple data table on bottom of page
+
+			var container = this.el.find('table');
+			if (queryResult.all) {
 				container = $('.data table');
 			}
-			var json = options.data;
 
-			// load the simple data table on bottom of page
-			container.html('');
-
-			if (json.header && json.rows) {
-				var headers = '<thead><tr><th>' + json.header.join('</th><th>') + '</th>';
-
-				headers += '</tr></thead>';
-				container.append(headers);
-
-				var body = '<tbody>';
-				body += '<tr>' + json.rows.map(function(row) {
-						return '<td>' + row.join('</td><td>') + '</td>';
-				}).join('</tr><tr>') + '</tr></tbody>';
-
-				container.append(body);
-
-			}
+			container.html(
+				this.renderTable(queryResult.data)
+			);
 		}
 	});
 })();
