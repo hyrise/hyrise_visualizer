@@ -8,7 +8,16 @@
 				"name": "string"
 			},
 			"table": {
-				"_isModifiable": "bool"
+				"_isModifiable": "bool",
+				"getValueInt": {
+					"!type": "fn(row: int, col: int)"
+				},
+				"getValueFloat": {
+					"!type": "fn(column: string)"
+				},
+				"getValueString": {
+					"!type": "fn(column: string)"
+				},
 			},
 			"query": {
 				"operators": "object",
