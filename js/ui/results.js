@@ -40,13 +40,10 @@
 
 		reload : function(queryResult) {
 			// load the simple data table on bottom of page
+			var container = queryResult.all ? $('.data').parent() : this.el;
 
-			var container = this.el.find('table');
-			if (queryResult.all) {
-				container = $('.data table');
-			}
-
-			container.html(
+			container.removeClass('hide');
+			container.find('table').html(
 				this.renderTable(queryResult.data)
 			);
 		}
