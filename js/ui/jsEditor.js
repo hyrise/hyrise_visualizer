@@ -355,7 +355,7 @@
 						var duration = perf.subQueryPerformanceData[lineNumber].duration,
 							widget = document.createElement("span");
 						widget.className = 'glyphicon glyphicon-circle-arrow-right stepInto';
-						self.highlightLine(parseInt(lineNumber-1), duration.toString() + ' cycles', 'performance-time ' + f_duration_class(duration), widget);
+						self.highlightLine(parseInt(lineNumber-1), duration.toString() + ' CPU cycles', 'performance-time ' + f_duration_class(duration), widget);
 					}
 				});
 			}
