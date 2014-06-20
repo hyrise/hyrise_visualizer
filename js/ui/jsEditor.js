@@ -118,7 +118,7 @@
 						self.showPerformanceData(data);
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {
-					hyryx.Alerts.addDanger("Error while executing procedure", textStatus + ' ' + errorThrown);
+					hyryx.Alerts.addDanger("Error while executing procedure", jqXHR.responseText);
 					console.log("Couldn't post/execute jsprocedure: " + textStatus + errorThrown);
 				});
 			} else {
