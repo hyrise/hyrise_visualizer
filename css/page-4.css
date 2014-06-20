@@ -91,8 +91,8 @@ div.performance-time.performance-section-9 {
 
 div.performance-time.invalid {
 	background-image: -webkit-gradient( linear, left center, right center, from(rgba(0,0,0,0)), to(rgba(180,180,180,0.7))) !important;
-	color: #777;
-	text-shadow: 0px 1px #ddd;
+	color: #777 !important;
+	text-shadow: 0px 1px #ddd !important;
 }
 
 div.performance-time span {
@@ -129,4 +129,16 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 
 .CodeMirror-linewidget span {
 	pointer-events: all;
+}
+
+.gutters-highlighted-lines {
+	width: 0em;
+}
+
+.CodeMirror-gutter-wrapper {
+	width: 100%;
+}
+
+.CodeMirror-gutter-wrapper .CodeMirror-gutter-elt:not(.CodeMirror-linenumber) {
+	width: 100% !important;
 }

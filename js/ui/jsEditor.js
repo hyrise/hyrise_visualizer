@@ -114,8 +114,8 @@
 						console.log(data);
 
 						self.emit("procedureExecuted", data);
-						self.showPerformanceData(data);
 						self.renewResultData(data);
+						self.showPerformanceData(data);
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					hyryx.Alerts.addDanger("Error while executing procedure", textStatus + ' ' + errorThrown);
@@ -154,6 +154,7 @@
 				minHeight: 500,
 				indentWithTabs: true,
 				indentUnit: 4,
+				gutters: ['CodeMirror-linenumbers', 'gutters-highlighted-lines'],
 				extraKeys: {
 					"Ctrl-Space": function(cm) { self.server.complete(cm); },
 					"Alt-Space": function(cm) { self.server.complete(cm); },
@@ -177,8 +178,8 @@
 				'click', 'button.button-execute', this.execute.bind(this)
 			);
 			this.targetEl.on('click', '.performance-time span.stepInto', function() {
-				var lineNumber = $(this).closest('.performance-time').data('line-number')
-				var varName = $(this).closest('.highlighted-line').siblings('pre').find('.cm-variable-2:first').text();
+				var lineNumber = $(this).closest('.performance-time').data('line-number') - 1;
+				var varName = $(this).closest('.CodeMirror-gutter-wrapper').parent().prev().find('pre .cm-variable-2:first').text();
 				self.showExecutedQueryPlan(lineNumber, varName);
 			})
 			this.targetEl.on(
@@ -201,6 +202,7 @@
 		},
 
 		showExecutedQueryPlan: function(lineNumber, varName) {
+			console.log('var!!!!!', varName, lineNumber);
 			var self = this;
 			var lineHandle = self.editor.getLineHandle(lineNumber);
 			var start = {line: lineNumber, ch: lineHandle.text.indexOf(varName)};
@@ -221,7 +223,7 @@
 								return prev;
 							}, definition);
 							// find interactive query object in code line
-							var bubble = $('.CodeMirror-code > div:nth-child(' + (last.start.line+1) + ') .interactiveQuery:first-child');
+							var bubble = $('#frame_editor .CodeMirror-code > div:nth-child(' + (last.start.line+1) + ') .interactiveQuery:first-child');
 							// determine performance data for interactive query object
 							var perfData = (self.resultData && self.resultData[lineNumber+1]) ? self.resultData[lineNumber+1] : undefined;
 							// click on bubble with performance data
@@ -320,24 +322,13 @@
 				msg.appendChild(widget);
 			}
 
-			var line = $('.CodeMirror-code > div:nth-child(' + (lineNumber+1) + ')');
-			line.append(msg);
-
+			this.editor.setGutterMarker(lineNumber, 'gutters-highlighted-lines', msg);
 			this.highlightedLines[lineNumber] = msg;
 		},
 
-		removeHighlightedLine: function(lineNumber, safe) {
-			safe = (safe === undefined) ? true : safe;
-			if (!safe || this.highlightedLines[lineNumber]) {
-				$(this.highlightedLines[lineNumber]).remove();
-				delete this.highlightedLines[lineNumber];
-			}
-		},
-
 		removeAllHighlightedLines: function() {
-			for (var lineNumber in this.highlightedLines) {
-				this.removeHighlightedLine(lineNumber, false);
-			}
+			this.editor.clearGutter('gutters-highlighted-lines');
+			this.highlightedLines= {};
 		},
 
 		showPerformanceData: function(data) {
@@ -350,7 +341,7 @@
 						var duration = perf.subQueryPerformanceData[lineNumber].duration,
 							widget = document.createElement("span");
 						widget.className = 'glyphicon glyphicon-circle-arrow-right stepInto';
-						self.highlightLine(lineNumber-1, duration.toString() + ' cycles', 'performance-time ' + f_duration_class(duration), widget);
+						self.highlightLine(parseInt(lineNumber), duration.toString() + ' cycles', 'performance-time ' + f_duration_class(duration), widget);
 					}
 				});
 			}
@@ -395,7 +386,12 @@
 		},
 
 		invalidatePerformanceData: function() {
-			$('.performance-time').addClass('invalid');
+			this.editor.clearGutter('gutters-highlighted-lines');
+			for (var line in this.highlightedLines) {
+				var msg = this.highlightedLines[line];
+				msg.className = msg.className + ' invalid';
+				this.editor.setGutterMarker(parseInt(line), 'gutters-highlighted-lines', msg);
+			}
 		}
 
 	});

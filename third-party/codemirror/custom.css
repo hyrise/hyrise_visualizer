@@ -152,6 +152,7 @@ http://ethanschoonover.com/solarized/img/solarized-palette.png
 .cm-s-solarized .CodeMirror-linenumber {
   color: #586e75;
   padding: 0 5px;
+  padding-left: 15px;
 }
 
 .cm-s-solarized .CodeMirror-gutter .CodeMirror-gutter-text {
