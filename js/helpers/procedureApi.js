@@ -8,16 +8,21 @@
 				"name": "string"
 			},
 			"table": {
-				"_isModifiable": "bool",
 				"getValueInt": {
-					"!type": "fn(row: int, col: int)"
+					"!type": "fn(col: int, row: int)"
 				},
 				"getValueFloat": {
-					"!type": "fn(column: string)"
+					"!type": "fn(col: int, row: int)"
 				},
 				"getValueString": {
-					"!type": "fn(column: string)"
+					"!type": "fn(col: int, row: int)"
 				},
+				"size": {
+					"!type": "fn() -> int"
+				},
+				"columnCount": {
+					"!type": "fn() -> int"
+				}
 			},
 			"query": {
 				"operators": "object",
