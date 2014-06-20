@@ -12,6 +12,13 @@
 		$(this).remove();
 	});
 
+	$('.alerts').on('mouseover', '.alert', function(event) {
+		var timeoutId = $(this).data('timeoutId');
+		if(timeoutId) {
+			clearTimeout(timeoutId);
+		}
+	});
+
 	function insertAlert(type, message, strong, progress) {
 		if(0 > $.inArray(type, AVAIL_TYPES)) {
 			console.error("This alert type does not exist!");
@@ -38,13 +45,17 @@
 	hyryx.Alerts = {
 
 		add: function(type, message, strong) {
-			var $new_alert = insertAlert(type, message, strong, false);
+			var timeoutId,
+				$new_alert = insertAlert(type, message, strong, false);
 			if (!$new_alert) {return;}
 
-			return window.setTimeout(
+
+			timeoutId = window.setTimeout(
 				deleteAlert.bind(this, $new_alert),
 				3000
 			);
+			$new_alert.data('timeoutId', timeoutId);
+			return timeoutId;
 		},
 
 		wait: function(type, message, strong, deferred) {
