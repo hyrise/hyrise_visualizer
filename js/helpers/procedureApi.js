@@ -9,14 +9,23 @@
 			},
 			"table": {
 				"getValueInt": {
-					"!type": "fn(col: int, row: int)"
+					"!type": "fn(col: int, row: int) -> int"
 				},
 				"getValueFloat": {
-					"!type": "fn(col: int, row: int)"
+					"!type": "fn(col: int, row: int) -> float"
 				},
 				"getValueString": {
-					"!type": "fn(col: int, row: int)"
+					"!type": "fn(col: int, row: int) -> string"
 				},
+				"setValueInt": {
+					"!type": "fn(col: int, row: int, value: int)"
+				},
+				"setValueFloat": {
+					"!type": "fn(col: int, row: int, value: float)"
+				},
+				"setValueString": {
+					"!type": "fn(col: int, row: int, value: string)"
+				}
 				"size": {
 					"!type": "fn() -> int"
 				},
