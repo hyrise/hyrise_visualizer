@@ -182,33 +182,37 @@
 				self.showExecutedQueryPlan($(this), lineNumber);
 			})
 			this.targetEl.on(
-				'click', '.interactiveQuery', function(event, data) {
-					data = (typeof data !== 'undefined') ? data.data : data;
-					var content = this.dataset.content;
-					var matcher = /^buildQuery\((.*)\)$/g;
-
-					if (match = matcher.exec(content)) {
-						var args = JSON.parse('[' + match[1] + ']');
-						var query = {
-							operators: args[0] || {},
-							edges: args[1] || []
-						}
-
-						self.emit('editJsonQuery', this, query, data);
-					}
+				'click', '.interactiveQuery', function() {
+					self.editJsonQuery(this);
 				}
 			);
+		},
+
+		editJsonQuery: function(element, data) {
+			data = (typeof data !== 'undefined') ? data.data : data;
+			var content = element.dataset.content;
+			var matcher = /^buildQuery\((.*)\)$/g;
+
+			if (match = matcher.exec(content)) {
+				var args = JSON.parse('[' + match[1] + ']');
+				var query = {
+					operators: args[0] || {},
+					edges: args[1] || []
+				}
+
+				this.emit('editJsonQuery', element, query, data);
+			}
 		},
 
 		showExecutedQueryPlan: function(span, lineNumber) {
 			var self = this;
 			this.determineQueryObjectCreationLine(span, lineNumber, function(line) {
-				// find interactive query object in code line
-				var bubble = $('#frame_editor .CodeMirror-code > div:nth-child(' + (line+1) + ') .interactiveQuery:first-child');
+				// determine interactive query object widget
+				var widget = self.editor.getLineHandle(line).markedSpans[0].marker.widgetNode.firstChild;
 				// determine performance data for interactive query object
 				var perfData = (self.resultData && self.resultData[lineNumber+1]) ? self.resultData[lineNumber+1] : undefined;
-				// click on bubble with performance data
-				bubble.trigger('click', {data: perfData});
+
+				self.editJsonQuery(widget, {data: perfData});
 			});
 		},
 
