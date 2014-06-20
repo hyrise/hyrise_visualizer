@@ -279,7 +279,7 @@ a:hover {
 .item-list {
   overflow-x: hidden;
   overflow-y: auto;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 4px;
 }
 
@@ -289,9 +289,10 @@ a:hover {
 
 .item-list .list-group-item {
   border: none;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   cursor: pointer;
+  text-shadow: 0px 1px #fff;
 }
 
 .item-list .list-group-item:first-child {
@@ -300,6 +301,10 @@ a:hover {
 
 .item-list .list-group-item:last-child {
   border-bottom: none
+}
+
+.item-list .list-group-item:hover {
+  background-color: #ddd;
 }
 
 div.storedProcedureList .item-list {
