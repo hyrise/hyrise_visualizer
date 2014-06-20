@@ -48,7 +48,11 @@ div#frame_queryEditor.hideQueryEditor {
 }
 
 div.highlighted-line {
-	margin-top: -20px
+	pointer-events: none;
+}
+
+div.highlighted-line > span {
+	pointer-events: all;
 }
 
 div.performance-time {
@@ -137,6 +141,7 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 
 .CodeMirror-gutter-wrapper {
 	width: 100%;
+	z-index: 0;
 }
 
 .CodeMirror-gutter-wrapper .CodeMirror-gutter-elt:not(.CodeMirror-linenumber) {

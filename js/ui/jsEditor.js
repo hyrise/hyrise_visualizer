@@ -178,9 +178,8 @@
 				'click', 'button.button-execute', this.execute.bind(this)
 			);
 			this.targetEl.on('click', '.performance-time span.stepInto', function() {
-				var lineNumber = $(this).closest('.performance-time').data('line-number') - 1;
-				var varName = $(this).closest('.CodeMirror-gutter-wrapper').parent().prev().find('pre .cm-variable-2:first').text();
-				self.showExecutedQueryPlan(lineNumber, varName);
+				var lineNumber = $(this).closest('.performance-time').data('line-number');
+				self.showExecutedQueryPlan($(this), lineNumber);
 			})
 			this.targetEl.on(
 				'click', '.interactiveQuery', function(event, data) {
@@ -201,9 +200,9 @@
 			);
 		},
 
-		showExecutedQueryPlan: function(lineNumber, varName) {
+		showExecutedQueryPlan: function(span, lineNumber) {
 			var self = this;
-			this.determineQueryObjectCreationLine(lineNumber, varName, function(line) {
+			this.determineQueryObjectCreationLine(span, lineNumber, function(line) {
 				// find interactive query object in code line
 				var bubble = $('#frame_editor .CodeMirror-code > div:nth-child(' + (line+1) + ') .interactiveQuery:first-child');
 				// determine performance data for interactive query object
@@ -213,7 +212,7 @@
 			});
 		},
 
-		determineQueryObjectCreationLine: function(lineNumber, varName, callback) {
+		determineQueryObjectCreationLine: function(span, lineNumber, callback) {
 			// check if query object is created in execution line
 			if (this.editor.getLineHandle(lineNumber).text.indexOf('buildQuery') !== -1) {
 				callback(lineNumber);
@@ -221,9 +220,11 @@
 			}
 
 			var self = this;
+			var varName = span.closest('.CodeMirror-gutter-wrapper').parent().find('pre .cm-variable-2:first').text();
 			var lineHandle = self.editor.getLineHandle(lineNumber);
 			var start = {line: lineNumber, ch: lineHandle.text.indexOf(varName)};
 			var end = {line: lineNumber, ch: start.ch+varName.length};
+
 
 			// find definition of variable
 			self.server.request(self.editor, {type: 'definition', start: start, end: end}, function(err, definition) {
@@ -235,7 +236,7 @@
 							var last = _.reduce(refs.refs, function(prev, value) {
 								if ((value.start.line > prev.start.line || (value.start.line == prev.start.line && value.start.ch > prev.start.ch))
 									&& self.editor.getLineHandle(value.start.line).text.indexOf('buildQuery') !== -1
-									&& value.start.line <= lineNumber)
+									&& value.start.line <= lineNumber-1)
 									return value;
 								return prev;
 							}, definition);
@@ -354,7 +355,7 @@
 						var duration = perf.subQueryPerformanceData[lineNumber].duration,
 							widget = document.createElement("span");
 						widget.className = 'glyphicon glyphicon-circle-arrow-right stepInto';
-						self.highlightLine(parseInt(lineNumber), duration.toString() + ' cycles', 'performance-time ' + f_duration_class(duration), widget);
+						self.highlightLine(parseInt(lineNumber-1), duration.toString() + ' cycles', 'performance-time ' + f_duration_class(duration), widget);
 					}
 				});
 			}
