@@ -202,7 +202,24 @@
 		},
 
 		showExecutedQueryPlan: function(lineNumber, varName) {
-			console.log('var!!!!!', varName, lineNumber);
+			var self = this;
+			this.determineQueryObjectCreationLine(lineNumber, varName, function(line) {
+				// find interactive query object in code line
+				var bubble = $('#frame_editor .CodeMirror-code > div:nth-child(' + (line+1) + ') .interactiveQuery:first-child');
+				// determine performance data for interactive query object
+				var perfData = (self.resultData && self.resultData[lineNumber+1]) ? self.resultData[lineNumber+1] : undefined;
+				// click on bubble with performance data
+				bubble.trigger('click', {data: perfData});
+			});
+		},
+
+		determineQueryObjectCreationLine: function(lineNumber, varName, callback) {
+			// check if query object is created in execution line
+			if (this.editor.getLineHandle(lineNumber).text.indexOf('buildQuery') !== -1) {
+				callback(lineNumber);
+				return;
+			}
+
 			var self = this;
 			var lineHandle = self.editor.getLineHandle(lineNumber);
 			var start = {line: lineNumber, ch: lineHandle.text.indexOf(varName)};
@@ -222,12 +239,8 @@
 									return value;
 								return prev;
 							}, definition);
-							// find interactive query object in code line
-							var bubble = $('#frame_editor .CodeMirror-code > div:nth-child(' + (last.start.line+1) + ') .interactiveQuery:first-child');
-							// determine performance data for interactive query object
-							var perfData = (self.resultData && self.resultData[lineNumber+1]) ? self.resultData[lineNumber+1] : undefined;
-							// click on bubble with performance data
-							bubble.trigger('click', {data: perfData});
+
+							callback(last.start.line);
 						} else {
 							console.error('Could not determine query object refs:', err)
 						}
