@@ -358,6 +358,10 @@ div.stencils .item-list {
         animation: alert 0.5s ease forwards;
 }
 
+.alert .progress {
+  margin-bottom: 0;
+}
+
 /* Animation */
 
 @-webkit-keyframes alert {
