@@ -141,7 +141,7 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 
 .CodeMirror-gutter-wrapper {
 	width: 100%;
-	z-index: 0;
+	pointer-events: none;
 }
 
 .CodeMirror-gutter-wrapper .CodeMirror-gutter-elt:not(.CodeMirror-linenumber) {
