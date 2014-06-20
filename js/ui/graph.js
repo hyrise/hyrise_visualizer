@@ -583,7 +583,7 @@
 								for (var i = 0; i < result.rows.length; i++) {
 									var row = result.rows[i];
 									(finalResult.data = finalResult.data || []).push([row[0], row[1]]);
-								};
+								}
 							} else {
 								var categories = [];
 								for (var i = 0; i < result.rows.length; i++) {
@@ -592,7 +592,7 @@
 										categories.push(row[0]);
 									}
 									(finalResult.data = finalResult.data || []).push(row[1]);
-								};
+								}
 								finalResult.categories = categories;
 							}
 
@@ -600,10 +600,10 @@
 							if (finalResult.name[xAxis.column]) {
 								finalResult.name[xAxis.column] = column.column;
 							}
+							content.push(finalResult);
 						}
 					}.bind(this)));
 
-					content.push(finalResult);
 				}.bind(this));
 
 				$.when.apply($, queries).done(function() {
