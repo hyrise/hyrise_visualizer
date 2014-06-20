@@ -25,7 +25,7 @@
 				},
 				"setValueString": {
 					"!type": "fn(col: int, row: int, value: string)"
-				}
+				},
 				"size": {
 					"!type": "fn() -> int"
 				},
