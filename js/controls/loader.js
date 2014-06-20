@@ -165,6 +165,7 @@ window.addEventListener('load', function() {
 				// TODO remove splash screen
 
 				$('body').addClass('onload');
+				hyryx.Alerts.removeStartLoader();
 				hyryx.utils.showScreen();
 			}, 0);
 		}

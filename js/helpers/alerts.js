@@ -53,6 +53,11 @@
 			deferred.always(
 				deleteAlert.bind(this, $new_alert)
 			);
+		},
+
+		removeStartLoader: function() {
+			deleteAlert($('.alert.start-loader'));
+			this.removeStartLoader = undefined;
 		}
 
 	};

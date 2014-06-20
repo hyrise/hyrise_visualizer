@@ -53,24 +53,6 @@ body {
   overflow: auto;
 }
 
-.loading {
-  width: 150px;
-  position: absolute;
-  margin: auto;
-  left: 0;
-  right: 0;
-  top: 50%;
-  opacity: 1;
-  -webkit-transition: opacity 1s;
-  background: url(../img/ajax-loader.gif) no-repeat scroll left center white;
-  height: auto;
-  padding-left: 24px;
-}
-
-.onload .loading {
-  opacity: 0;
-}
-
 div.logo {
   background-color: #2A5E8C;
   height: 44px;
