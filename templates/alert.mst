@@ -3,6 +3,7 @@
 		<strong>
 			{{strong}}
 		</strong>
+		<br/>
 	{{/strong}}
 	{{message}}
 	{{#progress}}

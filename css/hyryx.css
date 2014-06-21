@@ -332,6 +332,8 @@ div.stencils .item-list {
   margin: 7px 4px;
   text-align: center;
   text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 2px 2px #888;
   -webkit-animation: alert 0.5s ease forwards;
    -moz-animation: alert 0.5s ease forwards;
     -ms-animation: alert 0.5s ease forwards;
