@@ -328,7 +328,7 @@ div.stencils .item-list {
 
 .alert {
   position: relative;
-  padding: 8px 10px;
+  padding: 8px 20px;
   margin: 7px 4px;
   text-align: center;
   text-decoration: none;
@@ -341,6 +341,21 @@ div.stencils .item-list {
 
 .alert .progress {
   margin-bottom: 0;
+}
+
+.alert span.remove {
+  font-size: 16px;
+  display: none;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  height: 26px;
+  width: 16px;
+  margin-top: -13px;
+}
+
+.alert:hover span.remove {
+  display: block;
 }
 
 /* Animation */
