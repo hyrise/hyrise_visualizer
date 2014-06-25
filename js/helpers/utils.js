@@ -5,85 +5,72 @@ if ('undefined' === typeof hyryx) { var hyryx = {}; }
 	hyryx.utils = (function() {
 
 		function getID(cls) {
-		  if (!this.uniqueId) {
-		    this.uniqueId = (new Date()).getTime();
-		  }
-		  return '' + (this.uniqueId++) + '-' + (cls||'Object');
-		};
+			if (!this.uniqueId) {
+				this.uniqueId = (new Date()).getTime();
+			}
+			return '' + (this.uniqueId++) + '-' + (cls||'Object');
+		}
 
 		function showScreen(id) {
-            var hash = (window.location.hash||'').trim().split('#')[1];
+			var hash = (window.location.hash || '').trim().split('#')[1];
 
-            id = 'explorer';//(id||hash||'').trim() || 'explorer';
-			// var hash = window.location.hash;
 			// the default page
+			id = (id || hash || '').trim() || 'explorer';
 			var $target = $('.navbar-nav a[href=#page-'+id+']');
 
-			// if (hash.trim()) {
-			// 	var target = hash.replace('#', '#page-');
-			// 	if ($('#tag a[href='+target+']')[0]) {
-			// 		$target = $('#tag a[href='+target+']');
-			// 	}
-			// }
 			$target.click();
 		}
 
-        function getConfigForProperty(type, key) {
-            if (hyryx.stencils[type] && hyryx.stencils[type][key] && hyryx.stencils[type][key].type) {
-                return hyryx.stencils[type][key];
-            }
-        }
+		function getConfigForProperty(type, key) {
+			if (hyryx.stencils[type] && hyryx.stencils[type][key] && hyryx.stencils[type][key].type) {
+				return hyryx.stencils[type][key];
+			}
+		}
 
-        function getConfigForValue(type, key) {
-            var propConfig = getConfigForProperty(type, key);
-            if (propConfig) {
-                return propConfig.valueConfig;
-            }
-        }
+		function getConfigForValue(type, key) {
+			var propConfig = getConfigForProperty(type, key);
+			if (propConfig) {
+				return propConfig.valueConfig;
+			}
+		}
 
-        function serializeNode(node) {
-            
-            var o = {};
+		function serializeNode(node) {
 
-            $.each(node, function(key, value) {
-                if ('undefined' !== typeof value.value) {
-                    o[key] = value.value;
-                } else {
-                    o[key] = value;
-                }
-            });
+			var o = {};
 
-            o._position = node.getPosition();
+			$.each(node, function(key, value) {
+				if ('undefined' !== typeof value.value) {
+					o[key] = value.value;
+				} else {
+					o[key] = value;
+				}
+			});
 
-            return o;
+			o._position = node.getPosition();
 
-            // return {
-            //     type : node.type,
-            //     data : node.data,
-            //     _position : node.getPosition()
-            // };
-        }
+			return o;
+		}
 
 		function highlightJSON(json) {
 			if ('object' === typeof json) {
 				json = JSON.stringify(json, null, 4);
 			}
 
-            return json;
+			return json;
 		}
 
 		return {
 			getID : getID,
 			showScreen : showScreen,
-            getConfigForProperty : getConfigForProperty,
-            getConfigForValue : getConfigForValue,
-            serializeNode : serializeNode,
+			getConfigForProperty : getConfigForProperty,
+			getConfigForValue : getConfigForValue,
+			serializeNode : serializeNode,
 			highlightJSON : highlightJSON
 		};
 
 	})();
 
 	function repeat(s, count) {
-        return new Array(count + 1).join(s);
-    }
+		return new Array(count + 1).join(s);
+	}
 })();

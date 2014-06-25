@@ -59,7 +59,7 @@
 		handleEvent : function(event) {
 			switch (event.type) {
 				case 'loadPlan' :
-					this.loadPlan(event.options.data, event.options.marker);
+					this.loadPlan(event.options);
 					break;
 
 				case 'changeHeight' :
