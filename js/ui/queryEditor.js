@@ -23,7 +23,7 @@
 				});
 				self.attributes = new hyryx.debug.Attributes(rendered.find('#frame_attributes'));
 
-				callback(rendered);
+				callback($(rendered));
 			});
 		},
 

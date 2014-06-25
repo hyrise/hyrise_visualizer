@@ -801,10 +801,10 @@
 				});
 
 				// save created series in global variable
-				loadedSeries = newSeries;
+				loadedSeries = this.collectSeries();
 
 				try {
-					var query = JSON.parse(content[0].query);
+					var query = content[0].query;
 					// console.log(query);
 
 					if (!$('.btn-debug')[0]) {
