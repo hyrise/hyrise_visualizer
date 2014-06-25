@@ -271,7 +271,7 @@
 					form.find('input').each(function(i, input) {
 						var key = $(input).attr('id').split('complex-')[1];
 						var value = $(input).val();
-						newValue[key] = value;
+						newValue[key] = hyryx.utils.getTypedValueForKey(this.type, value);
 					});
 
 					// Since the code mirror is no simple input field, handle it differently

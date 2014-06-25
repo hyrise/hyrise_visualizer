@@ -34,8 +34,16 @@ if ('undefined' === typeof hyryx) { var hyryx = {}; }
 			}
 		}
 
-		function serializeNode(node) {
+		function getTypedValueForKey(type, value) {
+			if (type == 'number') {
+				return parseInt(value);
+			}
 
+			return value;
+		}
+
+		function serializeNode(node) {
+			
 			var o = {};
 
 			$.each(node, function(key, value) {
@@ -64,6 +72,7 @@ if ('undefined' === typeof hyryx) { var hyryx = {}; }
 			showScreen : showScreen,
 			getConfigForProperty : getConfigForProperty,
 			getConfigForValue : getConfigForValue,
+			getTypedValueForKey : getTypedValueForKey,
 			serializeNode : serializeNode,
 			highlightJSON : highlightJSON
 		};
