@@ -79,7 +79,7 @@
 					name : 'javascript',
 					json : true
 				},
-				theme : 'custom',
+				theme : 'solarized light',
 				lint : true,
 				gutters : ['CodeMirror-lint-markers'],
 				lineNumbers : true
