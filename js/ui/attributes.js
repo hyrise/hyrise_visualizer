@@ -401,7 +401,7 @@
 
 				$(this).parent().detach();
 
-				var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, me.container.selection, me.id);
+				var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, me.selection, me.id);
 				hyryx.command.do(command);
 			}
 
