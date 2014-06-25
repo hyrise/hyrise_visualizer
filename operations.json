@@ -1,7 +1,4 @@
 {
-	"Barrier" : {},
-	"CreateIndex" : {},
-	"CreateRadixTable" : {},
 	"CustomOperator" : {
 		"type" : "CustomOperator",
 		"custom" : {
@@ -15,8 +12,6 @@
 			}
 		}
 	},
-	"Distinct" : {},
-	"ExtractDelta" : {},
 	"GetTable" : {
 		"type" : "GetTable",
 		"name" : {
@@ -59,22 +54,6 @@
 			"value": "groupby"
 		}
 	},
-	"HashJoinProbe" : {},
-	"Histogram" : {},
-	"Histogram2ndPass" : {},
-	"IndexScan" : {},
-	"InsertOnlyDelete" : {},
-	"InsertOnlyInsert" : {},
-	"InsertOnlyLoad" : {},
-	"InsertOnlyUpdate" : {},
-	"InsertScan" : {},
-	"IntersectPositions" : {},
-	"JoinScan" : {},
-	"JsonTable" : {},
-	"LayoutSingleTable" : {},
-	"LayoutTable" : {},
-	"LayoutTableLoad" : {},
-	"LoadFile" : {},
 	"MaterializingScan" : {
 		"type" : "MaterializingScan",
 		"memcpy" : {
@@ -86,18 +65,12 @@
 			"value": true
 		}
 	},
-	"MergeHashTables" : {},
-	"MergeIndexScan" : {},
-	"MergePrefixSum" : {},
 	"MergeTable" : {
-	"type" : "MergeTable"
+		"type" : "MergeTable"
 	},
-	"MultiplyRefField" : {},
-	"NestedLoopEquiJoin" : {},
 	"NoOp" : {
-	"type" : "NoOp"
+		"type" : "NoOp"
 	},
-	"PrefixSum" : {},
 	"ProjectionScan" : {
 		"type" : "ProjectionScan",
 		"fields" : {
@@ -106,14 +79,6 @@
 			"value" : []
 		}
 	},
-	"RadixCluster" : {},
-	"RadixCluster2ndPass" : {},
-	"RadixJoin" : {},
-	"ReplaceTable" : {},
-	"ScriptOperation" : {},
-	"SetTable" : {},
-	"SettingsOperation" : {},
-	"SimpleRawTableScan" : {},
 	"SimpleTableScan" : {
 		"type" : "SimpleTableScan",
 		"predicates" : {
@@ -140,7 +105,6 @@
 			}
 		}
 	},
-	"SmallestTableScan" : {},
 	"SortScan" : {
 		"type": "SortScan",
 		"fields": {
@@ -159,15 +123,5 @@
 			"type":"table",
 			"value":""
 		}
-	},
-	"TableScan" : {},
-	"TableUnload" : {},
-	"TaskSchedulerAdjustment" : {},
-	"ThreadpoolAdjustment" : {},
-	"Union" : {},
-	"UnionAll" : {},
-	"UnionScan" : {},
-	"UnloadAll" : {},
-	"ValidPositionsMain" : {},
-	"ValidPositionsRaw" : {}
+	}
 }

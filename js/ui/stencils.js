@@ -28,14 +28,7 @@
 
 			// load available stencils
 			$.getJSON('operations.json', function(data) {
-				$.each(data, function(k, v) {
-					var i=0;
-					for (var op in v) { ++i; }
-
-					if (i > 0) {
-						hyryx.stencils[k] = v;
-					}
-				});
+				hyryx.stencils = data;
 
 				me.updateOpList();
 			});
