@@ -271,6 +271,10 @@ svg *::-webkit-selection {
     border: 1px solid transparent;
 }
 
+div.sidebar {
+    overflow: hidden;
+}
+
 div.sidebar > div:first-child {
     float: right;
     height: 100%;
