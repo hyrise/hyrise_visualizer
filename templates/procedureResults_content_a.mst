@@ -1,0 +1,19 @@
+<div class="area_frame">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Results</h4>
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<tr>
+						{{#header}}
+						<th>{{.}}</th>
+						{{/header}}
+					</tr>
+					{{#rows}}
+					{{#joinedRows}}{{.}}{{/joinedRows}}
+					{{/rows}}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

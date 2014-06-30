@@ -147,3 +147,34 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 .CodeMirror-gutter-wrapper .CodeMirror-gutter-elt:not(.CodeMirror-linenumber) {
 	width: 100% !important;
 }
+
+/* Sunburst css */
+
+#chart {
+  position: relative;
+}
+
+#chart svg {
+	display: block;
+	margin: auto;
+}
+
+#chart path {
+	stroke: #fff;
+}
+
+#explanation {
+	position: absolute;
+	width: 300px;
+	height: 150px;
+	left: 50%;
+	margin-left: -150px;
+	top: 50%;
+	margin-top: -75px;
+	text-align: center;
+	color: #666;
+}
+
+#explanation span.big {
+	font-size: 2.5em;
+}

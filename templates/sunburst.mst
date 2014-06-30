@@ -1,0 +1,16 @@
+<div class="area_frame">
+	<div class="row">
+
+		<div class="col-md-12">
+			<div id="sequence"></div>
+			<div id="chart">
+				<div id="explanation" style="visibility: hidden;">
+					<span class="big" id="chart-title"></span><br/><br/>
+					<span class="big" id="chart-duration"></span><br/>
+					<span>CPU cycles</span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

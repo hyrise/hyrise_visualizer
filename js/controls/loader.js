@@ -203,7 +203,8 @@ window.addEventListener('load', function() {
 			'js/ui/canvas.svgElements.js',
 			'js/ui/canvas.json.js',
 			'js/ui/attributes.js',
-            'js/ui/procedureResults.js'
+            'js/ui/procedureResults.js',
+            'js/ui/sunburst.js'
         ],
         complete : function() {
             hyryx.editor.setup();
