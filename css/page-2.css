@@ -192,6 +192,12 @@ svg *::-webkit-selection {
     z-index: 2000;
 }
 
+.canvas-controls.canvas-controls-up {
+    bottom: initial;
+    top: 4px;
+    right: 8px;
+}
+
 .canvas-controls .btn-group{
     padding: 0px 8px;
 }

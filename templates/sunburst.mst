@@ -10,6 +10,12 @@
 					<span>CPU cycles</span>
 				</div>
 			</div>
+			<div class="canvas-controls canvas-controls-up">
+				<select class="selectpicker show-tick" id="sunburst-value" data-style="btn-primary">
+					<option>CPU cycles</option>
+					<option>Cache Misses</option>
+				</select>
+			</div>
 		</div>
 
 	</div>
