@@ -39,19 +39,36 @@
 			}, 'text');
 		},
 
-		execute:  function(procedureName) {
-			// execute procedure with given name
-			return request({
+		execute:  function(procedureName, papi) {
+			var params = {
 				action: 'execute',
 				procedureName: procedureName
-			});
+			};
+			if (papi !== undefined) {
+				params.papiEvent = papi;
+			}
+
+			// execute procedure with given name
+			return request(params);
 		},
 
-		executeSource:  function(procedureSource) {
-			// execute source directly
-			return request({
+		executeSource:  function(procedureSource, papi) {
+			var params = {
 				action: 'execute',
 				procedureSource: procedureSource
+			};
+			if (papi !== undefined) {
+				params.papiEvent = papi;
+			}
+
+			// execute source directly
+			return request(params);
+		},
+
+		papiEvents: function() {
+			// get list of available PAPI events
+			return request({
+				action: 'papiEventsAvailable'
 			});
 		}
 
