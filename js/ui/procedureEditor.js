@@ -31,8 +31,8 @@
 			});
 			this.storedProcedureList.on("saveProcedure", this.jsEditor.save.bind(this.jsEditor));
 			this.jsEditor.on("procedureSaved", this.storedProcedureList.updateProcedureList.bind(this.storedProcedureList));
-			this.jsEditor.on("procedureExecuted", function(results) {
-				self.emit("procedureExecuted", results);
+			this.jsEditor.on("procedureExecuted", function(results, papi) {
+				self.emit("procedureExecuted", results, papi);
 			});
 			this.jsEditor.on("editJsonQuery", function(widget, query, performanceData) {
 				self.emit("showQueryEditor", widget, query, performanceData);

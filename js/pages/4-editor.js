@@ -20,6 +20,9 @@ hyryx.editor = (function() {
     function registerEvents() {
         ide.on("procedureLoaded", procedureResults.clearResults.bind(procedureResults));
         ide.on("procedureExecuted", procedureResults.showResults.bind(procedureResults));
+        procedureResults.on("editorExecute", function(papi) {
+            ide.screens.procedureEditor.jsEditor.execute(papi);
+        });
     }
 
     return {

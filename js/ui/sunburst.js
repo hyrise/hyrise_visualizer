@@ -1,6 +1,8 @@
 
 (function() {
 
+    DEFAULT_SUNBURST = 'PAPI_TOT_CYC'
+
     // Extend the standard ui plugin
     hyryx.editor.Sunburst = function() {
       hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
@@ -24,28 +26,38 @@
         init: function() {
             var self = this;
             this.viz = this.createSunburst();
-            $('#sunburst-value').selectpicker();
+            hyryx.ProcedureStore.papiEvents().done(function(papiEvents) {
+                var options = _.map(papiEvents, function(e) {
+                    return '<option>' + e + '</option>'
+                }).join('');
+                options = '<option>' + DEFAULT_SUNBURST + '</option>' + options;
+                $('#sunburst-value').append(options);
+                $('#sunburst-value').selectpicker();
+            });
             $('#sunburst-value').change(function() {
-                if ($(this).val() === 'CPU cycles') {
+                if ($(this).val() === DEFAULT_SUNBURST) {
                     self.update(self.data);
                 } else {
-                    self.update(self.data, function(d) {
-                        return 1;
-                    });
+                    self.emit('editorExecute', $(this).val());
                 }
-            })
+            });
         },
 
-        update: function(data, f_value) {
+        update: function(data, papi) {
             var self = this;
 
             this.data = data;
 
-            if (f_value === undefined) {
+            if (papi === undefined) {
                 f_value = function(d) { return d.duration; };
-                $('#sunburst-value').val('CPU cycles');
-                $('#sunburst-value').selectpicker('render');
+                $('#sunburst-value').val(DEFAULT_SUNBURST);
+                $('#chart-papi-type').text(DEFAULT_SUNBURST);
+            } else {
+                f_value = function(d) { return d.data; };
+                $('#sunburst-value').val(papi);
+                $('#chart-papi-type').text(papi);
             }
+            $('#sunburst-value').selectpicker('render');
 
             // Stash the old values for transition.
             function stash(d) {
@@ -84,7 +96,7 @@
                 };
 
                 d3.select("#chart-title").text(d.name);
-                d3.select("#chart-duration").text(d.duration);
+                d3.select("#chart-duration").text(d.value);
                 d3.select("#explanation").style("visibility", "");
 
                 var sequenceArray = getAncestors(d);
@@ -187,10 +199,13 @@
                     var duration = _.reduce(value, function(a, b) {
                         return a + b.duration;
                     }, 0);
-                    var node = {name: 'Line ' + key, duration: duration, children: []};
+                    var data = _.reduce(value, function(a, b) {
+                        return a + b.data;
+                    }, 0);
+                    var node = {name: 'Line ' + key, duration: duration, data: data, children: []};
                     root.children.push(node);
                     _.each(value, function(d) {
-                        node.children.push({name: d.name, duration: d.duration});
+                        node.children.push({name: d.name, duration: d.duration, data: data});
                     });
                 });
             });

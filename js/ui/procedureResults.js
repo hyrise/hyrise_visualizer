@@ -14,6 +14,9 @@
 			$.get('templates/procedureResults.mst', function(template) {
 				self.frame = $(Mustache.render(template));
 				self.sunburst = new hyryx.editor.Sunburst(self.frame.find('.content3'));
+
+				self.registerEvents();
+
 				callback(self.frame);
 			});
 		},
@@ -31,7 +34,14 @@
 			});
 		},
 
-		showResults: function(data) {
+		registerEvents: function() {
+			var self = this;
+			this.sunburst.on('editorExecute', function(papi) {
+				self.emit('editorExecute', papi);
+			});
+		},
+
+		showResults: function(data, papi) {
 			data.joinedRows = function () {
 				return function (text, render) {
 					return "<tr><td>" + render(text).split(",").join("</td><td>") + "</td></tr>";
@@ -42,7 +52,7 @@
 			});
 			this.frame.find('.content1').html(Mustache.render(this.template1, data));
 			this.frame.find('.content2').html(Mustache.render(this.template2, data));
-			this.sunburst.update(data);
+			this.sunburst.update(data, papi);
 			this.frame.show();
 		},
 

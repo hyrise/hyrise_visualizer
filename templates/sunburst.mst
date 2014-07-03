@@ -7,13 +7,11 @@
 				<div id="explanation" style="visibility: hidden;">
 					<span class="big" id="chart-title"></span><br/><br/>
 					<span class="big" id="chart-duration"></span><br/>
-					<span>CPU cycles</span>
+					<span id="chart-papi-type"></span>
 				</div>
 			</div>
 			<div class="canvas-controls canvas-controls-up">
-				<select class="selectpicker show-tick" id="sunburst-value" data-style="btn-primary">
-					<option>CPU cycles</option>
-					<option>Cache Misses</option>
+				<select class="selectpicker show-tick" id="sunburst-value" data-style="btn-primary" data-size="10">
 				</select>
 			</div>
 		</div>

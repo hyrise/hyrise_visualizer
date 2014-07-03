@@ -98,14 +98,14 @@
 			});
 		},
 
-		execute: function() {
+		execute: function(papi) {
 			console.log("Execute stored procedure...");
 
 			var self = this;
 			var current = this.getCurrentSource(this.generation);
 			if (current) {
 				this.generation = current.generation;
-				hyryx.ProcedureStore.executeSource(current.source).done(function(data) {
+				hyryx.ProcedureStore.executeSource(current.source, papi).done(function(data) {
 					if (data.error) {
 						hyryx.Alerts.addWarning("Error while executing procedure", data.error);
 						console.error("Error executing procedure:" + data.error);
@@ -113,7 +113,7 @@
 						hyryx.Alerts.addSuccess("Procedure executed");
 						console.log(data);
 
-						self.emit("procedureExecuted", data);
+						self.emit("procedureExecuted", data, papi);
 						self.renewResultData(data);
 						self.showPerformanceData(data);
 					}
@@ -174,9 +174,9 @@
 
 		registerEvents: function() {
 			var self = this;
-			this.targetEl.on(
-				'click', 'button.button-execute', this.execute.bind(this)
-			);
+			this.targetEl.on('click', 'button.button-execute', function() {
+				self.execute();
+			});
 			this.targetEl.on('click', '.performance-time span.stepInto', function() {
 				var lineNumber = $(this).closest('.performance-time').data('line-number');
 				self.showExecutedQueryPlan($(this), lineNumber);
