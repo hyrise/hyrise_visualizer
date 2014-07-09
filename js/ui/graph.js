@@ -29,6 +29,9 @@
 
 			// var $dataContainer = $fluidLayout.append('<div class="row"><div class="col-md-12 container" id="data-container">').find('.row:last');
 			// createDataContainerMarkup($dataContainer);
+
+			this.createDebugButton($graphOptions);
+
 			return $graphOptions;
 		},
 
@@ -53,6 +56,23 @@
 			// $desc.text('Create a new graph by dragging columns onto the axis. Click here to add ');
 
 			$desc.appendTo(parent);
+		},
+
+		createDebugButton : function(parent) {
+			var $button = $('<a class="btn-debug col-md-10"><div>Debug query &raquo;</div></a>').hide();
+
+			$button.click(function() {
+				var query = $(this).data('query');
+				if (query) {
+					hyryx.debug.dispatch({
+						type : 'canvas.loadPlan',
+						options : query
+					});
+					hyryx.utils.showScreen('debug');
+				}
+			});
+
+			parent.append($button);
 		},
 
 		createGraphMarkup : function(parent) {
@@ -803,25 +823,9 @@
 				// save created series in global variable
 				loadedSeries = this.collectSeries();
 
-				try {
-					var query = content[0].query;
-					// console.log(query);
-
-					if (!$('.btn-debug')[0]) {
-						$('.graph').append('<a class="btn-debug col-md-10"><div>Debug query &raquo;</div></a>');
-					}
-
-					$('.btn-debug').click(function() {
-						hyryx.debug.dispatch({
-							type : 'canvas.loadPlan',
-							options : query
-						});
-						hyryx.utils.showScreen('debug');
-					});
-
-				} catch (e) {
-					console.log('query could not be parsed', content[0].query);
-				}
+				$('.btn-debug')
+					.data('query', content[0].query)
+					.show();
 			}
 		}
 	};
