@@ -57,7 +57,8 @@ div.highlighted-line > span {
 
 div.performance-time {
 	text-align: right;
-	padding-right: 8px;
+	margin-left: -50px;
+	padding-right: 4px;
 	color: white;
 	text-shadow: 0px 0px 4px rgba(0,0,0,0.75);
 }
@@ -136,16 +137,7 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 }
 
 .gutters-highlighted-lines {
-	width: 0em;
-}
-
-.CodeMirror-gutter-wrapper {
-	width: 100%;
-	pointer-events: none;
-}
-
-.CodeMirror-gutter-wrapper .CodeMirror-gutter-elt:not(.CodeMirror-linenumber) {
-	width: 100% !important;
+	width: 16px;
 }
 
 /* Sunburst css */

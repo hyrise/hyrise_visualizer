@@ -180,7 +180,7 @@
 			this.targetEl.on('click', '.performance-time span.stepInto', function() {
 				var lineNumber = $(this).closest('.performance-time').data('line-number');
 				self.showExecutedQueryPlan($(this), lineNumber);
-			})
+			});
 			this.targetEl.on(
 				'click', '.interactiveQuery', function() {
 					self.editJsonQuery(this);
@@ -333,7 +333,6 @@
 
 		highlightLine: function(lineNumber, text, className, widget) {
 			var msg = document.createElement("div");
-			msg.appendChild(document.createTextNode(text));
 			msg.className = 'highlighted-line ' + className;
 			msg.dataset.lineNumber = lineNumber;
 			if (widget !== undefined) {
@@ -342,6 +341,13 @@
 
 			this.editor.setGutterMarker(lineNumber, 'gutters-highlighted-lines', msg);
 			this.highlightedLines[lineNumber] = msg;
+
+			if (widget !== undefined) {
+				$(widget).tooltip({
+					title: text,
+					placement: 'right'
+				});
+			}
 		},
 
 		removeAllHighlightedLines: function() {
