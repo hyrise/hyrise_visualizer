@@ -31,6 +31,9 @@
 				},
 				"columnCount": {
 					"!type": "fn() -> int"
+				},
+				"asArray": {
+					"!type": "fn() -> [[]]"
 				}
 			},
 			"query": {
