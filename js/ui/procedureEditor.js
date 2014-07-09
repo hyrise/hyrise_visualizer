@@ -16,6 +16,7 @@
 
 				self.storedProcedureList = new hyryx.editor.StoredProcedureList(rendered.find('#frame_storedProcedureList'));
 				self.jsEditor = new hyryx.editor.JSEditor(rendered.find('#frame_editor'));
+				self.streamgraph = new hyryx.editor.Streamgraph(rendered.find('#frame_streamgraph'));
 
 				self.registerEvents();
 
