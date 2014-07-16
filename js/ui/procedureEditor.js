@@ -44,6 +44,9 @@
 			this.jsEditor.updateWidget(widget, query);
 		},
 
-		init : function() {}
+		init : function() {
+			this.streamgraph.updateData({
+			});
+		}
 	});
 })();
