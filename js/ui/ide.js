@@ -29,8 +29,8 @@
 				self.emit(eventName, data, data2);
 			});
 
-			this.screens.procedureEditor.on('showQueryEditor', function(widget, query, performanceData) {
-				self.screens.queryEditor.loadPlan(query, widget, performanceData);
+			this.screens.procedureEditor.on('showQueryEditor', function(widget, query, parameters, performanceData) {
+				self.screens.queryEditor.loadPlan(query, parameters, widget, performanceData);
 				$('#frame_queryEditor').removeClass('hideQueryEditor');
 			});
 

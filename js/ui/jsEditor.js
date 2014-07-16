@@ -189,8 +189,8 @@
 		},
 
 		editJsonQuery: function(element, data) {
-			data = (typeof data !== 'undefined') ? data.data : data;
 			var content = element.dataset.content;
+			var line = element.dataset.line;
 			var matcher = /^buildQuery\((.*)\)$/g;
 
 			if (match = matcher.exec(content)) {
@@ -198,10 +198,46 @@
 				var query = {
 					operators: args[0] || {},
 					edges: args[1] || []
-				}
+				};
 
-				this.emit('editJsonQuery', element, query, data);
+				var parameters = this.findParamsFromAST(tern.parse(this.editor.getLineHandle(line).text));
+
+				this.emit('editJsonQuery', element, query, parameters, data);
 			}
+		},
+
+		findParamsFromAST: function(node) {
+			traversal:
+			while (node.type !== 'CallExpression') {
+				switch (node.type) {
+					case 'Program':
+						node = node.body[0];
+						break;
+					case 'ExpressionStatement':
+						node = node.expression;
+						break;
+					case 'AssignmentExpression':
+						node = node.right;
+						break;
+					case 'VariableDeclaration':
+						node = node.declarations[0];
+						break;
+					case 'VariableDeclarator':
+						node = node.init;
+						break;
+					default:
+						break traversal;
+				}
+			}
+
+			if (node.type !== 'CallExpression') return [];
+			if (node.callee.name !== 'executeQuery') return [];
+			if (node.arguments.length < 3) return [];
+			if (node.arguments[2].type !== 'ObjectExpression') return [];
+
+			return node.arguments[2].properties.map(function(property) {
+				return property.key.name;
+			});
 		},
 
 		showExecutedQueryPlan: function(span, lineNumber) {
@@ -212,7 +248,7 @@
 				// determine performance data for interactive query object
 				var perfData = (self.resultData && self.resultData[lineNumber+1]) ? self.resultData[lineNumber+1] : undefined;
 
-				self.editJsonQuery(widget, {data: perfData});
+				self.editJsonQuery(widget, perfData);
 			});
 		},
 
@@ -281,6 +317,7 @@
 			widget.className = className;
 			widget.textContent = title;
 			widget.dataset.content = text;
+			widget.dataset.line = from.line;
 			widget.id = hyryx.utils.getID('QueryWidget');
 
 			disableChanges = true;
