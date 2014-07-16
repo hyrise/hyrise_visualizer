@@ -162,7 +162,8 @@
 					"Alt-.": function(cm) { self.server.jumpToDef(cm); },
 					"Alt-,": function(cm) { self.server.jumpBack(cm); },
 					"Ctrl-Q": function(cm) { self.server.rename(cm); },
-					"Ctrl-.": function(cm) { self.server.selectName(cm); }
+					"Ctrl-.": function(cm) { self.server.selectName(cm); },
+					"Ctrl-S": function() { self.save(); }
 				}
 			});
 			this.editor.on('cursorActivity', function(cm) { self.server.updateArgHints(cm); });
