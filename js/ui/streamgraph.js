@@ -19,17 +19,17 @@
             var n = 100; // number of layers // currently we only support 100 different variables
             var zeroLayer = this.zeroData(n);
 
-            var color = d3.scale.linear()
-                .range(["#a1c5e5", "#245178"]);
+            var color = ["#9ec4e5", "#3d698f", "#6894ba", "#1e4363"];
 
             this.el = d3.select(this.frame[0]).append("svg")
                 .attr("width", this.svgWidth)
                 .attr("height", "100%");
             this.el.selectAll("path")
                 .data(zeroLayer)
-              .enter().append("path")
+                .enter()
+                .append("path")
                 .attr("d", this.buildScale(zeroLayer))
-                .style("fill", function() { return color(Math.random()); });
+                .style("fill", function(d, i) { return color[i % 4]; });
         },
 
         updateData: function(data, lineCount) {
