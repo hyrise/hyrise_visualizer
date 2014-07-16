@@ -412,10 +412,12 @@
 			}
 		},
 
-		addLastReferences: function(performanceFlow) {
-			var self = this;
+		enrichExecutionData: function(data) {
+			// this adds lineCount & last references (for subQueryDataflow)
+			var self = this,
+				newDataFlow = {};
 
-			$.each(performanceFlow, function(variable, occurences) {
+			$.each(data.subQueryDataflow, function(variable, occurences) {
 				// for every variable, find all references to
 				var line_of_some_occurence = parseInt(Object.keys(occurences)[0]),
 					lineHandle = self.editor.getLineHandle(line_of_some_occurence),
@@ -453,9 +455,12 @@
 						console.error('Could not determine variables last reference of ' + variable + ':', err);
 					}
 				});
+
+				newDataFlow[expr.node.name] = occurences;
 			});
 
-			return this.editor.lineCount();
+			data.subQueryDataflow = newDataFlow;
+			data.lineCount = this.editor.lineCount();
 		}
 
 	});

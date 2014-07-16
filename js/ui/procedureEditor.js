@@ -40,8 +40,8 @@
 				}
 
 				if (results.subQueryDataflow) {
-					var lineCount = self.jsEditor.addLastReferences(results.subQueryDataflow);
-					self.streamgraph.updateData(results.subQueryDataflow, lineCount);
+					self.jsEditor.enrichExecutionData(results);
+					self.streamgraph.updateData(results.subQueryDataflow, results.lineCount);
 				}
 				self.emit("procedureExecuted", results, papi);
 			});
