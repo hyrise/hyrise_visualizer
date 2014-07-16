@@ -32,7 +32,7 @@
         },
 
         updateData: function(data) {
-            this.data = this.parseData(data);
+            this.data = (data === undefined || $.isEmptyObject(data)) ? this.zeroData(26) : this.parseData(data);
             this.refresh();
         },
 
