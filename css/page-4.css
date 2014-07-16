@@ -189,6 +189,5 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 
 #frame_streamgraph > svg {
 	float: right;
-	margin-right: 8px;
 	padding-top: 1px;
 }

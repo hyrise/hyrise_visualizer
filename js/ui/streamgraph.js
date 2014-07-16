@@ -54,15 +54,25 @@
         },
 
         parseData: function(data) {
-            var numberOfVariables = 4;
+            var numberOfVariables = _.keys(data).length;
             var length = 26;
-            var stack = d3.layout.stack().offset("wiggle");
-            return stack(d3.range(numberOfVariables).map(function() { return bumpLayer(length); }));
+            var stack = d3.layout.stack();
+            return stack(d3.range(numberOfVariables).map(function(e, idx) {
+                var blub = data[_.keys(data)[idx]];
+                var result = zeroLayer(length);
+                _.reduce(_.keys(blub), function(prev, element) {
+                    for (var i = parseInt(prev.line); i < parseInt(element); i += 1) {
+                        result[i].y = prev.value
+                    }
+                    return {line: element, value: blub[element]}
+                }, {value: 0, line: 0});
+                return result;
+            }));
         },
 
         zeroData: function(variableCount) {
             var length = 26;
-            var stack = d3.layout.stack().offset("wiggle");
+            var stack = d3.layout.stack();
             return stack(d3.range(variableCount).map(function() { return zeroLayer(length); }));
         },
 
@@ -88,26 +98,4 @@
         for (i = 0; i < n; ++i) a[i] = {x: i, y: 0};
         return a;
     }
-
-
-    // Inspired by Lee Byron's test data generator.
-    function bumpLayer(n) {
-
-      function bump(a) {
-        var x = 1 / (0.1 + Math.random()),
-            y = 2 * Math.random() - 0.5,
-            z = 10 / (0.1 + Math.random());
-        for (var i = 0; i < n; i++) {
-          var w = (i / n - y) * z;
-          a[i] += x * Math.exp(-w * w);
-        }
-      }
-
-      var a = [], i;
-      for (i = 0; i < n; ++i) a[i] = 0;
-      for (i = 0; i < 5; ++i) bump(a);
-      // return a.map(function(d, i) { return {x: i, y: Math.max(0, d)}; });
-      return a.map(function(d, i) { var w = (i < 4) ? 1 : 0; return {x: i, y: w}; });
-    }
 })();
-

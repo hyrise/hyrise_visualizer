@@ -45,8 +45,18 @@
 		},
 
 		init : function() {
-			this.streamgraph.updateData({
-			});
+			var data = {
+			    "var1": {
+					"1": 25,
+					"5": 40,
+					"11": 0
+			    },
+			    "var2": {
+					"3": 12,
+					"6": 0
+			    }
+			};
+			this.streamgraph.updateData(data);
 		}
 	});
 })();
