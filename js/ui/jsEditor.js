@@ -33,7 +33,25 @@
 		/** Instantiate the Canvas and add the editor for the JSON representation */
 		init: function() {
 			this.registerEditor();
+			this.registerStreamGraph();
 			this.registerEvents();
+
+			this.streamGraph.updateData({
+				"var1": {
+					"1": 25,
+					"5": 40,
+					"11": 10,
+					"15": 25,
+					"23": 55,
+					"29": 5,
+					"40": 20,
+					"51": 0
+				},
+				"var2": {
+					"3": 12,
+					"6": 0
+				}
+			}, 51);
 		},
 
 		getCurrentSource: function(generation) {
@@ -116,6 +134,16 @@
 						self.emit("procedureExecuted", data, papi);
 						self.renewResultData(data);
 						self.showPerformanceData(data);
+
+						// delete the following line if backend works
+						if (!data.subQueryDataflow) {
+							data.subQueryDataflow = {"1": {"32": 2}, "2": {"36": 1}};
+						}
+
+						if (data.subQueryDataflow) {
+							self.enrichExecutionData(data.subQueryDataflow);
+							self.streamGraph.updateData(data.subQueryDataflow, data.lineCount);
+						}
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					hyryx.Alerts.addDanger("Error while executing procedure", jqXHR.responseText);
@@ -186,6 +214,10 @@
 					self.editJsonQuery(this);
 				}
 			);
+		},
+
+		registerStreamGraph: function() {
+			this.streamGraph = new hyryx.editor.Streamgraph($('#frame_editor .CodeMirror-sizer'));
 		},
 
 		editJsonQuery: function(element, data) {
@@ -305,6 +337,7 @@
 			this.performanceData = undefined;
 			this.clearOverlays();
 			this.editor.setValue(content);
+			this.streamGraph.updateData();
 			this.editor.eachLine(this.parseLine.bind(this));
 		},
 

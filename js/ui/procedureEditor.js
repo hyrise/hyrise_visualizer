@@ -16,7 +16,6 @@
 
 				self.storedProcedureList = new hyryx.editor.StoredProcedureList(rendered.find('#frame_storedProcedureList'));
 				self.jsEditor = new hyryx.editor.JSEditor(rendered.find('#frame_editor'));
-				self.streamgraph = new hyryx.editor.Streamgraph(rendered.find('#frame_streamgraph'));
 
 				self.registerEvents();
 
@@ -28,21 +27,11 @@
 			var self = this;
 			this.storedProcedureList.on("procedureLoaded", function(source) {
 				self.jsEditor.showContent(source);
-				self.streamgraph.updateData();
 				self.emit("procedureLoaded", source);
 			});
 			this.storedProcedureList.on("saveProcedure", this.jsEditor.save.bind(this.jsEditor));
 			this.jsEditor.on("procedureSaved", this.storedProcedureList.updateProcedureList.bind(this.storedProcedureList));
 			this.jsEditor.on("procedureExecuted", function(results, papi) {
-				// delete the following line if backend works
-				if (!results.subQueryDataflow) {
-					results.subQueryDataflow = {"1": {"32": 2}, "2": {"36": 1}};
-				}
-
-				if (results.subQueryDataflow) {
-					self.jsEditor.enrichExecutionData(results);
-					self.streamgraph.updateData(results.subQueryDataflow, results.lineCount);
-				}
 				self.emit("procedureExecuted", results, papi);
 			});
 			this.jsEditor.on("editJsonQuery", function(widget, query, performanceData) {
@@ -54,18 +43,6 @@
 			this.jsEditor.updateWidget(widget, query);
 		},
 
-		init : function() {
-			this.streamgraph.updateData({
-				"var1": {
-					"1": 25,
-					"5": 40,
-					"11": 0
-				},
-				"var2": {
-					"3": 12,
-					"6": 0
-				}
-			}, 142);
-		}
+		init : function() {}
 	});
 })();

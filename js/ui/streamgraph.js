@@ -11,7 +11,8 @@
 
     hyryx.editor.Streamgraph.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
         render: function(callback) {
-            callback();
+            this.frame = $('<div id="frame_streamgraph">');
+            callback(this.frame);
         },
 
         init: function() {
@@ -21,9 +22,9 @@
             var color = d3.scale.linear()
                 .range(["#a1c5e5", "#245178"]);
 
-            this.el = d3.select(this.targetEl[0]).append("svg")
+            this.el = d3.select(this.frame[0]).append("svg")
                 .attr("width", this.svgWidth)
-                .attr("height", this.svgHeight);
+                .attr("height", "100%");
             this.el.selectAll("path")
                 .data(zeroLayer)
               .enter().append("path")
