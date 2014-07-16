@@ -41,7 +41,7 @@
 
 				if (results.subQueryDataflow) {
 					var lineCount = self.jsEditor.addLastReferences(results.subQueryDataflow);
-					self.streamgraph.updateData(results, lineCount);
+					self.streamgraph.updateData(results.subQueryDataflow, lineCount);
 				}
 				self.emit("procedureExecuted", results, papi);
 			});
@@ -65,7 +65,7 @@
 					"3": 12,
 					"6": 0
 				}
-			});
+			}, 142);
 		}
 	});
 })();

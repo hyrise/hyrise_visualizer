@@ -31,8 +31,8 @@
                 .style("fill", function() { return color(Math.random()); });
         },
 
-        updateData: function(data) {
-            this.data = (data === undefined || $.isEmptyObject(data)) ? this.zeroData(26) : this.parseData(data);
+        updateData: function(data, lineCount) {
+            this.data = (data === undefined || $.isEmptyObject(data)) ? this.zeroData(100) : this.parseData(data, lineCount);
             this.refresh();
         },
 
@@ -53,13 +53,12 @@
                 .attr("d", this.buildScale(this.data));
         },
 
-        parseData: function(data) {
+        parseData: function(data, lineCount) {
             var numberOfVariables = _.keys(data).length;
-            var length = 26;
             var stack = d3.layout.stack();
             return stack(d3.range(numberOfVariables).map(function(e, idx) {
                 var blub = data[_.keys(data)[idx]];
-                var result = zeroLayer(length);
+                var result = zeroLayer(lineCount);
                 _.reduce(_.keys(blub), function(prev, element) {
                     for (var i = parseInt(prev.line); i < parseInt(element); i += 1) {
                         result[i].y = prev.value
@@ -71,7 +70,7 @@
         },
 
         zeroData: function(variableCount) {
-            var length = 26;
+            var length = this.viewPortTo - this.viewPortFrom;
             var stack = d3.layout.stack();
             return stack(d3.range(variableCount).map(function() { return zeroLayer(length); }));
         },
