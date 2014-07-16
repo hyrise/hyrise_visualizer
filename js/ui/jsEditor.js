@@ -141,7 +141,7 @@
 						}
 
 						if (data.subQueryDataflow) {
-							self.enrichExecutionData(data.subQueryDataflow);
+							self.enrichExecutionData(data);
 							self.streamGraph.updateData(data.subQueryDataflow, data.lineCount);
 						}
 					}
