@@ -480,7 +480,7 @@
 							return prev;
 						}, {start: start});
 
-						var next_line = "" + (last.start.line + 1);
+						var next_line = "" + (last.start.line + 2);
 						if (!occurences[next_line]) {
 							occurences[next_line] = 0;
 						}
@@ -493,7 +493,7 @@
 			});
 
 			data.subQueryDataflow = newDataFlow;
-			data.lineCount = this.editor.lineCount();
+			data.lineCount = this.editor.lineCount() + 1;
 		}
 
 	});
