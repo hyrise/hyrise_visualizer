@@ -34,7 +34,7 @@
 			this.targetEl.parent().addClass('hideSidebar');
 		},
 
-		show : function(node) {
+		show : function(node, parameters) {
 			var id = node.type;
 
 			if (this.getCurrentMarkup().type !== node.type) {
@@ -42,7 +42,7 @@
 				// if no markup exists for the given type of node, create a new one
 				if (!this.markups[id]) {
 					console.log('create new markup for ' + node.type);
-					this.markups[id] = new Markup(node, this.el);
+					this.markups[id] = new Markup(node, this.el, parameters);
 				}
 
 				// hide existing forms
@@ -100,9 +100,11 @@
 		}
 	});
 
-	var Markup = function(data, targetEl) {
+	var Markup = function(data, targetEl, parameters) {
 		this.targetEl = targetEl;
 		this.data = data;
+		this.parameters = parameters;
+
 		this.type = data.type;
 
 		this.el = this.render();
@@ -143,7 +145,7 @@
 						config.placeholder = 'Set custom function';
 						config.complex = true;
 					}
-					formElements[key] = new Input(config, key);
+					formElements[key] = new Input(config, key, this.parameters);
 				}
 			}.bind(this));
 
@@ -181,7 +183,7 @@
 		}
 	};
 
-	var Input = function(config, id) {
+	var Input = function(config, id, parameters) {
 
 		this.value = (config.isList ? [].concat(config.value||[]) : config.value);
 		this.valueConfig = config.valueConfig;
@@ -189,10 +191,12 @@
 
 		this.type = config.type || 'text';
 		this.id = config.id || id;
+		this.parameters = parameters;
 
 		this.placeholder = config.placeholder || '';
 		this.isList = config.isList || false;
 		this.complex = config.complex || false;
+		this.autocomplete = config.autocomplete || false;
 
 		this.listFieldRenderer = config.listFieldRenderer || function(v) { return v; };
 
@@ -346,7 +350,24 @@
 				}
 				// regular input
 				else {
-					form.push('<span>'+k+'</span><input type="'+v.type+'" class="form-control" id="complex-'+k+'" placeholder="'+v.value+'" type="text" />');
+					var autocomplete_param = '';
+
+					// Autocompletion with parameter names
+					if (v.autocomplete && this.parameters) {
+						var datalist_id = "autocompleter-" + Math.random().toString(36).substr(2, 5);
+						var datalist = '<datalist id="' + datalist_id + '">';
+
+						this.parameters.forEach(function(parameter) {
+							datalist += '<option value="' + parameter +'">';
+						});
+						datalist += '</datalist>';
+
+						form.push(datalist);
+						autocomplete_param = ' list="' + datalist_id + '"';
+					}
+
+					var input_html = '<span>'+k+'</span><input type="'+v.type+'" class="form-control" id="complex-'+k+'" placeholder="'+v.value+'" type="text" ' + autocomplete_param + '/>';
+					form.push(input_html);
 				}
 
 			}.bind(this));

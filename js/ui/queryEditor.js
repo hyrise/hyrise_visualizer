@@ -5,6 +5,7 @@
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
 		this.stencils = undefined;
 		this.canvas = undefined;
+		this.parameters = [];
 	};
 
 	hyryx.editor.QueryEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
@@ -42,7 +43,7 @@
 				self.emit('queryEdited', query, widget);
 			});
 			this.canvas.on("nodeSelected", function(node) {
-				self.attributes.show(node);
+				self.attributes.show(node, self.parameters);
 			});
 			this.canvas.on("nodeDeselected", function() {
 				self.attributes.hide();
@@ -53,7 +54,8 @@
 		},
 
 		loadPlan : function(query, parameters, widget, performanceData) {
-			this.canvas.loadPlan(query, parameters, widget, performanceData);
+			this.parameters = parameters;
+			this.canvas.loadPlan(query, widget, performanceData);
 		}
 	});
 })();

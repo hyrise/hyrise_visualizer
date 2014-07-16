@@ -6,7 +6,6 @@
 		this.showTitlebar = (typeof config.showTitlebar === "undefined") ? false : config.showTitlebar;
 		this.showExecuteButton = (typeof config.showExecuteButton === "undefined") ? true : config.showExecuteButton;
 		this.marker = null;
-		this.parameters = [];
 		this.newQueryPlan = {operators: {}, edges: []};
 		this.initialQueryPlan = this.newQueryPlan;
 
@@ -191,12 +190,10 @@
 			$(this.targetEl).on('click', 'button#revertQueryPlan', this.revertToInitialQueryPlan.bind(this));
 		},
 
-		loadPlan : function(plan, parameters, marker, performanceData) {
+		loadPlan : function(plan, marker, performanceData) {
 			if (marker) {
 				this.marker = marker;
 			}
-
-			this.parameters = parameters;
 
 			this.initialQueryPlan = plan;
 
