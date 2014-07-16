@@ -3,17 +3,6 @@
 	// Extend the standard ui plugin
 	hyryx.editor.ProcedureEditor = function() {
 		hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
-		this.tmpData = {
-			"var1": {
-				"1": 25,
-				"5": 40,
-				"11": 0
-			},
-			"var2": {
-				"3": 12,
-				"6": 0
-			}
-		};
 	};
 
 	hyryx.editor.ProcedureEditor.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
@@ -45,8 +34,16 @@
 			this.storedProcedureList.on("saveProcedure", this.jsEditor.save.bind(this.jsEditor));
 			this.jsEditor.on("procedureSaved", this.storedProcedureList.updateProcedureList.bind(this.storedProcedureList));
 			this.jsEditor.on("procedureExecuted", function(results, papi) {
+				// delete the following line if backend works
+				if (!results.subQueryDataflow) {
+					results.subQueryDataflow = {"1": {"32": 2}, "2": {"36": 1}};
+				}
+
+				if (results.subQueryDataflow) {
+					var lineCount = self.jsEditor.addLastReferences(results.subQueryDataflow);
+					self.streamgraph.updateData(results, lineCount);
+				}
 				self.emit("procedureExecuted", results, papi);
-				self.streamgraph.updateData(self.tmpData); // results.subQueryDataFlow
 			});
 			this.jsEditor.on("editJsonQuery", function(widget, query, performanceData) {
 				self.emit("showQueryEditor", widget, query, performanceData);
@@ -58,7 +55,17 @@
 		},
 
 		init : function() {
-			this.streamgraph.updateData(this.tmpData);
+			this.streamgraph.updateData({
+				"var1": {
+					"1": 25,
+					"5": 40,
+					"11": 0
+				},
+				"var2": {
+					"3": 12,
+					"6": 0
+				}
+			});
 		}
 	});
 })();
