@@ -135,11 +135,6 @@
 						self.renewResultData(data);
 						self.showPerformanceData(data);
 
-						// delete the following line if backend works
-						if (!data.subQueryDataflow) {
-							data.subQueryDataflow = {"1": {"32": 2}, "2": {"36": 1}};
-						}
-
 						if (data.subQueryDataflow) {
 							self.enrichExecutionData(data);
 							self.streamGraph.updateData(data.subQueryDataflow, data.lineCount);
@@ -452,7 +447,7 @@
 
 			$.each(data.subQueryDataflow, function(variable, occurences) {
 				// for every variable, find all references to
-				var line_of_some_occurence = parseInt(Object.keys(occurences)[0]),
+				var line_of_some_occurence = parseInt(Object.keys(occurences)[0]) - 1,	// "- 1" because editor starts counting with zero
 					lineHandle = self.editor.getLineHandle(line_of_some_occurence),
 					start = {
 						line: line_of_some_occurence,
