@@ -35,23 +35,6 @@
 			this.registerEditor();
 			this.registerStreamGraph();
 			this.registerEvents();
-
-			this.streamGraph.updateData({
-				"var1": {
-					"1": 25,
-					"5": 40,
-					"11": 10,
-					"15": 25,
-					"23": 55,
-					"29": 5,
-					"40": 20,
-					"51": 0
-				},
-				"var2": {
-					"3": 12,
-					"6": 0
-				}
-			}, 51);
 		},
 
 		getCurrentSource: function(generation) {
@@ -179,6 +162,8 @@
 				indentUnit: 4,
 				gutters: ['CodeMirror-linenumbers', 'gutters-highlighted-lines'],
 				extraKeys: {
+					"Ctrl-X": function(cm) { self.streamGraph.loadSample(); },
+					"Ctrl-Y": function(cm) { self.streamGraph.resetData(); },
 					"Ctrl-Space": function(cm) { self.server.complete(cm); },
 					"Alt-Space": function(cm) { self.server.complete(cm); },
 					"Ctrl-I": function(cm) { self.server.showType(cm); },

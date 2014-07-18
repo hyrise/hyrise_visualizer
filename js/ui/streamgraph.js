@@ -16,24 +16,19 @@
         },
 
         init: function() {
-            var n = 100; // number of layers // currently we only support 100 different variables
-            var zeroLayer = this.zeroData(n);
-
-            var color = ["#9ec4e5", "#3d698f", "#6894ba", "#1e4363"];
-
             this.el = d3.select(this.frame[0]).append("svg")
                 .attr("width", this.svgWidth)
                 .attr("height", "100%");
-            this.el.selectAll("path")
-                .data(zeroLayer)
-                .enter()
-                .append("path")
-                .attr("d", this.buildScale(zeroLayer))
-                .style("fill", function(d, i) { return color[i % 4]; });
+            this.resetData();
+        },
+
+        resetData: function() {
+            this.data = [];
+            this.refresh();
         },
 
         updateData: function(data, lineCount) {
-            this.data = (data === undefined || $.isEmptyObject(data)) ? this.zeroData(100) : this.parseData(data, lineCount);
+            this.data = (data === undefined || $.isEmptyObject(data)) ? [] : this.parseData(data, lineCount);
             this.refresh();
         },
 
@@ -43,15 +38,42 @@
             this.refresh();
         },
 
+        loadSample: function(number) {
+            if (number) {
+                current_sample = number;
+            } else {
+                current_sample = current_sample + 1;
+            }
+            current_sample = current_sample % samples.length;
+
+            this.updateData(samples[current_sample], 52);
+        },
+
         refresh: function() {
-            var self = this;
-            this.el.selectAll("path")
-                .data(function() {
-                    return self.data;
-                })
-                .transition()
+            var color = ["#9ec4e5", "#3d698f", "#6894ba", "#1e4363"];
+            var scale = this.buildScale(this.data);
+            var empty_scale = this.buildScale([[]]);
+
+            // updating variables
+            var paths = this.el.selectAll("path")
+                .data(this.data);
+            paths.transition()
                 .duration(250)
-                .attr("d", this.buildScale(this.data));
+                .attr("d", scale);
+
+            // entering variables
+            paths.enter().append("path")
+                .attr("d", empty_scale)
+                .style("fill", function(d, i) { return color[i % 4]; })
+                .transition()
+                    .duration(250)
+                    .attr("d", scale);
+            // exiting variables
+            paths.exit()
+                .transition()
+                    .duration(250)
+                    .attr("d", empty_scale)
+                    .remove();
         },
 
         parseData: function(data, lineCount) {
@@ -62,18 +84,12 @@
                 var result = zeroLayer(lineCount);
                 _.reduce(_.keys(blub), function(prev, element) {
                     for (var i = parseInt(prev.line); i < parseInt(element); i += 1) {
-                        result[i].y = prev.value
+                        result[i].y = prev.value;
                     }
-                    return {line: element, value: blub[element]}
+                    return {line: element, value: blub[element]};
                 }, {value: 0, line: 0});
                 return result;
             }));
-        },
-
-        zeroData: function(variableCount) {
-            var length = this.viewPortTo - this.viewPortFrom;
-            var stack = d3.layout.stack();
-            return stack(d3.range(variableCount).map(function() { return zeroLayer(length); }));
         },
 
         buildScale: function(data) {
@@ -98,4 +114,62 @@
         for (i = 0; i < n; ++i) a[i] = {x: i, y: 0};
         return a;
     }
+
+    var samples = [
+        {
+            "var1": {
+                "1": 25,
+                "5": 40,
+                "11": 10,
+                "15": 25,
+                "23": 55,
+                "29": 5,
+                "40": 20,
+                "51": 0
+            },
+            "var2": {
+                "3": 12,
+                "6": 0
+            }
+        },
+        {
+            "var1": {
+                "1": 40,
+                "5": 25,
+                "11": 12,
+                "15": 15,
+                "23": 5,
+                "29": 55,
+                "40": 10,
+                "51": 0
+            },
+            "var2": {
+                "3": 12,
+                "6": 0
+            }
+        },
+        {
+            "var2": {
+                "3": 12,
+                "6": 0
+            }
+        },
+        {
+            "var2": {
+                "3": 12,
+                "6": 0
+            },
+            "var3": {
+                "1": 40,
+                "5": 25,
+                "11": 12,
+                "15": 15,
+                "23": 5,
+                "29": 55,
+                "40": 10,
+                "51": 0
+            }
+        }
+    ];
+    var current_sample = -1;
 })();
