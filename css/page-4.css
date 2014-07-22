@@ -179,6 +179,7 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 	pointer-events: none;
 	top: 0;
 	right: 0;
+	height: 100%;
 }
 
 #frame_streamgraph > svg {
