@@ -6,6 +6,7 @@
         this.svgHeight = 500;
         this.viewPortFrom = 0;
         this.viewPortTo = 26;
+        this.reset();
         hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
     };
 
@@ -20,6 +21,11 @@
                 .attr("width", this.svgWidth)
                 .attr("height", "100%");
             this.resetData();
+        },
+
+        reset: function() {
+            this.curent_color = 0;
+            this.color_map = {};
         },
 
         resetData: function() {
@@ -50,13 +56,13 @@
         },
 
         refresh: function() {
-            var color = ["#9ec4e5", "#3d698f", "#6894ba", "#1e4363"];
+            var self = this;
             var scale = this.buildScale(this.data);
             var empty_scale = this.buildScale([[]]);
 
             // updating variables
             var paths = this.el.selectAll("path")
-                .data(this.data);
+                .data(this.data, function(d) { return d.variable; });
             paths.transition()
                 .duration(250)
                 .attr("d", scale);
@@ -64,7 +70,7 @@
             // entering variables
             paths.enter().append("path")
                 .attr("d", empty_scale)
-                .style("fill", function(d, i) { return color[i % 4]; })
+                .style("fill", function(d) { return self.nextColor(d.variable); })
                 .transition()
                     .duration(250)
                     .attr("d", scale);
@@ -80,7 +86,8 @@
             var numberOfVariables = _.keys(data).length;
             var stack = d3.layout.stack();
             return stack(d3.range(numberOfVariables).map(function(e, idx) {
-                var blub = data[_.keys(data)[idx]];
+                var variable = _.keys(data)[idx];
+                var blub = data[variable];
                 var result = zeroLayer(lineCount);
                 _.reduce(_.keys(blub), function(prev, element) {
                     for (var i = parseInt(prev.line); i < parseInt(element); i += 1) {
@@ -88,6 +95,7 @@
                     }
                     return {line: element, value: blub[element]};
                 }, {value: 0, line: 0});
+                result.variable = variable;
                 return result;
             }));
         },
@@ -106,6 +114,22 @@
                 .y(function(d) { return x(d.x); })
                 .x0(function(d) { return y(d.y0); })
                 .x1(function(d) { return y(d.y0 + d.y); });
+        },
+
+        nextColor: function(variable) {
+            if(variable && this.color_map[variable]) {
+                // if variable known and color saved, return this
+                return this.color_map[variable];
+            }
+
+            var color = colors[this.curent_color];
+            this.curent_color = (this.curent_color + 1) % colors.length;
+
+            if(variable){
+                // save new variable color
+                this.color_map[variable] = color;
+            }
+            return color;
         }
     });
 
@@ -114,6 +138,8 @@
         for (i = 0; i < n; ++i) a[i] = {x: i, y: 0};
         return a;
     }
+
+    var colors = ["#9ec4e5", "#3d698f", "#6894ba", "#1e4363"];
 
     var samples = [
         {
