@@ -204,6 +204,7 @@ window.addEventListener('load', function() {
 			'js/ui/canvas.json.js',
 			'js/ui/attributes.js',
             'js/ui/procedureResults.js',
+            'js/ui/streamgraph.js',
             'js/ui/sunburst.js'
         ],
         complete : function() {

@@ -1,4 +1,5 @@
 <div class="row equal-500">
 	<div id="frame_storedProcedureList" class="col-md-{{width_storedProcedureList}}"></div>
 	<div id="frame_editor" class="col-md-{{width_editor}}"></div>
+	<div id="frame_streamgraph" class="col-md-12"></div>
 </div>

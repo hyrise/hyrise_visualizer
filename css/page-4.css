@@ -170,3 +170,18 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 #explanation span.big {
 	font-size: 2.5em;
 }
+
+/* Streamgraph css */
+
+#frame_streamgraph {
+	position: absolute;
+	z-index: 10;
+	pointer-events: none;
+	top: 0;
+	right: 0;
+}
+
+#frame_streamgraph > svg {
+	float: right;
+	padding-top: 4px;
+}

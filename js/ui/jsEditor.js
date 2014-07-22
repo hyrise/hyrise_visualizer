@@ -33,6 +33,7 @@
 		/** Instantiate the Canvas and add the editor for the JSON representation */
 		init: function() {
 			this.registerEditor();
+			this.registerStreamGraph();
 			this.registerEvents();
 		},
 
@@ -116,6 +117,11 @@
 						self.emit("procedureExecuted", data, papi);
 						self.renewResultData(data);
 						self.showPerformanceData(data);
+
+						if (data.subQueryDataflow) {
+							self.enrichExecutionData(data);
+							self.streamGraph.updateData(data.subQueryDataflow, data.lineCount);
+						}
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					hyryx.Alerts.addDanger("Error while executing procedure", jqXHR.responseText);
@@ -156,6 +162,8 @@
 				indentUnit: 4,
 				gutters: ['CodeMirror-linenumbers', 'gutters-highlighted-lines'],
 				extraKeys: {
+					"Ctrl-X": function(cm) { self.streamGraph.loadSample(); },
+					"Ctrl-Y": function(cm) { self.streamGraph.resetData(); },
 					"Ctrl-Space": function(cm) { self.server.complete(cm); },
 					"Alt-Space": function(cm) { self.server.complete(cm); },
 					"Ctrl-I": function(cm) { self.server.showType(cm); },
@@ -187,6 +195,10 @@
 					self.editJsonQuery(this);
 				}
 			);
+		},
+
+		registerStreamGraph: function() {
+			this.streamGraph = new hyryx.editor.Streamgraph($('#frame_editor .CodeMirror-sizer'));
 		},
 
 		editJsonQuery: function(element, data) {
@@ -343,6 +355,7 @@
 			this.performanceData = undefined;
 			this.clearOverlays();
 			this.editor.setValue(content);
+			this.streamGraph.updateData();
 			this.editor.eachLine(this.parseLine.bind(this));
 		},
 
@@ -454,6 +467,57 @@
 				msg.className = msg.className + ' invalid';
 				this.editor.setGutterMarker(parseInt(line), 'gutters-highlighted-lines', msg);
 			}
+		},
+
+		enrichExecutionData: function(data) {
+			// this adds lineCount & last references (for subQueryDataflow)
+			var self = this,
+				newDataFlow = {};
+
+			$.each(data.subQueryDataflow, function(variable, occurences) {
+				// for every variable, find all references to
+				var line_of_some_occurence = parseInt(Object.keys(occurences)[0]) - 1,	// "- 1" because editor starts counting with zero
+					lineHandle = self.editor.getLineHandle(line_of_some_occurence),
+					start = {
+						line: line_of_some_occurence,
+						ch: 0
+					},
+					end = {
+						line: line_of_some_occurence,
+						ch: lineHandle.text.length
+					};
+
+				// find the variable name by analyzing the ast of this line
+				var ast = tern.parse(lineHandle.text);
+				var expr = tern.findExpressionAround(ast, start, end, {});
+				// set start and end accoring to the found variable
+				start.ch = expr.node.start;
+				end.ch = expr.node.end;
+
+				self.server.request(self.editor, {type: 'refs', start: start, end: end}, function(err, refs) {
+					if (!err) {
+						// determine last use of variable
+						var last = _.reduce(refs.refs, function(prev, value) {
+							if (value.start.line > prev.start.line){
+								return value;
+							}
+							return prev;
+						}, {start: start});
+
+						var next_line = "" + (last.start.line + 2);
+						if (!occurences[next_line]) {
+							occurences[next_line] = 0;
+						}
+					} else {
+						console.error('Could not determine variables last reference of ' + variable + ':', err);
+					}
+				});
+
+				newDataFlow[expr.node.name] = occurences;
+			});
+
+			data.subQueryDataflow = newDataFlow;
+			data.lineCount = this.editor.lineCount() + 1;
 		}
 
 	});
