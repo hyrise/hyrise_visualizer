@@ -12,11 +12,17 @@
 
     hyryx.editor.Streamgraph.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
         render: function(callback) {
-            this.frame = $('<div id="frame_streamgraph">');
-            callback(this.frame);
+            var self = this;
+            $.get('templates/streamgraph.mst', function(template) {
+                var rendered = $(Mustache.render(template));
+                self.frame = rendered.find('#frame_streamgraph');
+                self.infoBox = rendered.find('#streamgraph_infobox');
+                callback(rendered);
+            });
         },
 
         init: function() {
+            console.log('foo', d3.select(this.frame[0]));
             this.el = d3.select(this.frame[0]).append("svg")
                 .attr("width", this.svgWidth)
                 .attr("height", "100%");
@@ -29,11 +35,11 @@
         },
 
         resetData: function() {
-            this.data = [];
-            this.refresh();
+            this.updateData({});
         },
 
         updateData: function(data, lineCount) {
+            this.rawData = data;
             this.data = (data === undefined || $.isEmptyObject(data)) ? [] : this.parseData(data, lineCount);
             this.refresh();
         },
@@ -67,10 +73,21 @@
                 .duration(250)
                 .attr("d", scale);
 
+            var mouseenter = function(d, i) {
+                $('#streamgraph_infobox').show();
+                $('#streamgraph_infobox .popover-title').text(Object.keys(self.rawData)[i]);
+            };
+
+            var mouseleave = function(d, i) {
+                $('#streamgraph_infobox').hide();
+            }
+
             // entering variables
             paths.enter().append("path")
                 .attr("d", empty_scale)
                 .style("fill", function(d) { return self.nextColor(d.variable); })
+                .on("mouseover", mouseenter)
+                .on("mouseleave", mouseleave)
                 .transition()
                     .duration(250)
                     .attr("d", scale);

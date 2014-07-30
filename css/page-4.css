@@ -185,4 +185,27 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 #frame_streamgraph > svg {
 	float: right;
 	padding-top: 4px;
+	pointer-events: all;
+}
+
+#frame_streamgraph > svg path {
+	cursor: pointer;
+}
+
+#streamgraph_infobox {
+	position: fixed;
+	width: 100px;
+	right: 320px;
+	top: 80px;
+	display: none;
+	z-index: 50;
+}
+
+#streamgraph_infobox > .popover {
+	max-width: none;
+	left: -200px;
+	width: 250px;
+	top: 0;
+	margin-top: 0;
+	background-color: white;
 }

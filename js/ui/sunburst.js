@@ -102,10 +102,10 @@
                 var sequenceArray = getAncestors(d);
 
                 // Fade all the segments.
-                d3.selectAll("path").style("opacity", 0.3);
+                d3.selectAll("#chart path").style("opacity", 0.3);
 
                 // Then highlight only those that are an ancestor of the current segment.
-                self.viz.selectAll("path").filter(function(node) {
+                self.viz.selectAll("#chart path").filter(function(node) {
                     return (sequenceArray.indexOf(node) >= 0);
                 }).style("opacity", 1);
             };
@@ -113,10 +113,10 @@
             // Restore everything to full opacity when moving off the visualization.
             function mouseleave(d) {
                 // Deactivate all segments during transition.
-                d3.selectAll("path").on("mouseover", null);
+                d3.selectAll("#chart path").on("mouseover", null);
 
                 // Transition each segment to full opacity and then reactivate it.
-                d3.selectAll("path")
+                d3.selectAll("#chart path")
                     .transition()
                     .duration(1000)
                     .style("opacity", 1)
@@ -147,7 +147,7 @@
                     return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
                 });
 
-            var paths = this.viz.data([json]).selectAll("path").data(nodes);
+            var paths = this.viz.data([json]).selectAll("#chart path").data(nodes);
 
             paths.enter()
                 .append("svg:path")
