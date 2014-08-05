@@ -7,6 +7,7 @@
 
 		this.saveGeneration = 0;
 		this.id = hyryx.utils.getID('Editor');
+		this.executing = false;
 
 		this.server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
 
@@ -53,6 +54,7 @@
 			}
 			this.updateInteractiveQuerys();
 			result.source = this.editor.getValue();
+
 			return result;
 		},
 
@@ -106,6 +108,7 @@
 			var current = this.getCurrentSource(this.generation);
 			if (current) {
 				this.generation = current.generation;
+				this.executing = true;
 				hyryx.ProcedureStore.executeSource(current.source, papi).done(function(data) {
 					if (data.error) {
 						hyryx.Alerts.addWarning("Error while executing procedure", data.error);
@@ -126,7 +129,9 @@
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					hyryx.Alerts.addDanger("Error while executing procedure", jqXHR.responseText);
 					console.log("Couldn't post/execute jsprocedure: " + textStatus + errorThrown);
-				});
+				}).always(function() {
+					this.executing = false;
+				}.bind(this));
 			} else {
 				hyryx.Alerts.addInfo("Procedure didn't changed and won't be executed");
 				console.log("Nothing changed - nothing to do");
@@ -177,6 +182,7 @@
 			this.editor.on('cursorActivity', function(cm) { self.server.updateArgHints(cm); });
 			this.editor.on('change', function(cm) { self.invalidatePerformanceData(); });
 			this.editor.on('change', this.handleChanges.bind(this));
+			this.editor.on('changes', this.executeLive.bind(this));
 			this.generation = 0;
 			this.editor.setSize(null, 500);
 		},
@@ -310,6 +316,29 @@
 
 			var lineHandle = this.editor.getLineHandle(change.to.line);
 			this.parseLine(lineHandle);
+		},
+
+		isValidCode: function(code) {
+			try {
+				acorn.parse(code);
+				return true;
+			} catch (e) {
+				return false;
+			}
+		},
+
+		executeLive: function(cm, changes) {
+			if (this.executing) {
+				console.log('Not running code, another execution seems to be underway.');
+				return;
+			}
+
+			/*if (this.isValidCode(this.editor.getValue())) {
+				console.log('Not running code, JS code seems to be faulty.');
+				return;
+			}*/
+
+			this.execute();
 		},
 
 		updateWidget: function(widget, query) {
