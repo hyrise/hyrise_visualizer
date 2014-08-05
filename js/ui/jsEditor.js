@@ -7,7 +7,7 @@
 
 		this.saveGeneration = 0;
 		this.id = hyryx.utils.getID('Editor');
-		this.executing = false;
+		this.mayExecute = true;
 
 		this.server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
 
@@ -108,7 +108,7 @@
 			var current = this.getCurrentSource(this.generation);
 			if (current) {
 				this.generation = current.generation;
-				this.executing = true;
+				this.startExecution();
 				hyryx.ProcedureStore.executeSource(current.source, papi).done(function(data) {
 					if (data.error) {
 						hyryx.Alerts.addWarning("Error while executing procedure", data.error);
@@ -129,9 +129,7 @@
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					hyryx.Alerts.addDanger("Error while executing procedure", jqXHR.responseText);
 					console.log("Couldn't post/execute jsprocedure: " + textStatus + errorThrown);
-				}).always(function() {
-					this.executing = false;
-				}.bind(this));
+				});
 			} else {
 				hyryx.Alerts.addInfo("Procedure didn't changed and won't be executed");
 				console.log("Nothing changed - nothing to do");
@@ -328,10 +326,11 @@
 		},
 
 		executeLive: function(cm, changes) {
-			if (this.executing) {
+			if (! this.mayExecute) {
 				console.log('Not running code, another execution seems to be underway.');
 				return;
 			}
+			this.mayExecute = false;
 
 			/*if (this.isValidCode(this.editor.getValue())) {
 				console.log('Not running code, JS code seems to be faulty.');
@@ -339,6 +338,14 @@
 			}*/
 
 			this.execute();
+		},
+
+		startExecution: function() {
+			var self = this;
+			// Allow a new execution after five seconds.
+			window.setTimeout(function() {
+				self.mayExecute = true;
+			}, 5000);
 		},
 
 		updateWidget: function(widget, query) {
