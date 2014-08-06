@@ -70,7 +70,7 @@
 					var from = {line: lineNumber, ch: span.from};
 					var to = {line: lineNumber, ch: span.to};
 					var content = mark.widgetNode.firstChild.dataset.content;
-					self.createInteractiveQueryWidget(self, mark.doc.cm, content, from, to)
+					self.createInteractiveQueryWidget(self, mark.doc.cm, content, from, to);
 				});
 			});
 		},
@@ -142,7 +142,7 @@
 			if (data.performanceData) {
 				data.performanceData.forEach(function(perf) {
 					if (perf.subQueryPerformanceData) {
-						for (line in perf.subQueryPerformanceData) {
+						for (var line in perf.subQueryPerformanceData) {
 							self.resultData[line] = perf.subQueryPerformanceData[line];
 						}
 					}
@@ -158,12 +158,11 @@
 				mode: 'javascript',
 				theme: 'solarized light',
 				lint: true,
-				gutters: ['CodeMirror-lint-markers'],
 				lineNumbers: true,
 				minHeight: 500,
 				indentWithTabs: true,
 				indentUnit: 4,
-				gutters: ['CodeMirror-linenumbers', 'gutters-highlighted-lines'],
+				gutters: ['CodeMirror-lint-markers', 'CodeMirror-linenumbers', 'gutters-highlighted-lines'],
 				extraKeys: {
 					"Ctrl-X": function(cm) { self.streamGraph.loadSample(); },
 					"Ctrl-Y": function(cm) { self.streamGraph.resetData(); },
@@ -209,8 +208,9 @@
 			var content = element.dataset.content;
 			var line = element.dataset.line;
 			var matcher = /^buildQuery\((.*)\)$/g;
+			var match = matcher.exec(content);
 
-			if (match = matcher.exec(content)) {
+			if (match) {
 				var args = JSON.parse('[' + match[1] + ']');
 				var query = {
 					operators: args[0] || {},
@@ -291,20 +291,20 @@
 						if (!err) {
 							// determine last assignment of variable
 							var last = _.reduce(refs.refs, function(prev, value) {
-								if ((value.start.line > prev.start.line || (value.start.line == prev.start.line && value.start.ch > prev.start.ch))
-									&& self.editor.getLineHandle(value.start.line).text.indexOf('buildQuery') !== -1
-									&& value.start.line <= lineNumber-1)
+								if ((value.start.line > prev.start.line || (value.start.line == prev.start.line && value.start.ch > prev.start.ch)) &&
+									self.editor.getLineHandle(value.start.line).text.indexOf('buildQuery') !== -1 &&
+									value.start.line <= lineNumber - 1)
 									return value;
 								return prev;
 							}, definition);
 
 							callback(last.start.line);
 						} else {
-							console.error('Could not determine query object refs:', err)
+							console.error('Could not determine query object refs:', err);
 						}
 					});
 				} else {
-					console.error('Could not determine query object definition:', err)
+					console.error('Could not determine query object definition:', err);
 				}
 			});
 		},

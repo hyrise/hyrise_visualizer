@@ -80,7 +80,7 @@
 
             var mouseleave = function(d, i) {
                 $('#streamgraph_infobox').hide();
-            }
+            };
 
             // entering variables
             paths.enter().append("path")
