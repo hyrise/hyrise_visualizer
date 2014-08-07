@@ -22,7 +22,6 @@
         },
 
         init: function() {
-            console.log('foo', d3.select(this.frame[0]));
             this.el = d3.select(this.frame[0]).append("svg")
                 .attr("width", this.svgWidth)
                 .attr("height", "100%");
@@ -75,7 +74,21 @@
 
             var mouseenter = function(d, i) {
                 $('#streamgraph_infobox').show();
-                $('#streamgraph_infobox .popover-title').text(Object.keys(self.rawData)[i]);
+                $('#streamgraph_infobox #popover-title').text(Object.keys(self.rawData)[i]);
+            };
+
+            var mousemove = function(d, i) {
+                var y = d3.mouse(this)[1];
+                var height = $('#frame_streamgraph svg').height();
+                var line = Math.floor(y / (height / d.length));
+                var cardinality = d[line].y;
+                var overallCardinality = _.reduce(_.values(self.data), function(a, b) {
+                    return a + b[line].y;
+                }, 0)
+
+                $('#streamgraph_infobox #popover-subtitle').text('line ' + line);
+                $('#streamgraph_infobox #popover-currentCardinality').text(cardinality);
+                $('#streamgraph_infobox #popover-overallCardinality').text(overallCardinality);
             };
 
             var mouseleave = function(d, i) {
@@ -87,6 +100,7 @@
                 .attr("d", empty_scale)
                 .style("fill", function(d) { return self.nextColor(d.variable); })
                 .on("mouseover", mouseenter)
+                .on("mousemove", mousemove)
                 .on("mouseleave", mouseleave)
                 .transition()
                     .duration(250)
