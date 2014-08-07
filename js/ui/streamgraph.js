@@ -37,9 +37,10 @@
             this.updateData({});
         },
 
-        updateData: function(data, lineCount) {
+        updateData: function(data, lineCount, performanceData) {
             this.rawData = data;
             this.data = (data === undefined || $.isEmptyObject(data)) ? [] : this.parseData(data, lineCount);
+            this.performanceData = (performanceData === undefined) ? {} : _.map(performanceData, function(e) {return e.subQueryPerformanceData })[0];
             this.refresh();
         },
 
@@ -89,6 +90,16 @@
                 $('#streamgraph_infobox #popover-subtitle').text('line ' + line);
                 $('#streamgraph_infobox #popover-currentCardinality').text(cardinality);
                 $('#streamgraph_infobox #popover-overallCardinality').text(overallCardinality);
+
+                if (line.toString() in self.performanceData) {
+                    var entries = _.map(self.performanceData[line.toString()], function(e) {
+                        return '<li>' + e.name + ': ' + e.cardinality + '</li>';
+                    }).join('\n');
+                    var text = '<b>Cardinalities:</b><ul>' + entries + '</ul>';
+                    $('#streamgraph_infobox #popover-performanceData').html(text);
+                } else {
+                    $('#streamgraph_infobox #popover-performanceData').text('');
+                }
             };
 
             var mouseleave = function(d, i) {

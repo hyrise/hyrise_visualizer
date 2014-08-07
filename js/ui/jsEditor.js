@@ -123,7 +123,7 @@
 
 						if (data.subQueryDataflow) {
 							self.enrichExecutionData(data);
-							self.streamGraph.updateData(data.subQueryDataflow, data.lineCount);
+							self.streamGraph.updateData(data.subQueryDataflow, data.lineCount, data.performanceData);
 						}
 					}
 				}).fail(function(jqXHR, textStatus, errorThrown) {

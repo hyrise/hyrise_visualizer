@@ -216,6 +216,10 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 	line-height: 27px;
 }
 
+#streamgraph_infobox > .popover .popover-content {
+	padding: 9px 14px;
+}
+
 #streamgraph_infobox > .popover .popover-content ul {
 	padding-start: 16px;
 	-moz-padding-start: 16px;

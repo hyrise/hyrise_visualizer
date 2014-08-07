@@ -13,7 +13,7 @@
 					<li>current cardinality: <span id="popover-currentCardinality"></span> rows</li>
 					<li>overall cardinality: <span id="popover-overallCardinality"></span> rows</li>
 				</ul>
-<!-- 				<p>Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p> -->
+				<span id="popover-performanceData"></span>
 			</div>
 		</div>
 	</div>
