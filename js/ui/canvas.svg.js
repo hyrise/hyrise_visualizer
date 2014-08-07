@@ -61,11 +61,12 @@
 					display : 'block'
 				});
 
+
 			this.svg = container.append('svg')
 				.attr('class', 'screen stencilgraph')
 				.style('height', HEIGHT+'px')
 				.style('display', 'block')
-				// .attr('width', width)
+				.attr('width', '100%')
 				;
 
 			this.width = $('svg.stencilgraph').width();
