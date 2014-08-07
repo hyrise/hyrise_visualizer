@@ -87,7 +87,17 @@
 
 		createCanvasControls : function(target) {
 			var $controls = $('<div class="canvas-controls pull-right">').appendTo(target.find('div.canvas'));
-			$controls.append('<div class="btn-group" data-toggle="buttons">' +
+			if (!this.showExecuteButton) {
+				$controls.append('<div class="btn-group switchInfoText" data-toggle="buttons">' +
+					'<label class="btn btn-default active" data-control="duration">' +
+						'<input type="radio" name="switchInfoText" id="switchInfoText_duration">Duaration' +
+					'</label>' +
+					'<label class="btn btn-default" data-control="cardinality">' +
+						'<input type="radio" name="switchInfoText" id="switchInfoText_carinality">Cardinality' +
+					'</label>' +
+				'</div>');
+			}
+			$controls.append('<div class="btn-group switchView" data-toggle="buttons">' +
 				'<label class="btn btn-default active" data-control="canvas">' +
 					'<input type="radio" name="switchView" id="canvas"> Designer' +
 				'</label>' +
@@ -130,11 +140,13 @@
 				}).bind(me));
 			});
 
-			this.targetEl.on('click', '.canvas-controls label', function(d) {
+			this.targetEl.on('click', '.canvas-controls div.switchView label', function(d) {
 				me.switchView($(this).data('control'));
 			});
 
-
+			this.targetEl.on('click', '.canvas-controls div.switchInfoText label', function(d) {
+				me.getCurrentScreen().updateInfoText($(this).data('control'));
+			});
 		},
 
 		revertToInitialQueryPlan: function() {

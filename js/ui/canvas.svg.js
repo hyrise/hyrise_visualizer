@@ -148,9 +148,21 @@
 
 		showPerformanceData: function(data) {
 			data.forEach(function(perf) {
-				d3.select('#node' + perf.id + ' .performance_info text.cycles')
-					.text(perf.duration + ' cycles');
+				d3.select('#node' + perf.id + ' .performance_info text.infoText')
+					.datum({
+						duration: perf.duration + ' cycles',
+						cardinality: perf.cardinality + ' rows'
+					});
 			});
+			this.updateInfoText();
+		},
+
+		updateInfoText: function(infoTextType) {
+			infoTextType = infoTextType || $("input:radio[name='switchInfoText']").parent('.active').data('control');
+			d3.selectAll('.performance_info text.infoText')
+				.text(function(d){
+					return d[infoTextType];
+				});
 			d3.selectAll('.performance_info').classed('hide', false);
 		},
 
@@ -386,7 +398,7 @@
 			gNode.append('g').classed({
 				'performance_info': true
 			}).append('text').classed({
-				'cycles': true
+				'infoText': true
 			}).attr({
 				'text-anchor': 'middle',
 				'y': 20

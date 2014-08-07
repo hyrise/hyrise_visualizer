@@ -127,6 +127,8 @@
 		update : function() {
 			var pretty = hyryx.utils.highlightJSON(this.data);
 			this.el.find('.prettyprint').html(pretty);
-		}
+		},
+
+		updateInfoText: function() {}
 	};
 })();
