@@ -92,10 +92,10 @@
                 $('#streamgraph_infobox #popover-overallCardinality').text(overallCardinality);
 
                 if (line.toString() in self.performanceData) {
-                    var entries = _.map(self.performanceData[line.toString()], function(e) {
-                        return '<li>' + e.name + ': ' + e.cardinality + '</li>';
-                    }).join('\n');
-                    var text = '<b>Cardinalities:</b><ul>' + entries + '</ul>';
+                    var entries = _.compact(_.map(self.performanceData[line.toString()], function(e) {
+                        return e.cardinality ? '<li>' + e.name + ': ' + e.cardinality + '</li>': undefined;
+                    })).join('\n');
+                    var text = entries.length > 0 ? '<b>Cardinalities:</b><ul>' + entries + '</ul>' : '';
                     $('#streamgraph_infobox #popover-performanceData').html(text);
                 } else {
                     $('#streamgraph_infobox #popover-performanceData').text('');
