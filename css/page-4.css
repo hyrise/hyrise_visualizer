@@ -204,16 +204,24 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 #streamgraph_infobox > .popover {
 	max-width: none;
 	left: -250px;
-	width: 300px;
+	width: 350px;
 	top: 0;
 	margin-top: 0;
 	background-color: white;
+}
+
+#streamgraph_infobox > .popover #popover-title {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 250px;
 }
 
 #streamgraph_infobox > .popover #popover-subtitle {
 	float: right;
 	font-size: medium;
 	line-height: 27px;
+	margin-top: -20px;
 }
 
 #streamgraph_infobox > .popover .popover-content {

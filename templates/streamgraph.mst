@@ -5,8 +5,8 @@
 		<div class="popover left">
 			<div class="arrow"></div>
 			<h3 class="popover-title">
-				<span id="popover-title"></span>
-				<span id="popover-subtitle"></span>
+				<div id="popover-title"></div>
+				<div id="popover-subtitle"></div>
 			</h3>
 			<div class="popover-content">
 				<ul>
