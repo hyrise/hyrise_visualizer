@@ -39,6 +39,14 @@
 			}, 'text');
 		},
 
+		delete: function(procedureName) {
+			console.log('name', procedureName);
+			return request({
+				action: 'delete',
+				procedureName: procedureName
+			}, 'text');
+		},
+
 		execute:  function(procedureName, papi) {
 			var params = {
 				action: 'execute',

@@ -53,10 +53,15 @@
 				self.loadStoredProcedure.call(self, $(this).data('name'));
 			});
 
-			this.targetEl.on("click", "button", function() {
+			this.targetEl.on("click", "button.save", function() {
 				self.saveProcedure(
 					self.targetEl.find("input")[0].value
 				);
+			});
+
+			this.targetEl.on("click", "a.list-group-item button.remove", function() {
+				self.deleteProcedure.call(self, $(this).parent());
+				return false;
 			});
 		},
 
@@ -66,10 +71,23 @@
 			hyryx.ProcedureStore.get(procedureName).done(function(source) {
 				self.targetEl.find("input")[0].value = procedureName;
 				self.emit("procedureLoaded", source);
-			}).fail(function(jqXHR, textStatus, errorThrown ) {
+			}).fail(function(jqXHR, textStatus, errorThrown) {
 				hyryx.Alerts.addWarning("Couldn't load procedure", textStatus + ", " + errorThrown);
 				console.log("Couldn't load jsprocedure: " + textStatus + errorThrown);
 			});
+		},
+
+		deleteProcedure: function(entry) {
+			var self = this;
+			var procedureName = entry.data('name');
+			hyryx.ProcedureStore.delete(procedureName).done(function() {
+				hyryx.Alerts.addSuccess("Procedure successfully deleted!");
+				console.log("Procedure successfully deleted");
+				self.updateProcedureList();
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				hyryx.Alerts.addWarning("Couldn't delete procedure", textStatus + ", " + errorThrown);
+				console.log("Couldn't delete jsprocedure: " + textStatus + errorThrown);
+			})
 		}
 	});
 })();

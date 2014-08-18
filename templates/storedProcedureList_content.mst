@@ -2,6 +2,9 @@
 	{{#procedures}}
 	<a class="list-group-item" data-name="{{.}}">
 		{{.}}
+		<button class="btn btn-xs btn-link pull-right remove">
+			<span class="glyphicon glyphicon-remove"></span>
+		</button>
 	</a>
 	{{/procedures}}
 </div>
