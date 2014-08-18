@@ -60,7 +60,10 @@
 			});
 
 			this.targetEl.on("click", "a.list-group-item button.remove", function() {
-				self.deleteProcedure.call(self, $(this).parent());
+				var procedureName = $(this).parent().data('name');
+				if (confirm("Delete procedure " + procedureName + "?")) {
+					self.deleteProcedure.call(self, $(this).parent());
+				}
 				return false;
 			});
 		},
