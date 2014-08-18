@@ -166,7 +166,6 @@ window.addEventListener('load', function() {
 
 				$('body').addClass('onload');
 				hyryx.Alerts.removeStartLoader();
-				hyryx.utils.showScreen();
 			}, 0);
 		}
 	}]);

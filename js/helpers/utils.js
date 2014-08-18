@@ -82,4 +82,19 @@ if ('undefined' === typeof hyryx) { var hyryx = {}; }
 	function repeat(s, count) {
 		return new Array(count + 1).join(s);
 	}
+
+	(function rememberLastTab () {
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			//save the latest tab; use cookies if you like 'em better:
+			localStorage.setItem('lastTab', $(e.target).attr('id'));
+			console.log('rememberLastTab', $(e.target).attr('href'));
+		});
+
+		//go to the latest tab, if it exists:
+		var lastTab = localStorage.getItem('lastTab');
+		if (lastTab) {
+			$('#'+lastTab).tab('show');
+			console.log('loadLastTab');
+		}
+	})();
 })();
