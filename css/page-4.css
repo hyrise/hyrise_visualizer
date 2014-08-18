@@ -140,6 +140,12 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 	width: 16px;
 }
 
+/* Execute Button css*/
+.button-immediate {
+	text-align: center;
+	min-width: 38px;
+}
+
 /* Sunburst css */
 
 #chart {

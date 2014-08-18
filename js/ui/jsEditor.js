@@ -8,6 +8,7 @@
 		this.saveGeneration = 0;
 		this.id = hyryx.utils.getID('Editor');
 		this.mayExecute = true;
+		this.executeImmediate = true;
 
 		this.server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
 
@@ -189,6 +190,9 @@
 			this.targetEl.on('click', 'button.button-execute', function() {
 				self.execute();
 			});
+			this.targetEl.on('click', 'button.button-immediate', function() {
+				self.toggleImmediate(this);
+			});
 			this.targetEl.on('click', '.performance-time span.stepInto', function() {
 				var lineNumber = $(this).closest('.performance-time').data('line-number');
 				self.showExecutedQueryPlan($(this), lineNumber);
@@ -316,6 +320,15 @@
 			this.parseLine(lineHandle);
 		},
 
+		toggleImmediate: function(button) {
+			this.executeImmediate = !this.executeImmediate;
+			$(button).html(this.executeImmediate ? '&#10004' : '&#10008;' );
+			// '&#10004' is a tick, '&#10008;' is a cross
+			if (this.executeImmediate) {
+				this.executeLive();
+			}
+		},
+
 		isValidCode: function(code) {
 			try {
 				acorn.parse(code);
@@ -325,7 +338,10 @@
 			}
 		},
 
-		executeLive: function(cm, changes) {
+		executeLive: function() {
+			if (! this.executeImmediate) {
+				return;
+			}
 			if (! this.mayExecute) {
 				console.log('Not running code, another execution seems to be underway.');
 				return;
