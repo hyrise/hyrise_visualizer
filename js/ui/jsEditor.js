@@ -664,8 +664,6 @@
 			// this adds lineCount & last references (for subQueryDataflow)
 			var self = this,
 				newDataFlow = {};
-			var usedNames = {},
-				currentName;
 
 			$.each(data.subQueryDataflow, function(variable, occurences) {
 				// for every variable, find all references to
@@ -706,17 +704,12 @@
 					}
 				});
 
-				currentName = expr.node.name;
-				if (!usedNames[currentName]) {
-					usedNames[currentName] = 1;
-					newDataFlow[currentName] = occurences;
+				if (!newDataFlow[expr.node.name]) {
+					newDataFlow[expr.node.name] = occurences;
 				} else {
-					if (usedNames[currentName] === 1) {
-						newDataFlow[currentName + '_1'] = newDataFlow[currentName];
-						newDataFlow[currentName] = undefined;
-					}
-					usedNames[currentName] = usedNames[currentName] + 1;
-					newDataFlow[expr.node.name + '_' + usedNames[currentName]] = occurences;
+					newDataFlow[expr.node.name] =
+						occurences[line_of_some_occurence + 1] > newDataFlow[expr.node.name][line_of_some_occurence + 1] ?
+						occurences : newDataFlow[expr.node.name];
 				}
 			});
 
