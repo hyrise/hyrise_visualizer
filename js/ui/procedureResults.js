@@ -23,7 +23,6 @@
 
 		init: function() {
 			var self = this;
-			this.frame.hide();
 			$.get('templates/procedureResults_content_a.mst', function(template) {
 				self.template1 = template;
 				Mustache.parse(self.template1);
@@ -42,11 +41,11 @@
 		},
 
 		startLoading: function() {
-			this.frame.find('.procedureResults').addClass('loading');
+			this.frame.removeClass('loaded').addClass('loading');
 		},
 
 		showResults: function(data, papi) {
-			this.frame.find('.procedureResults').removeClass('loading');
+			this.frame.removeClass('loading').addClass('loaded');
 			data.joinedRows = function () {
 				return function (text, render) {
 					return "<tr><td>" + render(text).split(",").join("</td><td>") + "</td></tr>";
@@ -58,11 +57,10 @@
 			this.frame.find('.content1').html(Mustache.render(this.template1, data));
 			this.frame.find('.content2').html(Mustache.render(this.template2, data));
 			this.sunburst.update(data, papi);
-			this.frame.show();
 		},
 
 		clearResults: function() {
-			this.frame.hide();
+			this.frame.removeClass('loading').removeClass('loaded');
 		}
 	});
 })();
