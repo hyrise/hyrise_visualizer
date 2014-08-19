@@ -54,6 +54,11 @@
 		},
 
 		loadPlan : function(query, parameters, widget, performanceData) {
+			if (typeof performanceData == "undefined") {
+				$("div.switchInfoText").hide();
+			} else {
+				$("div.switchInfoText").show();
+			}
 			this.parameters = parameters;
 			this.canvas.loadPlan(query, widget, performanceData);
 		}
