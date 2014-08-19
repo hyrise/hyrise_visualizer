@@ -229,21 +229,26 @@
 			}
 		},
 
+		findParamNames: function() {
+			var ast = tern.parse(this.editor.getValue());
+			return this.findParamsFromAST(ast);
+		},
+
 		findParamsFromAST: function(node) {
 			if (node.type !== 'Program') return [];
 
-			var params = [];
-			for (var func in node.body) {
+			for (var index in node.body) {
+				var func = node.body[index];
 				if (func.type !== 'FunctionDeclaration') continue;
 				if (func.id.name !== 'hyrise_run_op') continue;
 
 				// Remove the first parameter, get the names for the rest.
-				params = func.params.splice(0, 1).map(function(elem) {
+				return func.params.slice(1).map(function(elem) {
 					return elem.name;
 				});
 			}
 
-			return params;
+			return [];
 		},
 
 		findQueryParamsFromAST: function(node) {
