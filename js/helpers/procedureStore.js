@@ -87,7 +87,7 @@
 				params.procedure.papiEvent = papi;
 			}
 			if (proc_params) {
-				params.parameter = proc_params;
+				params.parameter = JSON.stringify(proc_params);
 			}
 
 			// execute source directly
