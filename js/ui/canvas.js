@@ -90,7 +90,7 @@
 			if (!this.showExecuteButton) {
 				$controls.append('<div class="btn-group switchInfoText" data-toggle="buttons">' +
 					'<label class="btn btn-default active" data-control="duration">' +
-						'<input type="radio" name="switchInfoText" id="switchInfoText_duration">Duaration' +
+						'<input type="radio" name="switchInfoText" id="switchInfoText_duration">Duration' +
 					'</label>' +
 					'<label class="btn btn-default" data-control="cardinality">' +
 						'<input type="radio" name="switchInfoText" id="switchInfoText_carinality">Cardinality' +
