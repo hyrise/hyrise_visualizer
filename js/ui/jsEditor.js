@@ -120,7 +120,13 @@
 			if (current) {
 				this.generation = current.generation;
 				this.startExecution();
-				hyryx.ProcedureStore.executeSource(current.source, [], papi).done(function(data) {
+
+				var paramValues = this.getParamValues();
+				var params = this.getParamNames().map(function(name) {
+					return paramValues[name];
+				});
+
+				hyryx.ProcedureStore.executeSource(current.source, params, papi).done(function(data) {
 					if (data.error) {
 						hyryx.Alerts.addWarning("Error while executing procedure", data.error);
 						console.error("Error executing procedure:" + data.error);
@@ -162,11 +168,23 @@
 		},
 
 		watchParams: function() {
-			var params = this.findParamNames();
+			var params = this.getParamNames();
 			if (this.paramsHaveChanged(params)) {
 				this.updateParamSliders(params);
 				this.prevParams = params.slice(0);
 			}
+		},
+
+		getParamContainer: function() {
+			return this.targetEl.find('#param-sliders');
+		},
+
+		getParamValues: function() {
+			return this.getParamContainer().find('input[type=range]').toArray().reduce(function(memo, slider) {
+				var index = slider.id.substring(6);
+				memo[index] = slider.value;
+				return memo;
+			}, {});
 		},
 
 		paramsHaveChanged: function(newParams) {
@@ -186,14 +204,7 @@
 		},
 
 		updateParamSliders: function(params) {
-			var $sliders = this.targetEl.find('#param-sliders');
-
-			// Store old sliders' values
-			var oldValues = $sliders.find('input[type=range]').toArray().reduce(function(memo, slider) {
-				var index = slider.id.substring(6);
-				memo[index] = slider.value;
-				return memo;
-			}, {});
+			var oldValues = this.getParamValues();
 
 			// Generate new slider HTML
 			var sliders = _.map(params, function(param) {
@@ -203,7 +214,7 @@
 				return label + slider;
 			}).join('');
 
-			$sliders.html(sliders);
+			this.getParamContainer().html(sliders);
 		},
 
 		registerEditor: function() {
@@ -281,7 +292,7 @@
 			}
 		},
 
-		findParamNames: function() {
+		getParamNames: function() {
 			var ast = tern.parse(this.editor.getValue());
 			return this.findParamsFromAST(ast);
 		},
