@@ -235,3 +235,14 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 	-moz-padding-start: 16px;
 	-webkit-padding-start: 16px;
 }
+
+/* param sliders */
+
+#param-sliders {
+	display: inline-block;
+}
+
+#param-sliders .param-slider {
+	display: inline-block;
+	padding: 0 6px;
+}

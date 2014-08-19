@@ -204,17 +204,38 @@
 		},
 
 		updateParamSliders: function(params) {
-			var oldValues = this.getParamValues();
+			if (params.length < 1) {
+				$('#param-slider-box').addClass('hide');
+			} else {
+				var oldValues = this.getParamValues();
 
-			// Generate new slider HTML
-			var sliders = _.map(params, function(param) {
-				var label = '<label for="param-' + param + '">' + param + '</label>';
-				var value = oldValues[param] || 0;
-				var slider = '<input type="range" id="param-' + param + '" name="params[' + param + ']" min="0" max="200" value="' + value + '" />';
-				return label + slider;
-			}).join('');
+				// Generate new slider HTML
+				var sliders = _.map(params, function(param) {
+					var label = '<label for="param-' + param + '">' + param + '</label>';
+					var value = oldValues[param] || 0;
+					var slider = '<input type="range" id="param-' + param + '" name="params[' + param + ']" min="0" max="200" value="' + value + '" />';
+					return '<div class="param-slider">' + label + slider + '</div>';
+				}).join('');
 
-			this.getParamContainer().html(sliders);
+				this.getParamContainer().html(sliders);
+				$('#param-slider-box').removeClass('hide');
+			}
+		},
+
+		toogleParamSliders: function() {
+			var onClass = 'glyphicon-chevron-right';
+			var offClass = 'glyphicon-chevron-left';
+			var button = $('button.button-expand-sliders');
+			var span = button.find('span').first();
+			var isOn = span.hasClass(onClass);
+			button.height(function() { return isOn ? '19px' : '42px'; });
+			span.removeClass(function() {return isOn ? onClass : offClass});
+			span.addClass(function() {return isOn ? offClass : onClass});
+			if (isOn) {
+				this.getParamContainer().addClass('hide');
+			} else {
+				this.getParamContainer().removeClass('hide');
+			}
 		},
 
 		registerEditor: function() {
@@ -269,6 +290,9 @@
 			});
 			this.targetEl.on('change', '#param-sliders input[type=range]', function() {
 				self.executeLive();
+			});
+			this.targetEl.on('click', 'button.button-expand-sliders', function() {
+				self.toogleParamSliders();
 			});
 		},
 
@@ -504,6 +528,7 @@
 			this.clearOverlays();
 			this.editor.setValue(content);
 			this.streamGraph.updateData();
+			this.updateParamSliders(this.getParamNames());
 			this.editor.eachLine(this.parseLine.bind(this));
 		},
 
