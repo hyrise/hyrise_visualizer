@@ -211,15 +211,20 @@
 
 				// Generate new slider HTML
 				var sliders = _.map(params, function(param) {
-					var label = '<label for="param-' + param + '">' + param + '</label>';
+					var label = '<label for="param-' + param + '">' + param + ':</label>';
 					var value = oldValues[param] || 0;
+					var valueBox = '<span class="value-box-param" id="value-box-param-' + param + '">' + value + '</span>';
 					var slider = '<input type="range" id="param-' + param + '" name="params[' + param + ']" min="0" max="200" value="' + value + '" />';
-					return '<div class="param-slider">' + label + slider + '</div>';
+					return '<div class="param-slider">' + label + valueBox + slider + '</div>';
 				}).join('');
 
 				this.getParamContainer().html(sliders);
 				$('#param-slider-box').removeClass('hide');
 			}
+		},
+
+		updateValueBox: function(element) {
+			$('#value-box-' + element.id).text(element.value);
 		},
 
 		toogleParamSliders: function() {
@@ -289,7 +294,11 @@
 				self.editJsonQuery(this);
 			});
 			this.targetEl.on('change', '#param-sliders input[type=range]', function() {
+				self.updateValueBox(this);
 				self.executeLive();
+			});
+			this.targetEl.on('input', '#param-sliders input[type=range]', function() {
+				self.updateValueBox(this);
 			});
 			this.targetEl.on('click', 'button.button-expand-sliders', function() {
 				self.toogleParamSliders();

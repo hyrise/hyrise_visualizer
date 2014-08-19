@@ -246,3 +246,7 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 	display: inline-block;
 	padding: 0 6px;
 }
+
+span.value-box-param {
+	padding: 0 8px;
+}
