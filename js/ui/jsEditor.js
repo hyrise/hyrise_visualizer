@@ -8,7 +8,9 @@
 		this.saveGeneration = 0;
 		this.id = hyryx.utils.getID('Editor');
 		this.mayExecute = true;
+		this.shouldExecute = false;
 		this.executeImmediate = true;
+		this.ignoreChanges = false;	// ignore changes made between change event and "real" execution
 
 		this.server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
 
@@ -358,14 +360,16 @@
 		},
 
 		executeLive: function() {
-			if (! this.executeImmediate) {
+			if (! this.executeImmediate || this.ignoreChanges) {
 				return;
 			}
 			if (! this.mayExecute) {
+				this.shouldExecute = true;
 				console.log('Not running code, another execution seems to be underway.');
 				return;
 			}
 			this.mayExecute = false;
+			this.ignoreChanges = true;
 
 			/*if (this.isValidCode(this.editor.getValue())) {
 				console.log('Not running code, JS code seems to be faulty.');
@@ -377,9 +381,14 @@
 
 		startExecution: function() {
 			var self = this;
+			this.ignoreChanges = false;
 			// Allow a new execution after five seconds.
 			window.setTimeout(function() {
 				self.mayExecute = true;
+				if (self.shouldExecute) {
+					self.shouldExecute = false;
+					self.executeLive();
+				}
 			}, 5000);
 		},
 
