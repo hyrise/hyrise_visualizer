@@ -28,10 +28,10 @@
 				self.template1 = template;
 				Mustache.parse(self.template1);
 			});
-			$.get('templates/procedureResults_content_b.mst', function(template) {
-				self.template2 = template;
-				Mustache.parse(self.template2);
-			});
+			// $.get('templates/procedureResults_content_b.mst', function(template) {
+			// 	self.template2 = template;
+			// 	Mustache.parse(self.template2);
+			// });
 		},
 
 		registerEvents: function() {
