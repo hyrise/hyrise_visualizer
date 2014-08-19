@@ -80,8 +80,7 @@
 
             var mousemove = function(d, i) {
                 var y = d3.mouse(this)[1];
-                var height = $('#frame_streamgraph svg').height();
-                var line = Math.floor(y / (height / d.length));
+                var line = Math.floor((y + 16) / 20);
                 var cardinality = d[line].realY;
                 var overallCardinality = _.reduce(_.values(self.data), function(a, b) {
                     return a + b[line].realY;
