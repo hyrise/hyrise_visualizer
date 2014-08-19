@@ -127,7 +127,7 @@
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
 			"!doc": "Execute a database query and return the results."
 		},
-		"buildQuery": {
+		"buildQuery()": {
 			"!type": "fn() -> query",
 			"!doc": "Create a query object."
 		}
