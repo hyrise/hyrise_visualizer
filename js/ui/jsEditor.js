@@ -201,11 +201,9 @@
 				var lineNumber = $(this).closest('.performance-time').data('line-number');
 				self.showExecutedQueryPlan($(this), lineNumber);
 			});
-			this.targetEl.on(
-				'click', '.interactiveQuery', function() {
-					self.editJsonQuery(this);
-				}
-			);
+			this.targetEl.on('click', '.interactiveQuery', function() {
+				self.editJsonQuery(this);
+			});
 		},
 
 		registerStreamGraph: function() {
