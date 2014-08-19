@@ -182,7 +182,7 @@
 		getParamValues: function() {
 			return this.getParamContainer().find('input[type=range]').toArray().reduce(function(memo, slider) {
 				var index = slider.id.substring(6);
-				memo[index] = slider.value;
+				memo[index] = parseInt(slider.value);
 				return memo;
 			}, {});
 		},
@@ -214,7 +214,7 @@
 					var label = '<label for="param-' + param + '">' + param + ':</label>';
 					var value = oldValues[param] || 0;
 					var valueBox = '<span class="value-box-param" id="value-box-param-' + param + '">' + value + '</span>';
-					var slider = '<input type="range" id="param-' + param + '" name="params[' + param + ']" min="0" max="200" value="' + value + '" />';
+					var slider = '<input type="range" id="param-' + param + '" name="params[' + param + ']" min="0" max="2000" value="' + value + '" />';
 					return '<div class="param-slider">' + label + valueBox + slider + '</div>';
 				}).join('');
 
