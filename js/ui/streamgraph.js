@@ -39,7 +39,7 @@
 
         updateData: function(data, lineCount, performanceData) {
             this.rawData = data;
-            this.data = (data === undefined || $.isEmptyObject(data)) ? [] : this.parseData(data, lineCount);
+            this.data = (data === undefined || $.isEmptyObject(data)) ? [[]] : this.parseData(data, lineCount);
             this.performanceData = (performanceData === undefined) ? {} : _.map(performanceData, function(e) {return e.subQueryPerformanceData })[0];
             this.refresh();
         },
@@ -82,10 +82,10 @@
                 var y = d3.mouse(this)[1];
                 var height = $('#frame_streamgraph svg').height();
                 var line = Math.floor(y / (height / d.length));
-                var cardinality = d[line].y;
+                var cardinality = d[line].realY;
                 var overallCardinality = _.reduce(_.values(self.data), function(a, b) {
-                    return a + b[line].y;
-                }, 0)
+                    return a + b[line].realY;
+                }, 0);
 
                 $('#streamgraph_infobox #popover-subtitle').text('line ' + line);
                 $('#streamgraph_infobox #popover-currentCardinality').text(cardinality);
@@ -126,20 +126,20 @@
 
         parseData: function(data, lineCount) {
             var numberOfVariables = _.keys(data).length;
-            var stack = d3.layout.stack();
-            return stack(d3.range(numberOfVariables).map(function(e, idx) {
+            return d3.range(numberOfVariables).map(function(e, idx) {
                 var variable = _.keys(data)[idx];
                 var blub = data[variable];
                 var result = zeroLayer(lineCount);
                 _.reduce(_.keys(blub), function(prev, element) {
                     for (var i = parseInt(prev.line); i < parseInt(element); i += 1) {
                         result[i].y = prev.value;
+                        result[i].realY = prev.value;
                     }
                     return {line: element, value: blub[element]};
                 }, {value: 0, line: 0});
                 result.variable = variable;
                 return result;
-            }));
+            });
         },
 
         buildScale: function(data) {
@@ -148,12 +148,25 @@
                 .domain([0, length - 1])
                 .range([0, this.svgHeight]);
 
+            var max_thickness = d3.max(data, function(layer) { return d3.max(layer, function(d) { return d.y; }); });
+            var log_scale = d3.scale.log()
+                .domain([1, max_thickness + 1])
+                .range([0, max_thickness]);
+
+            var stack = d3.layout.stack()
+                            .y(function (d) {
+                                return log_scale(d.y + 1);
+                            }),
+                stacked = stack(data);
+
             var y = d3.scale.linear()
-                .domain([0, d3.max(data, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); })])
+                .domain([0, d3.max(stacked, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); })])
                 .range([this.svgWidth, 0]);
 
             return d3.svg.area()
-                .y(function(d) { return x(d.x); })
+                .y(function(d) {
+                    return x(d.x);
+                })
                 .x0(function(d) { return y(d.y0); })
                 .x1(function(d) { return y(d.y0 + d.y); });
         },
@@ -177,7 +190,7 @@
 
     function zeroLayer(n) {
         var a = [], i;
-        for (i = 0; i < n; ++i) a[i] = {x: i, y: 0};
+        for (i = 0; i < n; ++i) a[i] = {x: i, y: 0, realY: 0};
         return a;
     }
 
