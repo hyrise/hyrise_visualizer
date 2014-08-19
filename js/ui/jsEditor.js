@@ -267,6 +267,9 @@
 			this.targetEl.on('click', '.interactiveQuery', function() {
 				self.editJsonQuery(this);
 			});
+			this.targetEl.on('change', '#param-sliders input[type=range]', function() {
+				self.executeLive();
+			});
 		},
 
 		registerStreamGraph: function() {
