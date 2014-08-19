@@ -99,8 +99,9 @@
 					"value" : "year"
 				},
 				"value" : {
-					"type" : "number",
-					"value" : 2013
+					"type" : "text",
+					"value" : 2013,
+					"autocomplete": true
 				}
 			}
 		}
