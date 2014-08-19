@@ -85,7 +85,7 @@
 			var currentSource = this.getCurrentSource(this.saveGeneration);
 
 			if(!currentSource) {
-				console.log("no need to save - source didn't changed");
+				console.log("no need to save - source didn't change");
 				hyryx.Alerts.addInfo("Procedure was not modified since last save.");
 				return;
 			}
@@ -142,7 +142,7 @@
 					console.log("Couldn't post/execute jsprocedure: " + textStatus + errorThrown);
 				});
 			} else {
-				hyryx.Alerts.addInfo("Procedure didn't changed and won't be executed");
+				hyryx.Alerts.addInfo("Procedure didn't change and won't be executed");
 				console.log("Nothing changed - nothing to do");
 			}
 		},
