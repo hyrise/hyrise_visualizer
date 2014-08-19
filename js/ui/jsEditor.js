@@ -257,8 +257,9 @@
 				indentUnit: 4,
 				gutters: ['CodeMirror-lint-markers', 'CodeMirror-linenumbers', 'gutters-highlighted-lines'],
 				extraKeys: {
-					"Ctrl-X": function(cm) { self.streamGraph.loadSample(); },
-					"Ctrl-Y": function(cm) { self.streamGraph.resetData(); },
+					"Ctrl-Y": function(cm) { self.streamGraph.loadSample(); },
+					"Ctrl-E": function(cm) { self.execute(); },
+					"Ctrl-L": function(cm) { self.toggleImmediate($('button.button-immediate')); },
 					"Ctrl-Space": function(cm) { self.server.complete(cm); },
 					"Alt-Space": function(cm) { self.server.complete(cm); },
 					"Ctrl-I": function(cm) { self.server.showType(cm); },
