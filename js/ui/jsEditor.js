@@ -108,11 +108,14 @@
 		},
 
 		execute: function(papi) {
+			var self = this;
 			console.log("Execute stored procedure...");
 
 			this.ignoreChanges = true;
 
-			var self = this;
+			papi = papi ? papi : this.lastPapi;
+			this.lastPapi = papi;
+
 			var current = this.getCurrentSource(this.generation);
 			if (current) {
 				this.generation = current.generation;
