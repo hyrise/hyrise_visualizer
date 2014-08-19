@@ -20,7 +20,7 @@
 
 			if (this.showTitlebar) {
 				frame.append('<div class="titlebar">'
-					+ '<button type="button" id="hideQueryEditor" class="btn btn-link"><span class="glyphicon glyphicon-chevron-down"></span> Back</button>'
+					+ '<button type="button" id="hideQueryEditor" class="btn btn-link"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>'
 					+ '<button type="button" id="revertQueryPlan" class="btn btn-link pull-right"><span class="glyphicon glyphicon-repeat"></span> Revert</button></div>');
 			}
 			// create the canvas
