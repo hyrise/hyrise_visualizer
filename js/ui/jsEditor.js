@@ -271,10 +271,10 @@
 				}
 			});
 			this.editor.on('cursorActivity', function(cm) { self.server.updateArgHints(cm); });
+			this.editor.on('changes', this.watchParams.bind(this));
 			this.editor.on('change', function(cm) { self.invalidatePerformanceData(); });
 			this.editor.on('change', this.handleChanges.bind(this));
 			this.editor.on('changes', this.executeLive.bind(this));
-			this.editor.on('changes', this.watchParams.bind(this));
 			this.generation = 0;
 			this.editor.setSize(null, 500);
 		},
@@ -546,7 +546,6 @@
 			this.clearOverlays();
 			this.editor.setValue(content);
 			this.streamGraph.updateData();
-			this.updateParamSliders(this.getParamNames());
 			this.editor.eachLine(this.parseLine.bind(this));
 		},
 
