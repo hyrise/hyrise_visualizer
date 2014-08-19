@@ -162,12 +162,13 @@
 			var params = this.findParamNames();
 			if (this.paramsHaveChanged(params)) {
 				this.emit('paramsChanged', params);
-				this.prevParams = params;
+				this.prevParams = params.slice(0);
 			}
 		},
 
 		paramsHaveChanged: function(newParams) {
-			var oldParams = this.prevParams;
+			newParams = newParams.slice(0);
+			var oldParams = this.prevParams.slice(0);
 
 			newParams = newParams.filter(function(param) {
 				var index = oldParams.indexOf(param);
