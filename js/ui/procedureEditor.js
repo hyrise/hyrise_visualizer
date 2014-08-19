@@ -31,6 +31,9 @@
 			});
 			this.storedProcedureList.on("saveProcedure", this.jsEditor.save.bind(this.jsEditor));
 			this.jsEditor.on("procedureSaved", this.storedProcedureList.updateProcedureList.bind(this.storedProcedureList));
+			this.jsEditor.on("procedureExecuting", function() {
+				self.emit("procedureExecuting");
+			});
 			this.jsEditor.on("procedureExecuted", function(results, papi) {
 				self.emit("procedureExecuted", results, papi);
 			});

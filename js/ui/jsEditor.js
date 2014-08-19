@@ -126,6 +126,7 @@
 					return paramValues[name];
 				});
 
+				self.emit("procedureExecuting");
 				hyryx.ProcedureStore.executeSource(current.source, params, papi).done(function(data) {
 					if (data.error) {
 						hyryx.Alerts.addWarning("Error while executing procedure", data.error);

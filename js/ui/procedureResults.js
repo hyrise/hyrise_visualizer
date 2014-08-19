@@ -41,7 +41,12 @@
 			});
 		},
 
+		startLoading: function() {
+			this.frame.find('.procedureResults').addClass('loading');
+		},
+
 		showResults: function(data, papi) {
+			this.frame.find('.procedureResults').removeClass('loading');
 			data.joinedRows = function () {
 				return function (text, render) {
 					return "<tr><td>" + render(text).split(",").join("</td><td>") + "</td></tr>";
