@@ -28,7 +28,7 @@
             this.viz = this.createSunburst();
             hyryx.ProcedureStore.papiEvents().done(function(papiEvents) {
                 var options = _.map(papiEvents, function(e) {
-                    return '<option>' + e + '</option>'
+                    return '<option>' + e + '</option>';
                 }).join('');
                 options = '<option>' + DEFAULT_SUNBURST + '</option>' + options;
                 $('#sunburst-value').append(options);
@@ -63,7 +63,7 @@
             function stash(d) {
               d.x0 = d.x;
               d.dx0 = d.dx;
-            };
+            }
 
             // Interpolate the arcs in data space.
             function arcTween(a) {
@@ -79,7 +79,7 @@
                 a.dx0 = b.dx;
                 return arc(b);
               };
-            };
+            }
 
             // Fade all but the current sequence, and show it in the breadcrumb trail.
             function mouseover(d) {
@@ -93,10 +93,10 @@
                         current = current.parent;
                     }
                     return path;
-                };
+                }
 
                 d3.select("#chart-title").text(d.name);
-                d3.select("#chart-duration").text(d.value);
+                d3.select("#chart-duration").text(d.realDuration);
                 d3.select("#explanation").style("visibility", "");
 
                 var sequenceArray = getAncestors(d);
@@ -108,7 +108,7 @@
                 self.viz.selectAll("#chart path").filter(function(node) {
                     return (sequenceArray.indexOf(node) >= 0);
                 }).style("opacity", 1);
-            };
+            }
 
             // Restore everything to full opacity when moving off the visualization.
             function mouseleave(d) {
@@ -128,7 +128,7 @@
                     .transition()
                     .duration(1000)
                     .style("visibility", "hidden");
-            };
+            }
 
             // var arc = d3.svg.arc()
             //     .startAngle(function(d) { return d.x; })
@@ -136,7 +136,7 @@
             //     .innerRadius(function(d) { return Math.sqrt(d.y); })
             //     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-            var json = this.buildHierarchy(data);
+            var json = this.buildHierarchy(data.performanceData);
 
             var partition = d3.layout.partition()
                 .size([2 * Math.PI, this.radius * this.radius])
@@ -187,26 +187,40 @@
             return viz;
         },
 
-        buildHierarchy: function(data) {
+        buildHierarchy: function(performanceData) {
             var root = {name: "root", children: []};
 
-            if (!data) {
+            if (!performanceData) {
                 return root;
             }
 
-            _.each(data.performanceData, function(perf) {
-                _.each(perf.subQueryPerformanceData, function(value, key, list) {
-                    var duration = _.reduce(value, function(a, b) {
+            var index = 0,
+                durations = [];
+
+            _.each(performanceData, function(perf) {
+                _.each(perf.subQueryPerformanceData, function(value) {
+                    durations.push(_.reduce(value, function(a, b) {
                         return a + b.duration;
-                    }, 0);
+                    }, 0));
+                });
+            });
+
+            var maxDuration = Math.max.apply(Math, durations),
+                durationScale = d3.scale.sqrt()
+                    .domain([0, maxDuration])
+                    .range([0, maxDuration]);
+
+            _.each(performanceData, function(perf) {
+                _.each(perf.subQueryPerformanceData, function(value, key) {
                     var data = _.reduce(value, function(a, b) {
                         return a + b.data;
                     }, 0);
-                    var node = {name: 'Line ' + key, duration: duration, data: data, children: []};
+                    var node = {name: 'Line ' + key, duration: durations[index], realDuration: durations[index], data: data, children: []};
                     root.children.push(node);
                     _.each(value, function(d) {
-                        node.children.push({name: d.name, duration: d.duration, data: data});
+                        node.children.push({name: d.name, duration: durationScale(d.duration), realDuration: d.duration, data: data});
                     });
+                    index = index + 1;
                 });
             });
             return root;
