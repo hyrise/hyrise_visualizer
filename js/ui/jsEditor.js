@@ -10,6 +10,7 @@
 		this.mayExecute = true;
 		this.shouldExecute = false;
 		this.executeImmediate = true;
+		this.prevParams = [];
 		this.ignoreChanges = false;	// ignore changes made between change event and "real" execution
 
 		this.server = new CodeMirror.TernServer({defs: [hyryx.ProcedureApi]});
@@ -157,6 +158,29 @@
 			}
 		},
 
+		watchParams: function() {
+			var params = this.findParamNames();
+			if (this.paramsHaveChanged(params)) {
+				this.emit('paramsChanged', params);
+				this.prevParams = params;
+			}
+		},
+
+		paramsHaveChanged: function(newParams) {
+			var oldParams = this.prevParams;
+
+			newParams = newParams.filter(function(param) {
+				var index = oldParams.indexOf(param);
+				if (index > -1) {
+					oldParams.splice(index, 1);
+					return false;
+				}
+				return true;
+			});
+
+			return oldParams.length + newParams.length > 0;
+		},
+
 		registerEditor: function() {
 			var self = this;
 
@@ -187,6 +211,7 @@
 			this.editor.on('change', function(cm) { self.invalidatePerformanceData(); });
 			this.editor.on('change', this.handleChanges.bind(this));
 			this.editor.on('changes', this.executeLive.bind(this));
+			this.editor.on('changes', this.watchParams.bind(this));
 			this.generation = 0;
 			this.editor.setSize(null, 500);
 		},
