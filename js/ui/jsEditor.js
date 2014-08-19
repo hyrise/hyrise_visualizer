@@ -223,13 +223,30 @@
 					edges: args[1] || []
 				};
 
-				var parameters = this.findParamsFromAST(tern.parse(this.editor.getLineHandle(line).text));
+				var parameters = this.findQueryParamsFromAST(tern.parse(this.editor.getLineHandle(line).text));
 
 				this.emit('editJsonQuery', element, query, parameters, data);
 			}
 		},
 
 		findParamsFromAST: function(node) {
+			if (node.type !== 'Program') return [];
+
+			var params = [];
+			for (var func in node.body) {
+				if (func.type !== 'FunctionDeclaration') continue;
+				if (func.id.name !== 'hyrise_run_op') continue;
+
+				// Remove the first parameter, get the names for the rest.
+				params = func.params.splice(0, 1).map(function(elem) {
+					return elem.name;
+				});
+			}
+
+			return params;
+		},
+
+		findQueryParamsFromAST: function(node) {
 			traversal:
 			while (node.type !== 'CallExpression') {
 				switch (node.type) {
