@@ -50,10 +50,12 @@
 
             if (papi === undefined) {
                 f_value = function(d) { return d.duration; };
+                f_label = function(d) { return d.realDuration; };
                 $('#sunburst-value').val(DEFAULT_SUNBURST);
                 $('#chart-papi-type').text(DEFAULT_SUNBURST);
             } else {
                 f_value = function(d) { return d.data; };
+                f_label = function(d) { return d.realData; };
                 $('#sunburst-value').val(papi);
                 $('#chart-papi-type').text(papi);
             }
@@ -96,7 +98,7 @@
                 }
 
                 d3.select("#chart-title").text(d.name);
-                d3.select("#chart-duration").text(d.realDuration);
+                d3.select("#chart-duration").text(f_label(d));
                 d3.select("#explanation").style("visibility", "");
 
                 var sequenceArray = getAncestors(d);
@@ -195,12 +197,16 @@
             }
 
             var index = 0,
-                durations = [];
+                durations = [],
+                datas = [];
 
             _.each(performanceData, function(perf) {
                 _.each(perf.subQueryPerformanceData, function(value) {
                     durations.push(_.reduce(value, function(a, b) {
                         return a + b.duration;
+                    }, 0));
+                    datas.push(_.reduce(value, function(a, b) {
+                        return a + b.data;
                     }, 0));
                 });
             });
@@ -209,16 +215,18 @@
                 durationScale = d3.scale.sqrt()
                     .domain([0, maxDuration])
                     .range([0, maxDuration]);
+            var maxDatas = Math.max.apply(Math, datas),
+                dataScale = d3.scale.pow()
+                    .exponent(1.5)
+                    .domain([1, maxDatas])
+                    .range([1, maxDatas * maxDatas]);
 
             _.each(performanceData, function(perf) {
                 _.each(perf.subQueryPerformanceData, function(value, key) {
-                    var data = _.reduce(value, function(a, b) {
-                        return a + b.data;
-                    }, 0);
-                    var node = {name: 'Line ' + key, duration: durations[index], realDuration: durations[index], data: data, children: []};
+                    var node = {name: 'Line ' + key, duration: durations[index], realDuration: durations[index], data: datas[index], realData: datas[index], children: []};
                     root.children.push(node);
                     _.each(value, function(d) {
-                        node.children.push({name: d.name, duration: durationScale(d.duration), realDuration: d.duration, data: data});
+                        node.children.push({name: d.name, duration: durationScale(d.duration), realDuration: d.duration, data: d.data, realData: d.data});
                     });
                     index = index + 1;
                 });
