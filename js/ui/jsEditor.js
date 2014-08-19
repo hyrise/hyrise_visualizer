@@ -513,6 +513,7 @@
 		},
 
 		invalidatePerformanceData: function() {
+			this.streamGraph.resetData();
 			this.editor.clearGutter('gutters-highlighted-lines');
 			for (var line in this.highlightedLines) {
 				var msg = this.highlightedLines[line];
