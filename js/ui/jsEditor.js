@@ -470,6 +470,14 @@
 				console.log('Not running code, another execution seems to be underway.');
 				return;
 			}
+
+			if ($('.CodeMirror-lint-marker-error').length) {
+				// hack; check if there is a gutter error
+				this.shouldExecute = true;
+				console.log('Not running code, JS code seems to be faulty.');
+				return;
+			}
+
 			this.mayExecute = false;
 
 			/*if (this.isValidCode(this.editor.getValue())) {
