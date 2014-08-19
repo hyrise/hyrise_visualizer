@@ -116,10 +116,6 @@ div.performance-time:not(.invalid) span.stepInto:hover {
 	color: #ccc;
 }
 
-.CodeMirror-vscrollbar {
-	pointer-events: none;
-}
-
 .CodeMirror-code > div > pre {
 	pointer-events: none;
 }
