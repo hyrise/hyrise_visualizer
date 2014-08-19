@@ -164,7 +164,7 @@
 		watchParams: function() {
 			var params = this.findParamNames();
 			if (this.paramsHaveChanged(params)) {
-				this.emit('paramsChanged', params);
+				this.updateParamSliders(params);
 				this.prevParams = params.slice(0);
 			}
 		},
@@ -183,6 +183,27 @@
 			});
 
 			return oldParams.length + newParams.length > 0;
+		},
+
+		updateParamSliders: function(params) {
+			var $sliders = this.targetEl.find('#param-sliders');
+
+			// Store old sliders' values
+			var oldValues = $sliders.find('input[type=range]').toArray().reduce(function(memo, slider) {
+				var index = slider.id.substring(6);
+				memo[index] = slider.value;
+				return memo;
+			}, {});
+
+			// Generate new slider HTML
+			var sliders = _.map(params, function(param) {
+				var label = '<label for="param-' + param + '">' + param + '</label>';
+				var value = oldValues[param] || 0;
+				var slider = '<input type="range" id="param-' + param + '" name="params[' + param + ']" min="0" max="200" value="' + value + '" />';
+				return label + slider;
+			}).join('');
+
+			$sliders.html(sliders);
 		},
 
 		registerEditor: function() {
