@@ -64,6 +64,8 @@
 			$.each($.grep(this.editor.getAllMarks(), function(mark) {
 				return mark.className === 'interactiveQuery';
 			}), function(i, mark) {
+				if (mark.lines.length == 0) return;
+				
 				var lineNumber = mark.doc.getLineNumber(mark.lines[0]);
 				$.each($.grep(mark.lines[0].markedSpans, function(span) {
 					return span.marker === mark;
