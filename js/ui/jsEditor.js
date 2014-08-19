@@ -67,7 +67,7 @@
 				return mark.className === 'interactiveQuery';
 			}), function(i, mark) {
 				if (mark.lines.length == 0) return;
-				
+
 				var lineNumber = mark.doc.getLineNumber(mark.lines[0]);
 				$.each($.grep(mark.lines[0].markedSpans, function(span) {
 					return span.marker === mark;
@@ -108,6 +108,8 @@
 
 		execute: function(papi) {
 			console.log("Execute stored procedure...");
+
+			this.ignoreChanges = true;
 
 			var self = this;
 			var current = this.getCurrentSource(this.generation);
@@ -372,7 +374,6 @@
 				return;
 			}
 			this.mayExecute = false;
-			this.ignoreChanges = true;
 
 			/*if (this.isValidCode(this.editor.getValue())) {
 				console.log('Not running code, JS code seems to be faulty.');
