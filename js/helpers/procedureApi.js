@@ -29,6 +29,26 @@
 				"size": {
 					"!type": "fn() -> int"
 				},
+				"resize": {
+					"!type": "fn(size: int)",
+					"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
+					"!doc": "Resize the table, if possible. Throw an exception otherwise."
+				},
+				"getAttributeVectors": {
+					"!type": "fn()",
+					"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
+					"!doc": "Access the underlying table storage object."
+				},
+				"valueId": {
+					"!type": "fn(col: int, row: int)",
+					"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
+					"!doc": "Return the value ID struct with value ID and table ID."
+				},
+				"valueIdV": {
+					"!type": "fn(col: int, row: int)",
+					"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
+					"!doc": "Return only the value ID of the value ID struct."
+				},
 				"columnCount": {
 					"!type": "fn() -> int"
 				},
@@ -42,56 +62,6 @@
 			},
 			"edge": "[string, string]"
 		},
-		"getAttributeVectors": {
-			"!type": "fn()",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": "Access the underlying table storage object."
-		},
-		"valueId": {
-			"!type": "fn(arg: string)",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": "Return the value ID struct with value ID and table ID."
-		},
-		"valueIdV": {
-			"!type": "fn(arg: string)",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": "Return only the value ID of the value ID struct."
-		},
-		"resize": {
-			"!type": "fn(size: int)",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": "Resize the table, if possible. Throw an exception otherwise."
-		},
-		"setValueInt": {
-			"!type": "fn(column: string, value: int)",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": ""
-		},
-		"setValueFloat": {
-			"!type": "fn(column: string, value: float)",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": ""
-		},
-		"setValueString": {
-			"!type": "fn(column: string, value: string)",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": ""
-		},
-		"getValueInt": {
-			"!type": "fn(column: string)",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": ""
-		},
-		"getValueFloat": {
-			"!type": "fn(column: string)",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": ""
-		},
-		"getValueString": {
-			"!type": "fn(column: string)",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": ""
-		},
 		"copyStructureModifiable": {
 			"!type": "fn(column: string)",
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
@@ -103,9 +73,33 @@
 			"!doc": ""
 		},
 		"buildVerticalTable": {
-			"!type": "fn(table1: string, table2: string)",
+			"!type": "fn(table1: table, table2: table)",
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
 			"!doc": "Concatenate two tables and build a vertical table."
+		},
+		"buildTable": {
+			"!type": "fn(fields: [field], groups: [int]) -> table",
+			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
+			"!doc": "Create a custom output table."
+		},
+		"buildTableShort": {
+			"!type": "fn(spec) -> table",
+			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
+			"!doc": "Alternative, shorter way to create a table."
+		},
+		"buildTableColumn": {
+			"!type": "fn(spec) -> table",
+			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
+			"!doc": "Create a column store."
+		},
+		"executeQuery": {
+			"!type": "fn(query: query, input: table) -> table",
+			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
+			"!doc": "Execute a database query and return the results."
+		},
+		"buildQuery()": {
+			"!type": "fn() -> query",
+			"!doc": "Create a query object."
 		},
 		"include": {
 			"!type": "fn(filename: string)",
@@ -116,20 +110,6 @@
 			"!type": "fn(message: string)",
 			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
 			"!doc": "Log a string to the HYRISE logging facilities."
-		},
-		"buildTable": {
-			"!type": "fn(fields: [field], groups: [int]) -> table",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": "Create a custom output table."
-		},
-		"executeQuery": {
-			"!type": "fn(query: query, input: table) -> table",
-			"!url": "http://hyrise.github.io/hyrise/queryexecution/v8ops.html#using-javascript-for-plan-operations",
-			"!doc": "Execute a database query and return the results."
-		},
-		"buildQuery()": {
-			"!type": "fn() -> query",
-			"!doc": "Create a query object."
 		}
 	};
 
