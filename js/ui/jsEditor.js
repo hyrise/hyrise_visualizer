@@ -441,8 +441,14 @@
 		handleChanges: function(cm, change) {
 			if (disableChanges) return;
 
-			var lineHandle = this.editor.getLineHandle(change.to.line);
-			this.parseLine(lineHandle);
+			var start = change.to.line;
+			var lines = _.range(start, start + change.text.length);
+
+			for (var index in lines) {
+				var line = lines[index];
+				var lineHandle = this.editor.getLineHandle(line);
+				this.parseLine(lineHandle);
+			}
 		},
 
 		toggleImmediate: function(button) {
