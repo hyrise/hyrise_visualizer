@@ -114,7 +114,7 @@
 			if (current) {
 				this.generation = current.generation;
 				this.startExecution();
-				hyryx.ProcedureStore.executeSource(current.source, papi).done(function(data) {
+				hyryx.ProcedureStore.executeSource(current.source, [], papi).done(function(data) {
 					if (data.error) {
 						hyryx.Alerts.addWarning("Error while executing procedure", data.error);
 						console.error("Error executing procedure:" + data.error);

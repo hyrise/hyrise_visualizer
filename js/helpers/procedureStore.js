@@ -3,11 +3,17 @@
 	function request(data, dataType) {
 		if (dataType === undefined)
 			dataType = 'json';
+
+		data.performance = true;
+		if (data.procedure) {
+			data.procedure = JSON.stringify(data.procedure);
+		}
+
 		return $.ajax({
 			url : hyryx.settings.database + '/JSProcedure/',
 			type : 'POST',
 			dataType: dataType,
-			data: {procedure: JSON.stringify(data), performance: true}
+			data: data
 		});
 	}
 
@@ -19,13 +25,17 @@
 			if(procedureName === undefined) {
 				// get whole list of stored procedure names
 				return request({
-					action: 'get'
+					procedure: {
+						action: 'get'
+					}
 				});
 			} else {
 				// get source of stored procedure with given name
 				return request({
-					action: 'get',
-					procedureName: procedureName
+					procedure: {
+						action: 'get',
+						procedureName: procedureName
+					}
 				}, 'text');
 			}
 		},
@@ -33,40 +43,51 @@
 		create:  function(procedureName, procedureSource) {
 			// store procedure with given name and source
 			return request({
-				action: 'create',
-				procedureName: procedureName,
-				procedureSource: procedureSource
+				procedure: {
+					action: 'create',
+					procedureName: procedureName,
+					procedureSource: procedureSource
+				}
 			}, 'text');
 		},
 
 		delete: function(procedureName) {
 			console.log('name', procedureName);
 			return request({
-				action: 'delete',
-				procedureName: procedureName
+				procedure: {
+					action: 'delete',
+					procedureName: procedureName
+				}
 			}, 'text');
 		},
 
 		execute:  function(procedureName, papi) {
 			var params = {
-				action: 'execute',
-				procedureName: procedureName
+				procedure: {
+					action: 'execute',
+					procedureName: procedureName
+				}
 			};
 			if (papi !== undefined) {
-				params.papiEvent = papi;
+				params.procedure.papiEvent = papi;
 			}
 
 			// execute procedure with given name
 			return request(params);
 		},
 
-		executeSource:  function(procedureSource, papi) {
+		executeSource:  function(procedureSource, proc_params, papi) {
 			var params = {
-				action: 'execute',
-				procedureSource: procedureSource
+				procedure: {
+					action: 'execute',
+					procedureSource: procedureSource
+				}
 			};
 			if (papi !== undefined) {
-				params.papiEvent = papi;
+				params.procedure.papiEvent = papi;
+			}
+			if (proc_params) {
+				params.parameter = proc_params;
 			}
 
 			// execute source directly
@@ -76,7 +97,9 @@
 		papiEvents: function() {
 			// get list of available PAPI events
 			return request({
-				action: 'papiEventsAvailable'
+				procedure: {
+					action: 'papiEventsAvailable'
+				}
 			});
 		}
 
