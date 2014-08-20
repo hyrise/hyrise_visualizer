@@ -55,7 +55,7 @@
 						} catch (e) {
 							//
 						}
-						return true;
+						return element;
 					}).join("</td><td>") + "</td></tr>";
 				};
 			};
