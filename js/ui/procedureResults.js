@@ -49,10 +49,9 @@
 			data.joinedRows = function () {
 				return function (text, render) {
 					return "<tr><td>" + render(text).split(",").map(function(element) {
+						element = decodeURIComponent(escape(element));
 						try {
-							while (true) {
-								element = decodeURIComponent(escape(element));
-							}
+							element = decodeURIComponent(escape(element));
 						} catch (e) {
 							//
 						}
