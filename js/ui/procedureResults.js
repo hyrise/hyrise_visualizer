@@ -48,7 +48,16 @@
 			this.frame.removeClass('loading').addClass('loaded');
 			data.joinedRows = function () {
 				return function (text, render) {
-					return "<tr><td>" + render(text).split(",").join("</td><td>") + "</td></tr>";
+					return "<tr><td>" + render(text).split(",").map(function(element) {
+						try {
+							while (true) {
+								element = decodeURIComponent(escape(element));
+							}
+						} catch {
+							//
+						}
+						return true;
+					}).join("</td><td>") + "</td></tr>";
 				};
 			};
 			$.each(data.performanceData, function(idx, perfData) {
