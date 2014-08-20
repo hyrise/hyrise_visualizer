@@ -53,7 +53,7 @@
 							while (true) {
 								element = decodeURIComponent(escape(element));
 							}
-						} catch {
+						} catch (e) {
 							//
 						}
 						return true;
