@@ -7,7 +7,7 @@
 	-webkit-user-drag: element;
 }
 
-.list-group-item {
+div.stencils .list-group-item {
 	cursor: move;
 	opacity: 1;
 }
@@ -32,7 +32,7 @@ rect.selection {
 }
 
 g.node circle {
-    stroke  : gray;            
+    stroke  : gray;
 }
 
 g.node circle.inner {
@@ -68,6 +68,17 @@ g.node text {
     font-weight         : bold;
     pointer-events      : none;
 }
+
+g.node g.performance_info text {
+    fill: #2a5e8c;
+    fill-opacity: 0.6;
+    font-style: italic;
+}
+
+g.node g.performance_info.hide {
+    display: none !important;
+}
+
 
 g.edge path,
 path.dragline {
@@ -133,7 +144,6 @@ g.edge.selected circle.point {
 g.edge:not( .selected).hover *,
 path.dragline {
     display         : inline;
-    
 }
 
 
@@ -149,11 +159,6 @@ path.dragline {
 
 path.dragline.hidden {
     stroke-width: 0;
-}
-
-svg.stencilgraph {
-    border : 1px solid #ccc;
-    padding: 0;
 }
 
     /* disable text selection */
@@ -173,73 +178,32 @@ svg *::-webkit-selection {
     height: 400px;
     display: none;
     padding: 0;
-    overflow: auto;
-    border: 1px solid #cccccc;
 }
 
 .json-container .CodeMirror {
     height: 100%;
 }
 
-#page-debug .canvas {
-    margin-top: 5px;
-}
 
 .canvas-controls {
-    padding: 0;
-    margin-top: 10px;
-    /*margin-left: -8.333333333333332%;*/
+    position: absolute;
+    bottom: 24px;
+    right: 23px;
+    z-index: 2000;
 }
 
-.canvas-controls .button-execute {
-    display: inline-block;
-    text-align: center;
-    font-weight: 100;
-    font-style: normal;
-    text-decoration: none;
-    background: #010626;
-    color: #f2f2f2;
-    padding: 5px 10px;
-    border: 1px solid transparent;
-    transition: background-color 200ms;
-    -webkit-transition: background-color 200ms;
-    float: left;
-    margin-left: 10px;
+.canvas-controls.canvas-controls-up {
+    bottom: initial;
+    top: 4px;
+    right: 8px;
 }
 
-.canvas-controls .button-execute:hover {
-    background: #2A5E8C;
-    cursor: pointer;
+.canvas-controls .btn-group{
+    padding: 0px 8px;
 }
 
-.canvas-controls ul {
-    padding : 0;
-    float: left;
-}
-
-.canvas-controls ul li {
-    display: block;
-    text-align: center;
-    font-weight: 100;
-    font-style: normal;
-    float: left;
-    background: #010626;
-    color: #f2f2f2;
-    padding: 5px 10px;
-    border: 1px solid transparent;
-    transition: background-color 200ms;
-    -webkit-transition: background-color 200ms;
-}
-
-.canvas-controls ul li.hover {
-    background: #2A5E8C;
-    cursor: pointer;
-}
-
-.canvas-controls ul li.active {
-    background: white;
-    border: 1px solid #010626;
-    color: #010626;
+.attributes {
+    padding: 8px;
 }
 
 .attributes .form fieldset {
@@ -257,10 +221,6 @@ svg *::-webkit-selection {
     float: right;
 }
 */
-.attributes {
-    display: none;
-    margin-left: -15px;
-}
 
 .attributes .form .valuelist {
     list-style: none;
@@ -272,16 +232,11 @@ svg *::-webkit-selection {
     float: right;
 }
 
-.attributes .form .form-control {
-    width: 100%;
-    margin-bottom: 5px;
-    border-radius: 0;
-    padding-left: 5px;
-}
-
 .attributes .form .form-complex {
     text-align: center;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .attributes .form .form-complex:hover {
@@ -321,3 +276,35 @@ svg *::-webkit-selection {
     padding: 5px 10px;
     border: 1px solid transparent;
 }
+
+div.sidebar {
+    overflow: hidden;
+}
+
+div.sidebar > div:first-child {
+    float: right;
+    height: 100%;
+    background-color: #f7f7f7;
+    border-left: 1px solid #ccc;
+    width: 175px;
+    margin: -1px;
+    transition: width 0.25s ease-out;
+    -moz-transition: width 0.25s ease-out;
+    -webkit-transition: width 0.25s ease-out;
+}
+
+div.sidebar > div:nth-child(2) {
+    margin-right: 175px;
+    transition: margin-right 0.25s ease-out;
+    -moz-transition: margin-right 0.25s ease-out;
+    -webkit-transition: margin-right 0.25s ease-out;
+}
+
+div.sidebar.hideSidebar > div:first-child {
+    width: 0px;
+}
+
+div.sidebar.hideSidebar > div:nth-child(2) {
+    margin-right: 0px;
+}
+

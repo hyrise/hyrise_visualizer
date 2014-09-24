@@ -1,68 +1,61 @@
 hyryx.debug = (function() {
-    
-    var Stencils, Canvas, Json, Visualization, Result, Attributes;
+    var eventHandlers;
+
+    function registerEvents() {
+        eventHandlers.stencil.on("initDragDrop", function(stencils){
+            eventHandlers.canvas.initDragDrop(stencils);
+        });
+        eventHandlers.canvas.on("nodeSelected", function(node) {
+            eventHandlers.attributes.show(node);
+        });
+        eventHandlers.canvas.on("nodeDeselected", function() {
+            eventHandlers.attributes.hide();
+        });
+        eventHandlers.canvas.on("switchingView", function() {
+            eventHandlers.attributes.hide();
+        });
+    }
 
     function setup() {
-        var $visualizer = $('#visualizer #page-debug').append('<div class="container"><div class="row">');
-        var $fluidLayout = $visualizer.find('.row');
+        $.get('templates/page_debug.mst', function(template) {
+            var rendered = $(Mustache.render(template, {
+                width_stencils: 3,
+                width_canvas: 9,
+                width_data: 12
+            }));
+            $('#visualizer #page-debug').append(rendered);
 
-        // create stencils container
-        Stencils = new hyryx.debug.Stencils($fluidLayout);
-
-        // create canvas
-        Canvas = new hyryx.debug.Canvas($fluidLayout);
-
-        // create attributes container
-        Attributes = new hyryx.debug.Attributes($fluidLayout);
-
-        // Create data container
-        Data = new hyryx.explorer.Data($visualizer);
+            eventHandlers = {
+                'stencil': new hyryx.debug.Stencils(rendered.find('#frame_stencils')),
+                'canvas': new hyryx.debug.Canvas(rendered.find('#frame_canvas')),
+                'attributes': new hyryx.debug.Attributes(rendered.find('#frame_attributes')),
+                'data': new hyryx.explorer.Data(rendered.find('#frame_data'))
+            };
+            registerEvents();
+        });
     }
 
     function dispatch(event) {
         if ('string' === typeof event) {
             event = {
-                type : event,
-                options : {}
-            }
+                type: event,
+                options: {}
+            };
         }
-        var config = (event.type||'').split('.'), target = config[0], command = config[1];
+        var config = (event.type || '').split('.'),
+            target = config[0],
+            command = config[1];
 
-        if (target === 'canvas' && Canvas) {
-            Canvas.handleEvent({
-                type    : command,
-                options : event.options
+        if (eventHandlers[target]) {
+            eventHandlers[target].handleEvent({
+                type: command,
+                options: event.options
             });
-        } else if (target === 'attributes' && Attributes) {
-            Attributes.handleEvent({
-                type    : command,
-                options : event.options
-            })
-        } else if (target === 'data') {
-            Data.handleEvent({
-                type : command,
-                options : event.options
-            })
         }
     }
 
     return {
-        setup : setup,
-        dispatch : dispatch
+        setup: setup,
+        dispatch: dispatch
     };
 })();
-
-// <ul id='stencil-container'>
-// </ul>
-
-// <div id='hero-unit'>
-//     <canvas id='canvas1' width='500px' height=400 style='border:1px solid gray;' ondragover="allowDrop(event)"></canvas>
-//     <div id="json-container" width=500 height=400 style="display:none;"></div>
-//     <div id='visualisation-container'></div>
-//     <div id='result-container'></div>
-// </div>
-// <div id='button-container'>
-//     <button id='button-execute'>Execute</button>
-//     <button id='button-json'>Get JSON</button>
-// </div>
-// <div id='form-container'></div>

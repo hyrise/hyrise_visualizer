@@ -1,0 +1,20 @@
+<div>
+	<div id="frame_streamgraph">
+	</div>
+	<div id="streamgraph_infobox">
+		<div class="popover left">
+			<div class="arrow"></div>
+			<h3 class="popover-title">
+				<div id="popover-title"></div>
+				<div id="popover-subtitle"></div>
+			</h3>
+			<div class="popover-content">
+				<ul>
+					<li>current cardinality: <span id="popover-currentCardinality"></span> rows</li>
+					<li>overall cardinality: <span id="popover-overallCardinality"></span> rows</li>
+				</ul>
+				<span id="popover-performanceData"></span>
+			</div>
+		</div>
+	</div>
+</div>

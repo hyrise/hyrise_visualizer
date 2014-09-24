@@ -1,7 +1,4 @@
 {
-	"Barrier" : {},
-	"CreateIndex" : {},
-	"CreateRadixTable" : {},
 	"CustomOperator" : {
 		"type" : "CustomOperator",
 		"custom" : {
@@ -15,8 +12,6 @@
 			}
 		}
 	},
-	"Distinct" : {},
-	"ExtractDelta" : {},
 	"GetTable" : {
 		"type" : "GetTable",
 		"name" : {
@@ -31,18 +26,14 @@
 			"isList": true,
 			"value": []
 		},
-		"instances": {
-			"type" : "number",
-			"value": 3
-		},
 		"functions": {
 			"type" : "function",
 			"isList": true,
 			"value": [],
 			"valueConfig": {
 				"type" : {
-					"type" : "number",
-					"value" : 3
+					"type" : "string",
+					"value" : ""
 				},
 				"field" : {
 					"type" : "string",
@@ -53,10 +44,6 @@
 	},
 	"HashBuild" : {
 		"type": "HashBuild",
-		"instances": {
-				"type" : "number",
-				"value": 3
-			},
 		"fields": {
 				"type": "column",
 				"isList": true,
@@ -67,22 +54,6 @@
 			"value": "groupby"
 		}
 	},
-	"HashJoinProbe" : {},
-	"Histogram" : {},
-	"Histogram2ndPass" : {},
-	"IndexScan" : {},
-	"InsertOnlyDelete" : {},
-	"InsertOnlyInsert" : {},
-	"InsertOnlyLoad" : {},
-	"InsertOnlyUpdate" : {},
-	"InsertScan" : {},
-	"IntersectPositions" : {},
-	"JoinScan" : {},
-	"JsonTable" : {},
-	"LayoutSingleTable" : {},
-	"LayoutTable" : {},
-	"LayoutTableLoad" : {},
-	"LoadFile" : {},
 	"MaterializingScan" : {
 		"type" : "MaterializingScan",
 		"memcpy" : {
@@ -94,34 +65,20 @@
 			"value": true
 		}
 	},
-	"MergeHashTables" : {},
-	"MergeIndexScan" : {},
-	"MergePrefixSum" : {},
 	"MergeTable" : {
-	"type" : "MergeTable"
+		"type" : "MergeTable"
 	},
-	"MultiplyRefField" : {},
-	"NestedLoopEquiJoin" : {},
 	"NoOp" : {
-	"type" : "NoOp"
+		"type" : "NoOp"
 	},
-	"PrefixSum" : {},
 	"ProjectionScan" : {
 		"type" : "ProjectionScan",
 		"fields" : {
 			"type" : "column",
 			"isList" : true,
-			"value" : ["quarter", "amount"]
+			"value" : []
 		}
 	},
-	"RadixCluster" : {},
-	"RadixCluster2ndPass" : {},
-	"RadixJoin" : {},
-	"ReplaceTable" : {},
-	"ScriptOperation" : {},
-	"SetTable" : {},
-	"SettingsOperation" : {},
-	"SimpleRawTableScan" : {},
 	"SimpleTableScan" : {
 		"type" : "SimpleTableScan",
 		"predicates" : {
@@ -142,13 +99,13 @@
 					"value" : "year"
 				},
 				"value" : {
-					"type" : "number",
-					"value" : 2013
+					"type" : "text",
+					"value" : 2013,
+					"autocomplete": true
 				}
 			}
 		}
 	},
-	"SmallestTableScan" : {},
 	"SortScan" : {
 		"type": "SortScan",
 		"fields": {
@@ -167,15 +124,5 @@
 			"type":"table",
 			"value":""
 		}
-	},
-	"TableScan" : {},
-	"TableUnload" : {},
-	"TaskSchedulerAdjustment" : {},
-	"ThreadpoolAdjustment" : {},
-	"Union" : {},
-	"UnionAll" : {},
-	"UnionScan" : {},
-	"UnloadAll" : {},
-	"ValidPositionsMain" : {},
-	"ValidPositionsRaw" : {}
+	}
 }

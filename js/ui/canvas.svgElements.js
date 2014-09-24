@@ -4,7 +4,7 @@
 			hyryx.screen = {};
 		}
 
-		hyryx.screen.AbstractCanvasPlugin = function() {	
+		hyryx.screen.AbstractCanvasPlugin = function() {
 			this.id = hyryx.utils.getID('Object');
 
 			this.init.apply(this, arguments);
@@ -12,7 +12,7 @@
 			return this;
 		}
 
-		hyryx.screen.AbstractUIPlugin.prototype = {
+		hyryx.screen.AbstractCanvasPlugin.prototype = {
 
 			init : function() {
 				console.log('apply abstract canvas plugin logic');
@@ -32,7 +32,7 @@
 
 		hyryx.debug.Canvas.Node.prototype = extend(hyryx.screen.AbstractCanvasPlugin, {
 			init : function(position, type, edges, data, id) {
-				
+
 				this.type = type || '';
 
 				this._position = position;

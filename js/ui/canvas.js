@@ -1,26 +1,41 @@
 (function() {
 
 	// Extend the standard ui plugin
-	hyryx.debug.Canvas = function() {
+	hyryx.debug.Canvas = function(target, config) {
+		var config = (typeof config === "undefined") ? {} : config;
+		this.showTitlebar = (typeof config.showTitlebar === "undefined") ? false : config.showTitlebar;
+		this.showExecuteButton = (typeof config.showExecuteButton === "undefined") ? true : config.showExecuteButton;
+		this.marker = null;
+		this.newQueryPlan = {operators: {}, edges: []};
+		this.initialQueryPlan = this.newQueryPlan;
+
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
 	}
 
 	hyryx.debug.Canvas.prototype = extend(hyryx.screen.AbstractUIPlugin, {
 		/** Create a container for a SVG canvas and a container for the text editor */
 		render : function() {
+			var frame = $('<div class="area_frame no_padding"></div>').appendTo(this.targetEl);
+
+
+			if (this.showTitlebar) {
+				frame.append('<div class="titlebar">'
+					+ '<button type="button" id="hideQueryEditor" class="btn btn-link"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>'
+					+ '<button type="button" id="revertQueryPlan" class="btn btn-link pull-right"><span class="glyphicon glyphicon-repeat"></span> Revert</button></div>');
+			}
 			// create the canvas
 			this.activeScreen = this.screens.canvas = new hyryx.screen.CanvasScreen({
 				width : 7,
-				targetEl : this.targetEl
+				targetEl : frame
 			});
 
 			// create json view
 			this.screens.json = new hyryx.screen.JSONScreen({
 				width : 10,
-				targetEl : this.screens.canvas.el
+				targetEl : frame
 			});
 
-			this.createCanvasControls();
+			this.createCanvasControls(this.targetEl);
 
 			this.resultPreview = new hyryx.screen.resultPreview({
 				target : $('.execution-preview')
@@ -29,32 +44,20 @@
 
 		/** Instantiate the Canvas and add the editor for the JSON representation */
 		init : function() {
+			this.registerEventHandlers();
 			this.registerCanvasControls();
 			this.registerKeyBindings();
+			this.registerEvents();
+		},
+
+		registerEventHandlers : function() {
+			// bubble up node selection and deselection events
+			this.screens.canvas.on("node*", this.emit.bind(this));
 		},
 
 		/** Make certain functions accessible for other plugins */
 		handleEvent : function(event) {
 			switch (event.type) {
-				// Update drag drop handlers when updating the list of possible operations
-				case 'initDragDrop' :
-					
-					var me = this;
-
-					d3.selectAll('.stencils .list-group-item').call(d3.behavior.drag()
-					.on('dragstart', function(d) {
-						if (me.activeScreen.onDragStart instanceof Function) {
-							me.activeScreen.onDragStart.call(this, d);
-						}
-					})
-					.on('dragend', function(d) {							
-						if (me.activeScreen.onDragEnd instanceof Function) {
-							me.activeScreen.onDragEnd.call(this, d);
-						}
-					}));
-
-					break;
-
 				case 'loadPlan' :
 					this.loadPlan(event.options);
 					break;
@@ -65,78 +68,99 @@
 			}
 		},
 
-		createCanvasControls : function() {
-			var $controls = $('<div class="col-md-10 canvas-controls">').appendTo($('div.canvas'));
-			$controls.append('<ul><li class="active" data-control="canvas">Designer</li><li data-control="json">JSON</li></ul>');
+		initDragDrop : function(stencils) {
+			// Update drag drop handlers when updating the list of possible operations
+			var self = this;
 
-			$controls.append('<a class="button-execute">Execute<a>');
+			d3.selectAll(stencils).call(d3.behavior.drag()
+			.on('dragstart', function(d) {
+				if (self.activeScreen.onDragStart instanceof Function) {
+					self.activeScreen.onDragStart(this, d);
+				}
+			})
+			.on('dragend', function(d) {
+				if (self.activeScreen.onDragEnd instanceof Function) {
+					self.activeScreen.onDragEnd(this, d);
+				}
+			}));
+		},
 
-			$controls.append('<div class="execution-preview">');
+		createCanvasControls : function(target) {
+			var $controls = $('<div class="canvas-controls pull-right">').appendTo(target.find('div.canvas'));
+			if (!this.showExecuteButton) {
+				$controls.append('<div class="btn-group switchInfoText" data-toggle="buttons">' +
+					'<label class="btn btn-default active" data-control="duration">' +
+						'<input type="radio" name="switchInfoText" id="switchInfoText_duration">Duration' +
+					'</label>' +
+					'<label class="btn btn-default" data-control="cardinality">' +
+						'<input type="radio" name="switchInfoText" id="switchInfoText_carinality">Cardinality' +
+					'</label>' +
+				'</div>');
+			}
+			$controls.append('<div class="btn-group switchView" data-toggle="buttons">' +
+				'<label class="btn btn-default active" data-control="canvas">' +
+					'<input type="radio" name="switchView" id="canvas"> Designer' +
+				'</label>' +
+				'<label class="btn btn-default" data-control="json">' +
+					'<input type="radio" name="switchView" id="json"> JSON' +
+				'</label>' +
+			'</div>');
+
+			if (this.showExecuteButton) {
+				$controls.append('<a class="btn btn-primary button-execute">Execute<a>');
+			}
+
+			// $controls.append('<div class="execution-preview">');
 
 		},
 
 		registerCanvasControls : function() {
 			var me = this;
 
-			$('.canvas-controls .button-execute').on('click', function() {
+			this.targetEl.on('click', '.canvas-controls .button-execute', function() {
+				hyryx.Database.runQuery(
+					me.getSerializedQuery()
+				).done((function(data, status, xhr) {
+					if (data.error) {
+						hyryx.Alerts.addWarning("Error while executing query", data.error);
+						me.resultPreview.showError(data.error);
+					} else {
+						hyryx.Alerts.addSuccess("Query executed");
+						console.log(data);
+						me.resultPreview.update(data.performanceData);
 
-				var request = this.getSerializedQuery();
-				
-				$.ajax({
-					url : hyryx.settings.hyrisePath + '/jsonQuery',
-					type : 'POST',
-					dataType: 'json',
-					data : request,
-					success : function(data, status, xhr) {
-						if (data.error) {
-							this.resultPreview.showError(data.error);
-						} else {
-							console.log(data);
-							this.resultPreview.update(data.performanceData);
-
-							hyryx.debug.dispatch({
-								type : 'data.reload',
-								options : {
-									all : true,
-									data : data
-								}
-							});
+						hyryx.debug.dispatch({
+							type : 'data.reload',
+							options : {
+								all : true,
+								data : data
+							}
+						});
 					}
+				}).bind(me));
+			});
 
-						// $('.execution-preview')
-					}.bind(this)
-				});
+			this.targetEl.on('click', '.canvas-controls div.switchView label', function(d) {
+				me.switchView($(this).data('control'));
+			});
 
-			}.bind(this));
+			this.targetEl.on('click', '.canvas-controls div.switchInfoText label', function(d) {
+				me.getCurrentScreen().updateInfoText($(this).data('control'));
+			});
+		},
 
-			$('.canvas-controls li').on({
-				mouseover : function(d) {
-					var $this = $(this);
-					if (!$this.hasClass('active')) {
-						$this.addClass('hover');
-					}
-				},
-				mouseout : function(d) {
-					$(this).removeClass('hover');
-				},
-				click : function(d) {
-					$('.canvas-controls li.active').removeClass('active');
-					$(this).addClass('active');
+		revertToInitialQueryPlan: function() {
+			this.loadPlan(this.initialQueryPlan);
+		},
 
-					me.switchView($(this).data('control'));
-				}
-			})
-
-
+		queryEdited: function() {
+			this.emit('queryEdited', this.getSerializedQuery(), this.marker);
 		},
 
 		getSerializedQuery : function() {
-			var query = "query=";
-
 			var plan = this.activeScreen.getValue();
 			this.flattenPlan(plan);
-
-			return query + JSON.stringify(plan, null, 4);
+			return plan;
 		},
 
 		/**
@@ -144,7 +168,6 @@
 		 * @param  {Object} plan A plan with operators and edges
 		 */
 		flattenPlan : function(plan) {
-
 			$.each(plan.operators, function(opID, v) {
 				var data = v.data;
 				if (data) {
@@ -174,16 +197,22 @@
 			});
 		},
 
-		hideAttributesPanel : function() {
-			// todo use events or facade or stuff, this is evil
-			$('.attributes').hide();
+		registerEvents : function() {
+			$(this.targetEl).on('click', 'button#hideQueryEditor', this.queryEdited.bind(this));
+			$(this.targetEl).on('click', 'button#revertQueryPlan', this.revertToInitialQueryPlan.bind(this));
 		},
 
-		loadPlan : function(plan) {
+		loadPlan : function(plan, marker, performanceData) {
+			if (marker) {
+				this.marker = marker;
+			}
+
+			this.initialQueryPlan = plan;
+
 			var screen = this.getCurrentScreen();
 			if (screen) {
 				plan.hasChanged = true;
-				screen.show(plan);
+				screen.show(plan, performanceData);
 			}
 		},
 
@@ -196,9 +225,8 @@
 			var plan = this.getCurrentScreen().getValue();
 
 			if (this.screens[to]) {
-
+				this.emit('switchingView', to);
 				this.getCurrentScreen().hide();
-				this.hideAttributesPanel();
 				this.setCurrentScreen(to).show(plan);
 			}
 		}

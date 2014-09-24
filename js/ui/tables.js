@@ -20,10 +20,11 @@
 					'<input class="form-control" id="table" placeholder="Table name" type="text" />',
 					'<input class="form-control" id="file" placeholder="Path to table" type="text" />',
 				'</div>'].join('');
-			
-			var $tables = $('<div class="col-md-2 tables" id="'+this.id+'"><h3>Tables</h3></div>').appendTo(this.targetEl);
+
+			var frame = $('<div class="area_frame"></div>').appendTo(this.targetEl);
+			var $tables = $('<div class="tables" id="'+this.id+'"><h3>Tables</h3></div>').appendTo(frame);
 			$tables.append('<a href="#" class="" id="show-form-btn">+</a>');
-			
+
 			new hyryx.screen.popover({
 				title : "Add table",
 				content : form,
@@ -35,7 +36,7 @@
 
 			// The list for all tables
 			$tables.append('<div class="panel-group list">');
-			
+
 			return $tables;
 		},
 
@@ -47,65 +48,117 @@
 					'</a>'].join('');
 		},
 
-		load : function() {
+		fetchTables : function() {
 			var me = this;
 
-			$.ajax(hyryx.settings.railsPath + '/tables', {
-				success : function(r) {
-					$('.tables .list').html('');
+			var query = new hyryx.Database.Query;
+			query.addOperator({
+				type: 'MetaData',
+				input: []
+			});
 
-					hyryx.tables = r;
+			hyryx.Database.runQuery(query).then(function(result) {
+				if (result.rows) {
+					var queries = [];
+					var tables = {};
 
-					$.each(r, function(key, value) {
-						var panel = ['<div class="panel panel-default">',
-										'<div class="panel-heading">',
-											'<h4 class="panel-title"><a class="accordion-toggle" data-toggle="collapse" data-parent=".tables .list" href="#collapse-',key,'">',
-											key,
-											'</h4>',
-										'</div>',
-										'<div id="collapse-',key,'" class="panel-collapse collapse list-group">',
-											''];
+					$.each(result.rows, function(key, row) {
+						var table = row[0];
+						var field = row[1];
 
-						value.each(function(column, i) {
-							column.index = i;
-							column.key = key;
-							var $buttonMarkup = me.getAttributeButtonMarkup(column);
+						var column = {
+							name: field,
+							type: row[2]
+						};
 
-							panel.push($buttonMarkup);
-						});
+						// Get the smallest and the highest value for each column if type is 0 or 1
+						if (column.type < 2) {
+							var query = new hyryx.Database.Query;
+							query.addOperator(0, {
+								type: 'ProjectionScan',
+								fields: [field],
+								input: [table]
+							});
+							query.addOperator(1, {
+								type: 'SortScan',
+								fields: [0]
+							});
+							query.addEdge(0, 1);
 
-						panel.push('</div></div>');
+							queries.push(hyryx.Database.runQuery(query).done(function(data) {
+								if (data.rows) {
+									column.min = data.rows[0][0];
+									column.max = data.rows[data.rows.length - 1][0];
+								}
+							}));
+						}
 
-						$(panel.join('')).appendTo('.tables .list');
+						(tables[table] = tables[table] || []).push(column);
 					});
 
-					$('.tables .list .collapse.panel-collapse:first').addClass('in');
+					$.when.apply($, queries).done(function() {
+						me.displayTables(tables);
+					});
+				}
+			});
+		},
 
-					//initilaize the options popover
-					
+		load : function() {
+			this.fetchTables();
+		},
 
-					//make tables draggable and clone them
-					$(".tables .list .list-group-item").draggable({ 
-						helper: 'clone',
-						appendTo : $('#visualizer'),
-						start: function(e, ui) {
-							$('.axis').each(function() {
-								if (!$(this).find('.list-group-item')[0]) {
-									$(this).find('.drop-hint:not(.zone)').hide();
-									$(this).find('.drop-hint.zone').show();
-								}
-							});
-						},
-						stop: function(e, ui) {
-							$('.axis').each(function() {
-								if ($(this).find('.list-group-item')[0]) {
-									$(this).find('.drop-hint').hide();
-									$(this).find('.list-group-item').show();
-								} else {
-									$(this).find('.drop-hint:not(.zone)').show();
-									$(this).find('.drop-hint.zone').hide();
-								}
-							});
+		displayTables : function(tables) {
+			var me = this;
+
+			$('.tables .list').html('');
+			$.each(tables, function(key, value) {
+				var panel = ['<div class="panel panel-default">',
+								'<div class="panel-heading">',
+									'<h4 class="panel-title"><a class="accordion-toggle" data-toggle="collapse" data-parent=".tables .list" href="#collapse-',key,'">',
+									key,
+									'</h4>',
+								'</div>',
+								'<div id="collapse-',key,'" class="panel-collapse collapse list-group">',
+									''];
+
+				value.each(function(column, i) {
+					column.index = i;
+					column.key = key;
+					var $buttonMarkup = me.getAttributeButtonMarkup(column);
+
+					panel.push($buttonMarkup);
+				});
+
+				panel.push('</div></div>');
+
+				$(panel.join('')).appendTo('.tables .list');
+			});
+
+			// $('.tables .list .collapse.panel-collapse:first').addClass('in');
+
+			//initilaize the options popover
+
+
+			//make tables draggable and clone them
+			$(".tables .list .list-group-item").draggable({
+				helper: 'clone',
+				appendTo : $('#visualizer'),
+				start: function(e, ui) {
+					$('.axis').each(function() {
+						if (!$(this).find('.list-group-item')[0]) {
+							$(this).find('.drop-hint:not(.zone)').hide();
+							$(this).find('.drop-hint.zone').show();
+						}
+					});
+				},
+				stop: function(e, ui) {
+					$('.axis').each(function() {
+						if ($(this).find('.list-group-item')[0]) {
+							$(this).find('.drop-hint').hide();
+							$(this).find('.list-group-item').show();
+						} else {
+							$(this).find('.drop-hint:not(.zone)').show();
+							$(this).find('.drop-hint.zone').hide();
 						}
 					});
 				}
@@ -120,20 +173,18 @@
 			var file = $form.find('#file').val();
 
 			if (table && file) {
-				$.ajax({
-					url: hyryx.settings.railsPath + '/loadTable',
-					type: "POST",
-					data: {
-						table: table,
-						file: file
-					},
-					dataType: "json",
-					complete: function() {
-						// update list of tables
-						me.load();
-						// close popover
-						// $('.tables #show-form-btn').click();
-					}
+				var query = new hyryx.Database.Query;
+				query.addOperator({
+					type: 'TableLoad',
+					table: table,
+					filename: file
+				});
+
+				hyryx.Database.runQuery(query).then(function() {
+					// update list of tables
+					me.load();
+					// close popover
+					// $('.tables #show-form-btn').click();
 				});
 			}
 		}

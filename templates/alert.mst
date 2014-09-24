@@ -1,0 +1,17 @@
+<div class="alert alert-{{type}}">
+	{{#strong}}
+		<strong>
+			{{strong}}
+		</strong>
+		<br/>
+	{{/strong}}
+	{{message}}
+	{{#progress}}
+		<div class="progress progress-striped active">
+			<div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="1" style="width: 100%;">
+				<span class="sr-only">loading...</span>
+			</div>
+		</div>
+	{{/progress}}
+	<span class="remove">&times;</span>
+</div>

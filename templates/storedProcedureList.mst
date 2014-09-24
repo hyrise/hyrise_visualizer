@@ -1,0 +1,15 @@
+<div class="area_frame">
+	<div class="storedProcedureList" id="{{id}}">
+		<h3>Procedures</h3>
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" class="form-control">
+				<span class="input-group-btn">
+					<button class="btn btn-primary save" type="button">Save</button>
+				</span>
+			</div>
+		</div>
+		<div class="item-list">
+		</div>
+	</div>
+</div>

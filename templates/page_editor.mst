@@ -1,0 +1,8 @@
+<div>
+	<div class="row">
+		<div id="frame_ide" class="col-md-{{width_ide}}"></div>
+	</div>
+	<div class="row">
+		<div id="frame_procedureResults" class="col-md-{{width_procedureResults}}"></div>
+	</div>
+</div>

@@ -1,0 +1,9 @@
+<div class="row equal-500">
+	<div id="frame_stencils" class="col-md-{{width_stencils}}"></div>
+	<div class="col-md-{{width_canvas}}">
+		<div class="area_frame no_padding sidebar hideSidebar">
+			<div id="frame_attributes"></div>
+			<div id="frame_canvas"></div>
+		</div>
+	</div>
+</div>

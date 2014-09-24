@@ -1,5 +1,4 @@
 var hyryx = {
-	settings	: {},
 	images		: {},
 	stencils	: {}
 };
@@ -9,10 +8,8 @@ window.addEventListener('load', function() {
 	var hyryxProto = document.getElementById('hyryx-proto'),
 		rect = hyryxProto.getBoundingClientRect();
 
-	hyryx.settings.hyryxSize = rect.width;
-
 	Modernizr.addTest('standalone', function() {
-		return (window.navigator.standalone != false);
+		return (window.navigator.standalone !== false);
 	});
 
 	yepnope.addPrefix('preload', function(resource) {
@@ -33,7 +30,7 @@ window.addEventListener('load', function() {
 				image.src = resource.url;
 				hyryx.images[resource.url] = image;
 			}
-		}
+		};
 		return resource;
 	});
 
@@ -54,28 +51,29 @@ window.addEventListener('load', function() {
 			"js/libs/jquery-ui.js",
 			"js/libs/bootstrap.js",
 			"js/libs/highcharts.js",
-			"js/libs/d3.v3.js"
+			"js/libs/d3.v3.js",
+			"js/libs/wildemitter.js",
+			"js/libs/mustache.js"
 		],
 
 		// load server config
 		complete : function() {
 			d3.json('config.json', function(error, result) {
 				if (error) {
-					alert('Couldn\'t load server configuration');
+					console.log(error);
+					alert('Could not load server configuration');
 				} else {
-					hyryx.settings.server = result.server;
-					hyryx.settings.railsPath =  result.server + ':' + result.railsPort;
-					hyryx.settings.hyrisePath = result.server + ':' + result.hyrisePort;
+					hyryx.settings = result;
 				}
 			});
 
 			$('#tag a').on('click', function(event) {
 				event.preventDefault();
-				console.log('link clicked')
+				console.log('link clicked');
 				var $target = $(event.target);
 
 				$('#tag a').removeClass('active');
-            	$target.addClass('active');
+				$target.addClass('active');
 
 				window.location.hash = $target.attr('href').split('#page-')[1];
 			});
@@ -96,22 +94,41 @@ window.addEventListener('load', function() {
 			// HELPERS
 			'js/helpers/extensions.js',
 			'js/helpers/utils.js',
-			
+			'js/helpers/database.js',
+			'js/helpers/procedureStore.js',
+			'js/helpers/procedureApi.js',
+			'js/helpers/alerts.js',
+
 			// CONTROLS
 			'js/controls/commands.js',
 
 			// THIRD-PARTY
-			'loader!third-party/codemirror/codemirror.js',
-			'loader!third-party/codemirror/codemirror.css',
+			'loader!third-party/codemirror/lib/codemirror.js',
+			'loader!third-party/codemirror/lib/codemirror.css',
 			'loader!third-party/codemirror/custom.css',
 			'loader!third-party/codemirror/mode.javascript.js',
-			
+
+			'loader!third-party/acorn/acorn.js',
+			'loader!third-party/acorn/acorn_loose.js',
+			'loader!third-party/acorn/util/walk.js',
+
+			'loader!third-party/tern/lib/signal.js',
+			'loader!third-party/tern/lib/tern.js',
+			'loader!third-party/tern/lib/def.js',
+			'loader!third-party/tern/lib/comment.js',
+			'loader!third-party/tern/lib/infer.js',
+
 			'loader!third-party/codemirror/addons/lint/jshint-2.1.11.js',
 			'loader!third-party/codemirror/addons/lint/jsonlint.js',
 			'loader!third-party/codemirror/addons/lint/lint.js',
 			'loader!third-party/codemirror/addons/lint/lint.css',
 			'loader!third-party/codemirror/addons/lint/javascript-lint.js',
 			'loader!third-party/codemirror/addons/lint/json-lint.js',
+			'loader!third-party/codemirror/addons/hint/show-hint.js',
+			'loader!third-party/codemirror/addons/hint/javascript-hint.js',
+			'loader!third-party/codemirror/addons/hint/show-hint.css',
+			'loader!third-party/codemirror/addons/tern/tern.js',
+			'loader!third-party/codemirror/addons/tern/tern.css',
 
 			"loader!third-party/selectpicker/bootstrap-select.js",
 			"loader!third-party/selectpicker/bootstrap-select.css",
@@ -119,13 +136,19 @@ window.addEventListener('load', function() {
 			// TIPSY
 			"loader!third-party/tipsy/tipsy.js",
 			"loader!third-party/tipsy/tipsy.css",
-			
+
+			// underscore
+			"loader!third-party/underscore/underscore-min.js",
+
 			// APPLICATION CODE
-			
+
 			'js/pages/1-explore.js',
 			'js/pages/2-debug.js',
+			'js/pages/4-editor.js',
+
 
 			'js/ui/abstractPlugin.js',
+			'js/ui/abstractTemplatePlugin.js',
 			'js/ui/popover.js'
 		]
 	},{
@@ -142,7 +165,7 @@ window.addEventListener('load', function() {
 				// TODO remove splash screen
 
 				$('body').addClass('onload');
-				hyryx.utils.showScreen();
+				hyryx.Alerts.removeStartLoader();
 			}, 0);
 		}
 	}]);
@@ -163,5 +186,28 @@ window.addEventListener('load', function() {
 			hyryx.debug.setup();
 		}
 	}]);
-			
+
+    // loading stage #4
+    Modernizr.load([{
+        load : [
+            // page 4 components
+            'js/ui/storedProcedureList.js',
+            'js/ui/ide.js',
+            'js/ui/procedureEditor.js',
+            'js/ui/queryEditor.js',
+            'js/ui/jsEditor.js',
+            'js/ui/stencils.js',
+			'js/ui/canvas.js',
+			'js/ui/canvas.svg.js',
+			'js/ui/canvas.svgElements.js',
+			'js/ui/canvas.json.js',
+			'js/ui/attributes.js',
+            'js/ui/procedureResults.js',
+            'js/ui/streamgraph.js',
+            'js/ui/sunburst.js'
+        ],
+        complete : function() {
+            hyryx.editor.setup();
+        }
+    }]);
 }, false);

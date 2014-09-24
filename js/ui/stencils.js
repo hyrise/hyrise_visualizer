@@ -1,10 +1,10 @@
 (function() {
 	hyryx.debug.Stencils = function() {
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
-	}
+	};
 
 	hyryx.debug.Stencils.prototype = extend(hyryx.screen.AbstractUIPlugin, {
-		
+
 		render : function() {
 			return this.createStencilsMarkup();
 		},
@@ -16,8 +16,9 @@
 		createStencilsMarkup : function() {
 			// create container for stencils
 			this.id = hyryx.utils.getID('Stencils');
-			var $stencils = $('<div class="col-md-2 stencils" id="'+this.id+'"><h3>Stencils</h3></div>').appendTo(this.targetEl);
-			$stencils.append('<div class="panel-group list">');
+			var frame = $('<div class="area_frame"></div>').appendTo(this.targetEl);
+			var $stencils = $('<div class="stencils" id="'+this.id+'"><h3>Operations</h3></div>').appendTo(frame);
+			$stencils.append('<div class="list">');
 
 			return $stencils;
 		},
@@ -27,14 +28,7 @@
 
 			// load available stencils
 			$.getJSON('operations.json', function(data) {
-				$.each(data, function(k, v) {
-					var i=0;
-					for (op in v) { ++i; };
-
-					if (i > 0) {
-						hyryx.stencils[k] = v;
-					};
-				});
+				hyryx.stencils = data;
 
 				me.updateOpList();
 			});
@@ -42,32 +36,27 @@
 
 		updateOpList : function() {
 
-			var me = this;
+			var me = this,
+				$stencil_list = this.targetEl.find('.stencils .list');
 
-			$('.stencils .list').html('');
+			$stencil_list.html('');
 
-			var header = 'Operations';
-			var panel = ['<div class="panel panel-default">',
-							'<div class="panel-heading">',
-								'<h4 class="panel-title"><a class="accordion-toggle" data-toggle="collapse" data-parent=".stencils .list" href="#collapse-',header,'">',
-								header,
-								'</h4>',
-							'</div>',
-							'<div id="collapse-',header,'" class="panel-collapse collapse list-group">'];
+			// var header = 'Operations';
+			var panel = ['<div class="item-list">', '<div class="list-group">'];
 
 			$.each(hyryx.stencils, function(key, value) {
-				
+
 				var $buttonMarkup = me.getStencilButtonMarkup(value);
 
 				panel.push($buttonMarkup);
 			});
 
 			panel.push('</div></div>');
-			$(panel.join('')).appendTo('.stencils .list');
+			$(panel.join('')).appendTo($stencil_list);
 
-			$('.stencils .list .collapse.panel-collapse:first').addClass('in');
+			$stencil_list.find('.collapse.panel-collapse:first').addClass('in');
 
-			hyryx.debug.dispatch('canvas.initDragDrop');
+			this.emit("initDragDrop", $stencil_list.find('.list-group-item'));
 		},
 
 		getStencilButtonMarkup : function(config) {

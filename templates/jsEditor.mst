@@ -1,0 +1,21 @@
+<div class="area_frame no_padding">
+	<div class="screen editor" id="{{id}}"></div>
+</div>
+<div class="canvas-controls">
+	{{#submitbutton}}
+	<div id="param-slider-box" class="btn-group hide">
+		<div id="param-sliders" class="btn btn-default hide"></div>
+		<button type="button" class="btn btn-primary button-expand-sliders">
+			<span class="glyphicon glyphicon-chevron-left"></span>
+		</button>
+	</div>
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary button-execute">
+			Execute
+		</button>
+		<button type="button" class="btn btn-primary button-immediate">
+			&#10004;
+		</button>
+	</div>
+	{{/submitbutton}}
+</div>

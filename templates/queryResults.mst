@@ -1,0 +1,6 @@
+<div class="area_frame hide">
+	<div class="data" id="{{ id }}">
+		<h3>Retrieved Data</h3>
+		<table width="100%" class="table table-condensed table-striped table-responsive"></table>
+	</div>
+</div>

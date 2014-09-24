@@ -1,0 +1,21 @@
+<thead><tr>
+	{{#header}}
+		<th>{{.}}</th>
+	{{/header}}
+</tr></thead>
+<tbody>
+	{{#no_content}}
+		<tr>
+			<td align="center" colspan="{{column_count}}">
+				empty result
+			</td>
+		</tr>
+	{{/no_content}}
+	{{#rows}}
+		<tr>
+			{{#.}}
+				<td>{{.}}</td>
+			{{/.}}
+		</tr>
+	{{/rows}}
+</tbody>

@@ -1,3 +1,4 @@
 [submodule "hyrise"]
 	path = hyrise
-	url = http://github.com/hyrise/hyrise
+	url = http://github.com/hyrise/mp2014
+

@@ -7,17 +7,14 @@
 
 		this.isActiveScreen = false;
 		this.id = hyryx.utils.getID('JSON');
-		
+		this.data = {};
+
 		this.el = this.render();
 		this.init();
 		return this;
-	}
-
-	var jsonEditor;
+	};
 
 	hyryx.screen.JSONScreen.prototype = {
-
-		data : {},
 
 		show : function(data) {
 			this.isActiveScreen = true;
@@ -33,7 +30,7 @@
 		},
 
 		render : function() {
-			var markup = $('<div class="screen col-md-'+this.width+' '+this.cls+'" id="'+this.id+'">');
+			var markup = $('<div class="screen '+this.cls+'" id="'+this.id+'">');
 
 			this.targetEl.append(markup);
 
@@ -50,17 +47,17 @@
 			this.registerEditor();
 		},
 
-		onDragStart : function(d) {
+		onDragStart : function(source, d) {
 			// the dom node representing a new stencil
-			var gStencil = d3.select(this);
+			var gStencil = d3.select(source);
 
-			gStencil.style('opacity', .4);
+			gStencil.style('opacity', 0.4);
 
 			d3.event.sourceEvent.stopPropagation();
 		},
 
-		onDragEnd : function(d) {
-			var gStencil = d3.select(this);
+		onDragEnd : function(source, d) {
+			var gStencil = d3.select(source);
 			gStencil.style('opacity', 1);
 
 			if (d3.event.sourceEvent.toElement.tagName.toLowerCase() == 'pre') {
@@ -68,7 +65,7 @@
 				var name = $(gStencil[0]).data('type');
 				var node = new hyryx.debug.Canvas.Node([0,0], name);
 
-				CodeMirror.signal(jsonEditor, 'drop', jsonEditor, node, {left : p.x, top : p.y});
+				CodeMirror.signal(this.editor, 'drop', this.editor, node, {left : p.x, top : p.y});
 			}
 		},
 
@@ -76,17 +73,18 @@
 		 * Create a custom text editor where the pretty print container is located, so the user can directly modify the JSON
 		 */
 		registerEditor : function() {
-			jsonEditor = this.editor = CodeMirror(this.el[0], {
+			this.editor = CodeMirror(this.el[0], {
 				value : '',
 				mode : {
 					name : 'javascript',
 					json : true
 				},
-				theme : 'custom',
+				theme : 'solarized light',
 				lint : true,
 				gutters : ['CodeMirror-lint-markers'],
 				lineNumbers : true
 			});
+			this.editor.setSize(null, 500);
 
 			this.editor.on('blur', function(editor) {
 				var oldValue = this.getValue();
@@ -129,6 +127,8 @@
 		update : function() {
 			var pretty = hyryx.utils.highlightJSON(this.data);
 			this.el.find('.prettyprint').html(pretty);
-		}
+		},
+
+		updateInfoText: function() {}
 	};
 })();

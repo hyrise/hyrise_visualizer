@@ -1,36 +1,23 @@
 (function() {
 	hyryx.debug.Attributes = function() {
+		this.markups = {};
+		this.currentMarkup = null;
+		this.container = null;
 		hyryx.screen.AbstractUIPlugin.apply(this, arguments);
-	}
-
-	var attributes;
+	};
 
 	hyryx.debug.Attributes.prototype = extend(hyryx.screen.AbstractUIPlugin, {
-		
-		markups : {},
-		currentMarkup : null,
 
 		render : function() {
-			attributes = this.createAttributesContainer();
+			this.container = this.createAttributesContainer();
 
-			return attributes.el;
+			return this.container.el;
 		},
 
-		init : function() {
-
-		},
+		init : function() {},
 
 		/** Make certain functions accessible for other plugins */
-		handleEvent : function(event) {
-			if (attributes) {
-				switch (event.type) {
-					// Update drag drop handlers when updating the list of possible operations
-					case 'hide' : attributes.hide(); break;
-					case 'show' : attributes.show(event.options); break;
-				}
-					
-			}
-		},
+		handleEvent : function() {},
 
 		getCurrentMarkup : function() {
 			return this.currentMarkup || {
@@ -44,18 +31,18 @@
 		},
 
 		hide : function() {
-			this.el.hide();
+			this.targetEl.parent().addClass('hideSidebar');
 		},
 
-		show : function(options) {
-			var id = options.node.type;
+		show : function(node, parameters) {
+			var id = node.type;
 
-			if (this.getCurrentMarkup().type !== options.node.type) {
+			if (this.getCurrentMarkup().type !== node.type) {
 
 				// if no markup exists for the given type of node, create a new one
 				if (!this.markups[id]) {
-					console.log('create new markup for ' + options.node.type);
-					this.markups[id] = new Markup(options.node, this.el);
+					console.log('create new markup for ' + node.type);
+					this.markups[id] = new Markup(node, this.el, parameters);
 				}
 
 				// hide existing forms
@@ -64,19 +51,19 @@
 			}
 
 			// reference to selected node
-			this.selection = options.node;
+			this.selection = node;
 
 			// show the form for the given node data
-			this.getCurrentMarkup().show(options.node);
-			this.el.show();
-
+			this.getCurrentMarkup().show(node);
+			this.targetEl.parent().removeClass('hideSidebar');
 		},
 
 		createAttributesContainer : function() {
 			// create container for stencils
 			this.id = hyryx.utils.getID('Attributes');
-			var $attributes = $('<div class="col-md-3 attributes" id="'+this.id+'"><h3>Attributes</h3></div>').appendTo(this.targetEl);
-			$attributes.append('<div class="panel-group form">');
+			var frame = $('<div></div>').appendTo(this.targetEl);
+			var $attributes = $('<div class="attributes" id="'+this.id+'"><h3>Attributes</h3></div>').appendTo(frame);
+			$attributes.append('<div class="form">');
 
 			$attributes.on('change', 'input', this.handleInputChange.bind(this));
 
@@ -106,20 +93,22 @@
 				if (field.isList) {
 					newValue = oldValue.concat(newValue);
 				}
-	
+
 				var command = new hyryx.command.changeValueCommand(oldValue, newValue, field, this.selection, id);
 				hyryx.command.do(command);
 			}
 		}
 	});
 
-	var Markup = function(data, targetEl) {
+	var Markup = function(data, targetEl, parameters) {
 		this.targetEl = targetEl;
 		this.data = data;
+		this.parameters = parameters;
+
 		this.type = data.type;
 
 		this.el = this.render();
-	}
+	};
 
 	Markup.prototype = {
 		render : function() {
@@ -140,25 +129,24 @@
 					if (config.type === 'predicate') {
 						config.listFieldRenderer = function(v) {
 							return [v.type, v.f, v.value].join(' ');
-						}
+						};
 						config.placeholder = 'add predicate';
 						config.complex = true;
 					} else if (config.type === 'function') {
 						config.listFieldRenderer = function(v) {
 							return [v.type, v.field].join(' ');
-						}
+						};
 						config.complex = true;
 						config.placeholder = 'add function';
 					} else if (config.type === 'custom') {
 						config.listFieldRenderer = function(v) {
 							return 'custom function';
-						}
+						};
 						config.placeholder = 'Set custom function';
 						config.complex = true;
 					}
-					formElements[key] = new Input(config, key);
+					formElements[key] = new Input(config, key, this.parameters);
 				}
-				
 			}.bind(this));
 
 			this.formElements = formElements;
@@ -195,20 +183,20 @@
 		}
 	};
 
-	var tables = [], columns = [], expressions = [];
-
-	var Input = function(config, id) {
+	var Input = function(config, id, parameters) {
 
 		this.value = (config.isList ? [].concat(config.value||[]) : config.value);
 		this.valueConfig = config.valueConfig;
 		this.disabled = config.disabled;
-	
+
 		this.type = config.type || 'text';
 		this.id = config.id || id;
+		this.parameters = parameters;
 
 		this.placeholder = config.placeholder || '';
 		this.isList = config.isList || false;
 		this.complex = config.complex || false;
+		this.autocomplete = config.autocomplete || false;
 
 		this.listFieldRenderer = config.listFieldRenderer || function(v) { return v; };
 
@@ -222,7 +210,7 @@
 		this.list = null;
 		// the CodeMirror instance
 		this.codeMirror = null;
-	}
+	};
 
 	Input.prototype = {
 		getValue : function() {
@@ -254,7 +242,7 @@
 		initList : function() {
 			if (this.isList) {
 				this.input.val('');
-				
+
 				var list = this.list;
 				list.html('');
 				this.value.each(function(v, i) {
@@ -270,9 +258,9 @@
 		 * @return {HTMLElement} The fieldset containing the title of the field, the field and a list representing all values
 		 */
 		render : function() {
-			this.fieldset = $('<fieldset></fieldset>');
+			this.fieldset = $('<div class="form-group"></div>');
 
-			this.title = $('<span>'+this.id+'</span>').appendTo(this.fieldset);
+			this.title = $('<label for="field-' + this.id + '">' + this.id + '</label>').appendTo(this.fieldset);
 
 
 			if (this.complex) {
@@ -287,7 +275,7 @@
 					form.find('input').each(function(i, input) {
 						var key = $(input).attr('id').split('complex-')[1];
 						var value = $(input).val();
-						newValue[key] = value;
+						newValue[key] = hyryx.utils.getTypedValueForKey(this.type, value);
 					});
 
 					// Since the code mirror is no simple input field, handle it differently
@@ -302,10 +290,10 @@
 					if (me.isList) {
 						newValue = oldValue.concat(newValue);
 					}
-		
+
 					var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, me.selection, me.id);
 					hyryx.command.do(command);
-				}
+				};
 
 				// create a form for the attribute
 				this.createForm(applyClb);
@@ -333,7 +321,7 @@
 				this.input.addClass('checkbox');
 				if (this.value) {
 					this.input.attr('checked', 'checked');
-				}				
+				}
 			}
 
 			return this.fieldset;
@@ -355,7 +343,6 @@
 			var form = ['<div class="complex-add-form form-horizontal">'];
 
 			$.each(this.valueConfig, function(k, v) {
-				
 				// CodeMirror Javascript editor
 				if (v.type === 'custom') {
 					hasCustomAttribute = true;
@@ -363,10 +350,27 @@
 				}
 				// regular input
 				else {
-					form.push('<span>'+k+'</span><input type="'+v.type+'" class="form-control" id="complex-'+k+'" placeholder="'+v.value+'" type="text" />');
+					var autocomplete_param = '';
+
+					// Autocompletion with parameter names
+					if (v.autocomplete && this.parameters) {
+						var datalist_id = "autocompleter-" + Math.random().toString(36).substr(2, 5);
+						var datalist = '<datalist id="' + datalist_id + '">';
+
+						this.parameters.forEach(function(parameter) {
+							datalist += '<option value="' + parameter +'">';
+						});
+						datalist += '</datalist>';
+
+						form.push(datalist);
+						autocomplete_param = ' list="' + datalist_id + '"';
+					}
+
+					var input_html = '<span>'+k+'</span><input type="'+v.type+'" class="form-control" id="complex-'+k+'" placeholder="'+v.value+'" type="text" ' + autocomplete_param + '/>';
+					form.push(input_html);
 				}
 
-			}.bind(this));			
+			}.bind(this));
 			form.push('</div>');
 
 			form = form.join('');
@@ -379,7 +383,7 @@
 				showClb : function(form) {
 					if (hasCustomAttribute) {
 						var renderTarget = form.find('.codemirror');
-						
+
 						var id = renderTarget.attr('id').split('complex-')[1];
 
 						// parse the initial value, which might be an object or the plain value
@@ -417,8 +421,8 @@
 				});
 
 				$(this).parent().detach();
-	
-				var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, attributes.selection, me.id);
+
+				var command = new hyryx.command.changeValueCommand(oldValue, newValue, me, me.selection, me.id);
 				hyryx.command.do(command);
 			}
 
@@ -428,15 +432,15 @@
 				}
 				list.delButton.appendTo(li);
 				list.delButton.show();
-				
-			};
+
+			}
 
 			function hideButtons() {
 				if (list.delButton) {
 					list.delButton.hide();
 				}
-			};
-			
+			}
+
 			list.on('mouseover', 'li', function(e) {
 				showButtonsOnEntry(e.target, list.children().index(e.target));
 			}).on('mouseout', 'li', function() {

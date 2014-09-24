@@ -16,7 +16,7 @@
 		render : function() {
 			this.id = hyryx.utils.getID('Graph');
 			// Add graph options
-			var $graphOptions = this.targetEl.append('<div id="'+this.id+'" class="graph col-md-10">').find('.graph');
+			var $graphOptions = this.targetEl.append('<div class="area_frame no_padding"><div id="'+this.id+'" class="graph">').find('.graph');
 
 			this.addDescription($graphOptions);
 			// createGlobalFilterMarkup($graphOptions);
@@ -29,6 +29,9 @@
 
 			// var $dataContainer = $fluidLayout.append('<div class="row"><div class="col-md-12 container" id="data-container">').find('.row:last');
 			// createDataContainerMarkup($dataContainer);
+
+			this.createDebugButton($graphOptions);
+
 			return $graphOptions;
 		},
 
@@ -55,6 +58,23 @@
 			$desc.appendTo(parent);
 		},
 
+		createDebugButton : function(parent) {
+			var $button = $('<a class="btn-debug col-md-10"><div>Debug query &raquo;</div></a>').hide();
+
+			$button.click(function() {
+				var query = $(this).data('query');
+				if (query) {
+					hyryx.debug.dispatch({
+						type : 'canvas.loadPlan',
+						options : query
+					});
+					hyryx.utils.showScreen('debug');
+				}
+			});
+
+			parent.append($button);
+		},
+
 		createGraphMarkup : function(parent) {
 
 			// y-axis
@@ -65,7 +85,7 @@
 			});
 
 			// Add graph container
-			parent.append('<div id="graph" class="col-md-10" style="height:400px;"></div>');
+			parent.append('<div id="graph"></div>');
 
 			// opposite y-axis
 			this.createAxisMarkup(parent, {
@@ -85,7 +105,7 @@
 		// Create an axis based on the given config object and append it to the given parent object
 		createAxisMarkup : function(parent, config) {
 			var xAxis = config.configID[0]==='x';
-			var $axis = jQuery('<div class="axis axisDroppableContainer '+config.configID+(xAxis ? ' col-md-12':' col-md-1')+'" id="'+config.configID+'"></div>');
+			var $axis = jQuery('<div class="axis axisDroppableContainer '+config.configID+(xAxis ? ' axisX':' axisY')+'" id="'+config.configID+'"></div>');
 			var $settings = jQuery('<div class="axisSettings" id="'+config.id+'">').appendTo($axis);
 
 			$axis.append('<p class="drop-hint">'+(xAxis ? 'x-axis' : 'y-axis')+'</p>');
@@ -96,14 +116,15 @@
 			this.createAxisTypeSelectMarkup($settings, config);
 
 			$axis.appendTo(parent);
-				
+
 		},
 
 		// Create type selection
 		createAxisTypeSelectMarkup : function(parent, config) {
 			// var $div = jQuery('<div class="control-group"></div>');
-			
-			var $select = jQuery('<select class="selectpicker axisTypeSelect"></select>').appendTo(parent);
+
+			var oppositeYAxis = config.configID==='oppositeYSettings';
+			var $select = jQuery('<select class="selectpicker axisTypeSelect ' + (oppositeYAxis ? 'pull-right':'') + '"></select>').appendTo(parent);
 			// Add options
 			('linear logarithmic datetime categories'.split(' ')).each(function(type) {
 				jQuery('<option value="'+type+'">'+type.capitalize()+'</option>').appendTo($select);
@@ -123,7 +144,7 @@
 		// Add a selection for different graph types
 		createGraphTypeFilterMarkup : function(parent) {
 			var $div = jQuery('<div class="control-group"></div>');
-			
+
 			jQuery('<label class="control-label" for="graphTypeButton"> Graph Type: </label>').appendTo($div);
 			var $select = jQuery('<select class="selectpicker graphTypeButton show-tick"></select>').appendTo($div);
 			// Add options
@@ -227,7 +248,7 @@
 					var toggle = $(this).find('.popoverToggle'),
 						min = toggle.data('min'),
 						max = toggle.data('max');
-							
+
 
 					new hyryx.screen.popover({
 						container: $(this),
@@ -256,7 +277,7 @@
 					jQuery(this).removeClass("hoverDroppable");
 				},
 				drop: function(event, ui) {
-					if (jQuery(this).children('[data-id="' + jQuery(ui.draggable).data("id") + '"]').length <= 0) {         
+					if (jQuery(this).children('[data-id="' + jQuery(ui.draggable).data("id") + '"]').length <= 0) {
 						jQuery(this).append(jQuery(ui.draggable).clone());
 						helpers.reloadData();
 					}
@@ -274,14 +295,14 @@
 
 			$form.append('<div class="control-group aggregationControls">'+
 						'<label class="control-label" for="aggregationSelect">Aggregation</label>'+
-						
+
 						'<select class="selectpicker aggrSelect show-tick">' +
 							('none count average sum'.split(' ')).map(function(type) {
 								return '<option value="'+type+'">'+type.capitalize()+'</option>';
 							}).join('')+
-						'</select>'+					
+						'</select>'+
 					'</div>');
-					
+
 			$form.append('<div class="control-group typeControls">'+
 						'<label class="control-label" for="chartTypeSelect">Type</label>'+
 						'<select class="selectpicker typeSelect show-tick">' +
@@ -290,7 +311,7 @@
 							}).join('')+
 						'</select>'+
 					'</div>');
-					
+
 			if (Number(type) < 2) {
 				$form.append('<div class="control-group rangeControls">'+
 							'<label class="control-label" for="valueRangeSlider">Value range:</label>'+
@@ -300,7 +321,7 @@
 								'<div class="col-md-6 text-right">'+max+'</div>'+
 							// '</div>'+
 						'</div>');
-			} 
+			}
 
 			// initialize select picker plugin
 			// $form.find('.selectpicker').selectpicker();
@@ -340,10 +361,10 @@
 			// render slider
 			var lower = $li.attr('data-lower-value');
 			lower = (typeof lower === 'undefined' ? min : lower);
-			
+
 			var higher = $li.attr('data-higher-value');
 			higher = (typeof higher === 'undefined' ? max : higher);
-			
+
 			form.find('.valueRangeSlider').slider({
 				min		: min,
 				max		: max,
@@ -389,14 +410,14 @@
 				switch($(this).parents('.axisSettings').attr('id')) {
 					case 'yAxis':
 						chart.yAxis[0].update({type: $(this).val()});
-						break; 
-					case 'oAxis':
-						chart.yAxis[1].update({type: $(this).val()}); 
-						break; 
-					case 'xAxis':
-						chart.xAxis[0].update({type: $(this).val()}); 
 						break;
-				} 
+					case 'oAxis':
+						chart.yAxis[1].update({type: $(this).val()});
+						break;
+					case 'xAxis':
+						chart.xAxis[0].update({type: $(this).val()});
+						break;
+				}
 			});
 
 
@@ -416,7 +437,7 @@
 			$(".graphTypeButton").change( function() {
 				if (chart.series) {
 					for(var i = 0; i < chart.series.length; i++) {
-						chart.series[i].update({type: $(this).val()}); 
+						chart.series[i].update({type: $(this).val()});
 					}
 				}
 				$('.column').attr('data-chartType', $(this).val());
@@ -454,7 +475,7 @@
 					chart.series[indicesToRemove[i]].remove();
 					loadedSeries.splice(indicesToRemove[i], 1);
 				}
-			}  
+			}
 		},
 
 		collectSeries : function() {
@@ -541,7 +562,7 @@
 
 		reloadData : function() {
 			if ((jQuery('.ySettings .list-group-item').length > 0 || jQuery('.oppositeYSettings .list-group-item').length > 0) && jQuery('.xSettings .list-group-item').length > 0) {
-				
+
 				var newSeries = this.collectSeries();
 				var xAxisColumn = jQuery('.xSettings .list-group-item');
 				var xAxis = {
@@ -551,105 +572,261 @@
 					"table": xAxisColumn.data("table")
 				};
 				var filters = this.collectFilters();
-				var me = this;
 
-				jQuery.ajax({
-					url: hyryx.settings.railsPath + '/getContentForSeries',
-					type: "POST",
-					data: {series: newSeries, xaxis: xAxis, filters: filters},
-					dataType: "json",
-					error: function(jqXHR, textStatus, errorThrown) {
-						console.log(textStatus);
-					},
-					complete: function(jqXHR, textStatus ){
-						json = jQuery.parseJSON(jqXHR.responseText);
-						if (json.hasOwnProperty("error")){
-							alert(json["error"]);
-						}else{
+				var content = [];
+				var queries = [];
+				$.each(newSeries, function (index, serie) {
+					var finalResult = {};
+					var column = serie.yColumn;
 
-							// update x-axis
-							if (json[0].hasOwnProperty("categories")) {
-								chart.xAxis[0].setCategories(json[0]['categories'], true);
-							}
-							// chart.xAxis[0].setTitle({text:xAxis['column']}, true);
-							// jQuery('.xSettings .axisTitle').val(xAxis['column']);
+					var query = new hyryx.Database.Query;
 
-							//remove old series from chart
-							while (chart.series.length) {
-								chart.series[0].remove();
-							}
+					this.composeAggregationQuery(xAxis, column, query,
+						this.composeProjectionQuery(xAxis, column, query,
+							this.composeLocalFilterQuery(column, query,
+								this.composeFilterQuery(filters, query)
+							)
+						)
+					);
 
-							for (var i = 0; i < json.length; i++) {
+					queries.push(hyryx.Database.runQuery(query).then(function(result) {
+						if (result.rows) {
+							finalResult = {
+								axis: serie.axis,
+								id: column.id,
+								name: result.header[1],
+								query: query,
+								raw: result
+							};
 
-								var axis = 0;
-								if (json[i]['axis'] == 'o') {
-									axis = 1;
+							if (xAxis.type < 2) {
+								for (var i = 0; i < result.rows.length; i++) {
+									var row = result.rows[i];
+									(finalResult.data = finalResult.data || []).push([row[0], row[1]]);
 								}
-
-								// update y-Axis with series
-								chart.addSeries({
-									name: json[i]['name'],
-									data: json[i]['data'],
-									yAxis: axis
-								}, true);
-								//preserve chart type after reload
-								chart.series[chart.series.length-1].update({type:  jQuery('.axisDroppableContainer [data-id="'+json[i]['id']+'"]').attr('data-chartType')});
-
-								// add click listener for title field
-								if (chart.yAxis[axis].axisTitle) {
-									var element = chart.yAxis[axis].axisTitle.element;
-
-									// set initial title of the axis
-									$(element).text(json[i]['name']);
-									helpers.registerAxisPopover(element);
+							} else {
+								var categories = [];
+								for (var i = 0; i < result.rows.length; i++) {
+									var row = result.rows[i];
+									if (categories.indexOf(row[0]) == -1) {
+										categories.push(row[0]);
+									}
+									(finalResult.data = finalResult.data || []).push(row[1]);
 								}
-
-								// var target = $('#highcharts-0 .highcharts-axis text');
-
-								// add a popover to edit the name of the axis
-								
+								finalResult.categories = categories;
 							}
 
-							if (chart.xAxis[0].axisTitle) {
-								helpers.registerAxisPopover(chart.xAxis[0].axisTitle.element);	
+							// Replace names like COUNT(xaxis) with COUNT(yaxis)
+							if (finalResult.name[xAxis.column]) {
+								finalResult.name[xAxis.column] = column.column;
 							}
+							content.push(finalResult);
+						}
+					}.bind(this)));
 
-							hyryx.explorer.dispatch({
-								type : 'data.reload',
-								options : {
-									all : true,
-									data : json[0].raw
-								}
-							});
+				}.bind(this));
 
-							// save created series in global variable
-							loadedSeries = newSeries;
+				$.when.apply($, queries).done(function() {
+					this.displayContent(content);
+				}.bind(this));
+			}
+		},
 
-							try {
-								var query = JSON.parse(json[0].query);
-								// console.log(query);
-							
-								if (!$('.btn-debug')[0]) {
-									$('.graph').append('<a class="btn-debug col-md-10"><div>Debug query &raquo;</div></a>');
-								}
+		composeFilterQuery : function(filters, query, lastOp) {
+			if ( ! filters) {
+				return lastOp;
+			}
 
-								$('.btn-debug').click(function() {
-									hyryx.debug.dispatch({
-										type : 'canvas.loadPlan',
-										options : query
-									});
-									hyryx.utils.showScreen('debug');
-								});
-								
-							} catch (e) {
-								console.log('query could not be parsed', json[0].query);
-							}
+			$.each(filters, function(index, filterColumn) {
+				lastOp = this.composeLocalFilterQuery(filterColumn, query, lastOp);
+			}.bind(this));
 
+			return lastOp;
+		},
 
-						}   
+		composeLocalFilterQuery : function(column, query, lastOp) {
+			if (column.min) {
+				var minFilter = query.addOperator({
+					type: 'SimpleTableScan',
+					predicates: [
+						{type: 7 /* OR */},
+						{type: 2 /* GT */, 'in': 0, f: column.column, vtype: column.type, value: column.min},
+						{type: 0 /* EQ */, 'in': 0, f: column.column, vtype: column.type, value: column.min}
+					]
+				});
+
+				if (lastOp) {
+					query.addEdge(lastOp, minFilter);
+				} else {
+					query.getOperator(minFilter).input = [column.table];
+				}
+
+				lastOp = minFilter;
+			}
+
+			if (column.max) {
+				var maxFilter = query.addOperator({
+					type: 'SimpleTableScan',
+					predicates: [
+						{type: 7 /* OR */},
+						{type: 1 /* LT */, 'in': 0, f: column.column, vtype: column.type, value: column.max},
+						{type: 0 /* EQ */, 'in': 0, f: column.column, vtype: column.type, value: column.max}
+					]
+				});
+
+				if (lastOp) {
+					query.addEdge(lastOp, maxFilter);
+				} else {
+					query.getOperator(maxFilter).input = [column.table];
+				}
+
+				lastOp = maxFilter;
+			}
+
+			return lastOp;
+		},
+
+		composeProjectionQuery : function(xaxis, column, query, lastOp) {
+			var projection = query.addOperator({
+				type: 'ProjectionScan',
+				fields: [
+					xaxis.column,
+					column.column
+				]
+			});
+
+			if (lastOp) {
+				query.addEdge(lastOp, projection);
+			} else {
+				query.getOperator(projection).input = [column.table];
+			}
+
+			return projection;
+		},
+
+		composeAggregationQuery : function(xaxis, column, query, lastOp) {
+			if (column.aggregation != 'none') {
+				var group = query.addOperator({
+					type: 'GroupByScan',
+					fields: [xaxis.column]
+				});
+
+				switch (column.aggregation) {
+					case 'count':
+						query.getOperator(group).function = {
+							type: 1,
+							field: xaxis.column
+						};
+						break;
+					case 'count':
+						query.getOperator(group).function = {
+							type: 2,
+							field: column.column
+						};
+						break;
+					case 'count':
+						query.getOperator(group).function = {
+							type: 0,
+							field: column.column
+						};
+						break;
+					default:
+						query.getOperator(group).function = {
+							type: 1,
+							field: xaxis.column
+						};
+				}
+
+				var hash = query.addOperator({
+					type: 'HashBuild',
+					fields: [xaxis.column],
+					key: 'groupby'
+				});
+
+				var sort = query.addOperator({
+					type: 'SortScan',
+					fields: [0]
+				});
+
+				query.addEdge(lastOp, hash);
+				query.addEdge(lastOp, group);
+
+				query.addEdge(hash, group);
+				query.addEdge(group, sort);
+
+				lastOp = sort;
+			}
+
+			return lastOp;
+		},
+
+		displayContent : function(content) {
+			if (content.hasOwnProperty("error")) {
+				alert(content["error"]);
+			} else {
+
+				// update x-axis
+				if (content[0].hasOwnProperty("categories")) {
+					chart.xAxis[0].setCategories(content[0]['categories'], true);
+				}
+				// chart.xAxis[0].setTitle({text:xAxis['column']}, true);
+				// jQuery('.xSettings .axisTitle').val(xAxis['column']);
+
+				//remove old series from chart
+				while (chart.series.length) {
+					chart.series[0].remove();
+				}
+
+				for (var i = 0; i < content.length; i++) {
+
+					var axis = 0;
+					if (content[i]['axis'] == 'o') {
+						axis = 1;
+					}
+
+					// update y-Axis with series
+					chart.addSeries({
+						name: content[i]['name'],
+						data: content[i]['data'],
+						yAxis: axis
+					}, true);
+					//preserve chart type after reload
+					chart.series[chart.series.length-1].update({type:  jQuery('.axisDroppableContainer [data-id="'+content[i]['id']+'"]').attr('data-chartType')});
+
+					// add click listener for title field
+					if (chart.yAxis[axis].axisTitle) {
+						var element = chart.yAxis[axis].axisTitle.element;
+
+						// set initial title of the axis
+						$(element).text(content[i]['name']);
+						helpers.registerAxisPopover(element);
+					}
+
+					// var target = $('#highcharts-0 .highcharts-axis text');
+
+					// add a popover to edit the name of the axis
+
+				}
+
+				if (chart.xAxis[0].axisTitle) {
+					helpers.registerAxisPopover(chart.xAxis[0].axisTitle.element);
+				}
+
+				hyryx.explorer.dispatch({
+					type : 'data.reload',
+					options : {
+						all : true,
+						data : content[0].raw
 					}
 				});
+
+				// save created series in global variable
+				loadedSeries = this.collectSeries();
+
+				$('.btn-debug')
+					.data('query', content[0].query)
+					.show();
 			}
 		}
-	}
+	};
 })();

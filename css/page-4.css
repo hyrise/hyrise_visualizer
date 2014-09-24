@@ -1,0 +1,252 @@
+span.interactiveQuery {
+    cursor: pointer;
+    color: #fff;
+    background-color: #2a5e8c;
+    border-color: #245178;
+    padding: 2px 4px 2px 3px;
+    border-radius: 4px;
+}
+
+span.interactiveQuery:hover {
+    color: #fff;
+    background-color: #21496d;
+    border-color: #163149;
+}
+
+div.titlebar {
+	width: 100%;
+	background-color: #f7f7f7;
+	height: 39px;
+	line-height: 39px;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: -41px;
+}
+
+div.titlebar button.btn {
+	text-decoration: none;
+	outline: 0 !important;
+}
+
+div.titlebar .pull-right {
+	padding-top: 9px;
+	padding-bottom: 3px;
+}
+
+div#frame_queryEditor {
+	z-index: 3000;
+}
+
+div#frame_queryEditor {
+	margin-top: -515px;
+	transition: margin-top 0.3s ease-in-out;
+	-moz-transition: margin-top 0.3s ease-in-out;
+	-webkit-transition: margin-top 0.3s ease-in-out;
+}
+
+div#frame_queryEditor.hideQueryEditor {
+	margin-top: 0px;
+}
+
+div.highlighted-line {
+	pointer-events: none;
+}
+
+div.highlighted-line > span {
+	pointer-events: all;
+}
+
+div.performance-time {
+	text-align: right;
+	margin-left: -50px;
+	padding-right: 4px;
+	color: white;
+	text-shadow: 0px 0px 4px rgba(0,0,0,0.75);
+}
+
+div.performance-time.performance-section-0 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(23,137,129,0.7));
+}
+div.performance-time.performance-section-1 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(81,165,96,0.7));
+}
+div.performance-time.performance-section-2 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(137,196,53,0.7));
+}
+div.performance-time.performance-section-3 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(172,219,58,0.7));
+}
+div.performance-time.performance-section-4 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(202,232,140,0.7));
+}
+div.performance-time.performance-section-5 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(207,190,39,0.7));
+}
+div.performance-time.performance-section-6 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(196,120,20,0.7));
+}
+div.performance-time.performance-section-7 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(201,74,16,0.7));
+}
+div.performance-time.performance-section-8 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(178,53,28,0.7));
+}
+div.performance-time.performance-section-9 {
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0) 30%, rgba(153,44,26,0.7));
+}
+
+div.performance-time.invalid {
+	background-image: -webkit-gradient( linear, left center, right center, from(rgba(0,0,0,0)), to(rgba(180,180,180,0.7))) !important;
+	color: #777 !important;
+	text-shadow: 0px 1px #ddd !important;
+}
+
+div.performance-time span {
+	margin-left: 8px;
+}
+
+div.performance-time span.glyphicon {
+	top: 2px;
+}
+
+div.performance-time:not(.invalid) span.stepInto {
+	cursor: pointer;
+}
+
+div.performance-time:not(.invalid) span.stepInto:hover {
+	color: #ccc;
+}
+
+.CodeMirror-code > div > pre {
+	pointer-events: none;
+}
+
+.CodeMirror-code > div > pre > span {
+	pointer-events: all;
+}
+
+.CodeMirror-linewidget {
+	pointer-events: none;
+}
+
+.CodeMirror-linewidget span {
+	pointer-events: all;
+}
+
+.gutters-highlighted-lines {
+	width: 16px;
+}
+
+/* Execute Button css*/
+.button-immediate {
+	text-align: center;
+	min-width: 38px;
+}
+
+/* Sunburst css */
+
+#chart {
+  position: relative;
+}
+
+#chart svg {
+	display: block;
+	margin: auto;
+}
+
+#chart path {
+	stroke: #fff;
+}
+
+#explanation {
+	position: absolute;
+	width: 300px;
+	height: 150px;
+	left: 50%;
+	margin-left: -150px;
+	top: 50%;
+	margin-top: -75px;
+	text-align: center;
+	color: #666;
+}
+
+#explanation span.big {
+	font-size: 2.5em;
+}
+
+/* Streamgraph css */
+
+#frame_streamgraph {
+	position: absolute;
+	z-index: 10;
+	pointer-events: none;
+	top: 0;
+	right: 0;
+	height: 100%;
+}
+
+#frame_streamgraph > svg {
+	float: right;
+	padding-top: 4px;
+	pointer-events: all;
+}
+
+#frame_streamgraph > svg path {
+	cursor: pointer;
+}
+
+#streamgraph_infobox {
+	position: fixed;
+	width: 100px;
+	right: calc(40% - 300px);
+	top: 80px;
+	display: none;
+	z-index: 50;
+}
+
+#streamgraph_infobox > .popover {
+	max-width: none;
+	left: -250px;
+	width: 350px;
+	top: 0;
+	margin-top: 0;
+	background-color: white;
+}
+
+#streamgraph_infobox > .popover #popover-title {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 250px;
+}
+
+#streamgraph_infobox > .popover #popover-subtitle {
+	float: right;
+	font-size: medium;
+	line-height: 27px;
+	margin-top: -20px;
+}
+
+#streamgraph_infobox > .popover .popover-content {
+	padding: 9px 14px;
+}
+
+#streamgraph_infobox > .popover .popover-content ul {
+	padding-start: 16px;
+	-moz-padding-start: 16px;
+	-webkit-padding-start: 16px;
+}
+
+/* param sliders */
+
+#param-sliders {
+	display: inline-block;
+}
+
+#param-sliders .param-slider {
+	display: inline-block;
+	padding: 0 6px;
+}
+
+span.value-box-param {
+	padding: 0 8px;
+}
