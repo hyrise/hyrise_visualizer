@@ -1,0 +1,7 @@
+<div class="area_frame">
+     <div class="cluster_navigation_buttons_list">
+	<h3>Cluster Management</h3>
+	<button type="button" id="btn-cluster-management" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto; margin-top:30px; width:100%">Cluster Management</button>
+	<button type="button" id="btn-cluster-stats" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto; width:100%">Cluster Statistics</button>
+    </div>
+</div>

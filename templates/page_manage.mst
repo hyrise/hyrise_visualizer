@@ -1,0 +1,4 @@
+<div>
+	<div id='frame_clusterNavigation' class="col-md-{{width_clusterManagement}}"></div>
+	<div id='frame_clusterStats' class="col-md-{{width_clusterStats}}"></div>
+</div>
