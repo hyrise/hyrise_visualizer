@@ -96,7 +96,7 @@ if __name__ == '__main__':
         }
 
     cherrypy.config.update({
-                'server.socket_host': '127.0.0.1',
+                'server.socket_host': '192.168.200.10',
                 'server.socket_port': 8000,
      })
     #cherrypy.config.update({ "server.logToScreen" : False })
