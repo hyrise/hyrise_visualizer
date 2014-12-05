@@ -1,17 +1,17 @@
 #!/usr/bin/env python
-import SimpleHTTPServer
-import BaseHTTPServer
-import SocketServer
-import json
+# import SimpleHTTPServer
+# import BaseHTTPServer
+# import SocketServer
+# import json
 import os
-import pandas as pd
-import math
-import numpy as np
-from functools import partial
+# import pandas as pd
+# import math
+# import numpy as np
+# from functools import partial
 import os.path, time
 import cherrypy
 import random
-from subprocess import call
+# from subprocess import call
 import requests
 import psutil
 
@@ -33,7 +33,7 @@ class MyServerHandler(object):
     @cherrypy.expose
     def load(self):
         l = psutil.cpu_percent(interval=0, percpu=True)
-        return """{"0": [%d, %d, %d, %d, %d, %d, %d, %d], "1": [%d, %d, %d, %d, %d, %d, %d, %d], "2": [%d, %d, %d, %d, %d, %d, %d, %d], "3": [%d, %d, %d, %d, %d, %d, %d, %d] }""" % (l[16], l[18], l[20], l[22], l[24], l[26], l[28], l[30], l[32], l[34], l[36], l[38], l[40], l[42], l[44], l[46], l[48], l[50], l[52], l[54], l[56], l[58], l[60], l[62], l[64], l[66], l[68], l[70], l[72], l[74], l[76], l[78] )
+        return """{"0": [%d], "1": [%d], "2": [%d], "3": [%d] }""" % (l[0], l[1], l[2], l[3])
 
     @cherrypy.expose
     def QueryData(self):
@@ -96,7 +96,7 @@ if __name__ == '__main__':
         }
 
     cherrypy.config.update({
-                'server.socket_host': '192.168.30.112',
+                'server.socket_host': '127.0.0.1',
                 'server.socket_port': 8000,
      })
     #cherrypy.config.update({ "server.logToScreen" : False })

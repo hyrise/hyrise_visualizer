@@ -18,6 +18,9 @@
 				data : {
 					query: JSON.stringify(query),
 					limit: 0
+				},
+				success: function(oResult){
+					console.log(oResult);
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown ) {
 				console.log('Could not execute query: ' + textStatus + errorThrown);

@@ -4,7 +4,7 @@ hyryx.manage = (function() {
     function setup() {
 	$.get('templates/page_manage.mst', function(template) {
 	    var rendered = $(Mustache.render(template, {
-		width_clusterManagement: 3,
+		width_clusterNavigation: 3,
 		width_clusterStats: 9
 	    }));
 	    $('#visualizer #page-manage').append(rendered);

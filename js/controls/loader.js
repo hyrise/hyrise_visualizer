@@ -146,8 +146,10 @@ window.addEventListener('load', function() {
 
 			'js/pages/1-explore.js',
 			'js/pages/2-debug.js',
-                        'js/pages/3-manage.js',
+            'js/pages/3-manage.js',
 			'js/pages/4-editor.js',
+			'js/pages/5-demos.js',
+			'js/pages/6-sql.js',
 
 
 			'js/ui/abstractPlugin.js',
@@ -199,6 +201,8 @@ window.addEventListener('load', function() {
 		],
 		complete : function() {
 			hyryx.manage.setup();
+			hyryx.demos.setup();
+			hyryx.sql.setup();
 		}
 	}]);
 
@@ -226,4 +230,14 @@ window.addEventListener('load', function() {
             hyryx.editor.setup();
         }
     }]);
+
+    // loading stage #5
+	Modernizr.load([{
+		load : [
+		    // page 5 components
+		],
+		complete : function() {
+			hyryx.sql.setup();
+		}
+	}]);
 }, false);
