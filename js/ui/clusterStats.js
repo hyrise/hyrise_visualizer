@@ -20,6 +20,32 @@
 		
 	init : function() {
 
+		$('#btn-startup').click(function(oEvent){
+			$.ajax({
+				method: "GET",
+				url: "startserver",
+				success: function(oResult){
+					alert("success");
+				},
+				error: function(oResult){
+					alert("error")
+				}
+			})
+		});
+
+		$('#btn-kill-all').click(function(oEvent){
+			$.ajax({
+				method: "GET",
+				url: "killall",
+				success: function(oResult){
+					alert("success");
+				},
+				error: function(oResult){
+					alert("error")
+				}
+			})
+		});
+
 	    $('#frame_clusterThroughputGraph').highcharts({
 		chart: {
                     type: 'areaspline',
