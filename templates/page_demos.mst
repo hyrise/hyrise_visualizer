@@ -1,3 +1,4 @@
 <div>
-	Demos
+	<div id='frame_demoNavigation' class="col-md-{{width_demoNavigation}}"></div>
+	<div id='frame_demoDisplay' class="col-md-{{width_demoDisplay}}"></div>
 </div>

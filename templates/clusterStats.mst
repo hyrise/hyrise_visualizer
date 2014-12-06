@@ -1,49 +1,18 @@
 <div>
-	<div id="clusterManagementScreen" hidden=true>
-	     <div class="area_frame">
+  <div id="clusterManagementScreen" hidden=true>
+    <div class="area_frame">
       <div style=" width:300px; float:left; margin: auto; margin-top:0px;">
-<div style=" width:150px; float:left; margin: 20px auto; margin-top:0px;">
-            <button type="button" id="btn-one-replica" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto; margin-top:30px">
-              Use 1 Replica
-            </button>
-            <button type="button" id="btn-two-replica" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto">
-              Use 2 Replica
-            </button>
-            <button type="button" id="btn-three-replica" data-loading-text="Loading..." class="btn btn-primary" style="margin:5px auto">
-              Use 3 Replica
-            </button>
-            <button type="button" id="btn-kill-master" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto">
-              Kill Master
-            </button>
-        </div>
-           <div style=" width:150px; float:left; margin: 20px auto; margin-top:0px;">
+        <div style=" width:150px; float:left; margin: 20px auto; margin-top:0px;">
             <button type="button" id="btn-startup" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto; margin-top:30px">
               Start Cluster
             </button>
              <button type="button" id="btn-kill-all" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto">
               Stop Cluster
             </button>
-            <button type="button" id="btn-start-workload" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto">
-              Start Workload
-            </button>
-            <button type="button" id="btn-stop-workload" data-loading-text="Loading..." class="btn btn-primary" style="margin:5px auto">
-              Stop Workload
-            </button><br>
+        </div>
+      </div>
 
-        </div>
-        <div style="width:280px">
-              <p>
-                #Users writing: <input type="text" id="amount_write_user" readonly style="border:0; color:#f6931f; font-weight:bold;">
-              </p>
-                <div id="slider_write_user"></div>
-               <p>
-                #Users reading: <input type="text" id="amount_read_user" readonly style="border:0; color:#f6931f; font-weight:bold;">
-              </p>
-                <div id="slider_read_user"></div>
-        </div>
-        </div>
-
-        <div id="clusterStatus" style="width:250px; border:1px;float:left; margin:30px; margin-top:10px;">
+        <div id="clusterStatus" style="width:250px; border:1px;float:right; margin:30px; margin-top:10px;">
           <h4>Cluster Status</h2>
           <h5>Instance 1
           <div id="clusterStatusInst1"></div></h5>
@@ -56,16 +25,16 @@
           <h5>Dispatcher
           <div id="clusterStatusDisp"></div></h5>
         </div>
-	     </div>
-	</div>
-	
-	<div id="clusterStatsScreen" hidden=true>
-	<div class="area_frame">
-	     <div id="frame_clusterThroughputGraph"></div>
-	     <div id="delayAndLoad">
-	     	  <div id="frame_replicationDelay"></div>
-	     	  <div id="frame_serverLoad"></div>
-	     </div>
-	</div>
-	</div>
+    </div>
+  </div>
+  
+  <div id="clusterStatsScreen" hidden=true>
+  <div class="area_frame">
+       <div id="frame_clusterThroughputGraph"></div>
+       <div id="delayAndLoad">
+          <div id="frame_replicationDelay"></div>
+          <div id="frame_serverLoad"></div>
+       </div>
+  </div>
+  </div>
 </div>

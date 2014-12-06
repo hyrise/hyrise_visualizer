@@ -201,7 +201,6 @@ window.addEventListener('load', function() {
 		],
 		complete : function() {
 			hyryx.manage.setup();
-			hyryx.demos.setup();
 			hyryx.sql.setup();
 		}
 	}]);
@@ -235,6 +234,17 @@ window.addEventListener('load', function() {
 	Modernizr.load([{
 		load : [
 		    // page 5 components
+		    'js/ui/demoDisplay.js',
+		    'js/ui/demoNavigation.js'
+		],
+		complete : function() {
+			hyryx.demos.setup();
+		}
+	}]);
+	// loading stage #6
+	Modernizr.load([{
+		load : [
+		    // page 6 components
 		],
 		complete : function() {
 			hyryx.sql.setup();
