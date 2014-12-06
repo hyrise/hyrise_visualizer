@@ -43,27 +43,27 @@ class MyServerHandler(object):
 
     @cherrypy.expose
     def startserver(self):
-        call(["bash", "start.sh"])
+        call(["bash", "scripts/start.sh"])
         return ""
 
     @cherrypy.expose
     def killmaster(self):
-        call(["bash", "killmaster.sh"])
+        call(["bash", "scripts/killmaster.sh"])
         return ""
 
     @cherrypy.expose
     def killall(self):
-        call(["bash", "end.sh"])
+        call(["bash", "scripts/end.sh"])
         return ""
 
     @cherrypy.expose
     def readworkload(self):
-        call(["bash", "workload_read.sh"])
+        call(["bash", "scripts/workload_read.sh"])
         return ""
 
     @cherrypy.expose
     def writeworkload(self):
-        call(["bash", "workload_write.sh"])
+        call(["bash", "scripts/workload_write.sh"])
         return ""
 
     @cherrypy.expose

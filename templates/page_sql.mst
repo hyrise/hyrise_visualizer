@@ -1,3 +1,3 @@
 <div>
-	SQL
+	<div id="frame_sqlParser" class="col-md-12"></div>
 </div>
