@@ -2,7 +2,7 @@
 # import SimpleHTTPServer
 # import BaseHTTPServer
 # import SocketServer
-# import json
+import json
 import os
 # import pandas as pd
 # import math
@@ -17,7 +17,15 @@ import psutil
 
 import config
 
+
+def getConfig():
+    json_file = open('config.json')
+    data = json.load(json_file)
+    json_file.close()
+    return data
+
 class MyServerHandler(object):
+
     @cherrypy.expose
     def index(self):
         with open("index.html") as f:
@@ -26,8 +34,9 @@ class MyServerHandler(object):
     
     @cherrypy.expose
     def delay(self):
+        config = getConfig();
         payload = {'query': '{"operators": {"0": {"type": "ClusterMetaData"} } }'}
-        r = requests.post("http://%s:%d/query/" % (config.cluster_nodes[config.master][0], config.cluster_nodes[config.master][1]), data=payload)
+        r = requests.post("http://%s:%d/query/" % (config["nodes"][config["master"]]["host"], config["nodes"][config["master"]]["port"]), data=payload)
         return r.text
 
     @cherrypy.expose
@@ -37,8 +46,9 @@ class MyServerHandler(object):
 
     @cherrypy.expose
     def QueryData(self):
+        config = getConfig();
         payload = {'data':0}
-        r = requests.post("http://%s:%d/statistics" % (config.dispatcher_url, config.dispatcher_port), data=payload, stream=True)
+        r = requests.post("http://%s:%d/statistics" % (config["dispatcher"]["host"], config["dispatcher"]["port"]), data=payload, stream=True)
         return '{"data":' + r.text + '}' 
 
     @cherrypy.expose
@@ -68,21 +78,34 @@ class MyServerHandler(object):
 
     @cherrypy.expose
     def useonereplica(self):
+        config = getConfig();
         payload = {"data":0}
-        r = requests.post("http://%s:%d/number_of_slaves_1" % (config.dispatcher_url, config.dispatcher_port), data=payload)
+        r = requests.post("http://%s:%d/number_of_slaves_1" % (config["dispatcher"]["host"], config["dispatcher"]["port"]), data=payload)
         return r.text
 
     @cherrypy.expose
     def usetworeplica(self):
+        config = getConfig();
         payload = {"data":0}
-        r = requests.post("http://%s:%d/number_of_slaves_2" % (config.dispatcher_url, config.dispatcher_port), data=payload)
+        r = requests.post("http://%s:%d/number_of_slaves_2" % (config["dispatcher"]["host"], config["dispatcher"]["port"]), data=payload)
         return r.text
 
     @cherrypy.expose
     def usethreereplica(self):
+        config = getConfig();
         payload = {"data":0}
-        r = requests.post("http://%s:%d/number_of_slaves_3" % (config.dispatcher_url, config.dispatcher_port), data=payload)
+        r = requests.post("http://%s:%d/number_of_slaves_3" % (config["dispatcher"]["host"], config["dispatcher"]["port"]), data=payload)
         return r.text
+
+    @cherrypy.expose
+    def saveConfig(self, data):
+        with open('config.json','w') as outfile:
+            json.dump(json.loads(data), outfile)
+
+    @cherrypy.expose
+    def loadConfig(self):
+        config = getConfig()
+        return json.dumps(config)
 
   
 if __name__ == '__main__':
@@ -96,10 +119,10 @@ if __name__ == '__main__':
         }
 
     cherrypy.config.update({
-                'server.socket_host': '192.168.200.10',
+                'server.socket_host': '127.0.0.1',
                 'server.socket_port': 8000,
      })
-    #cherrypy.config.update({ "server.logToScreen" : False })
+    cherrypy.config.update({ "server.logToScreen" : False })
     #cherrypy.config.update({'log.screen': False})
     # cherrypy.config.update({ "environment": "embedded" })
         

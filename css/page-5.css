@@ -1,3 +1,23 @@
-table {
-	font-size: 14px;
+h5 {
+	font-weight: bold;
+	text-align: center;
+}
+
+.ManageNodesTable{
+	width: 100%;
+}
+.ManageNodesTable div{
+	text-align: center;
+	margin-top: 10px;
+}
+
+.ManageNodesTable .ManageNodesButtons{
+	margin-top: 15px;
+	text-align: left;
+}
+.ManageButtonContainer{
+	margin: 50px 0px 0px 0px;
+}
+
+#clusterManagementScreen .panel-heading{
 }

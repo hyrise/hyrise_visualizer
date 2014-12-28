@@ -1,30 +1,52 @@
 <div>
   <div id="clusterManagementScreen" hidden=true>
     <div class="area_frame">
-      <div style=" width:300px; float:left; margin: auto; margin-top:0px;">
-        <div style=" width:150px; float:left; margin: 20px auto; margin-top:0px;">
-            <button type="button" id="btn-startup" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto; margin-top:30px">
-              Start Cluster
-            </button>
-             <button type="button" id="btn-kill-all" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto">
-              Stop Cluster
-            </button>
+      <div class="panel panel-default ManageNodes">
+        <div class="panel-heading">
+          <h4 class="panel-title">Nodes</h4>
+        </div>
+        <div class="panel-body ManageNodesTable">
+          <h5 class="col-md-6">Host</h5> 
+          <h5 class="col-md-2">Port</h5>
+          <h5 class="col-md-2">Master</h5>
+          {{#nodes}}
+              <div class="col-md-6"><input id="host-{{index}}" class="NodeHost form-control" value="{{host}}"></input></div>
+              <div class="col-md-2"><input id="port-{{index}}" class="NodePort form-control" value="{{port}}"></input></div>
+              <div class="col-md-2"><input id="master-{{index}}" value="{{index}}" type="radio" name="master" class="ManageMasterRadio" {{#master}}checked{{/master}}></input></div>
+          {{/nodes}}
+        
+        <div class="ManageNodesButtons col-md-12">
+          <button type="button" id="btn-add" class="btn btn-primary">+</button>
+          <button type="button" id="btn-add" class="btn btn-primary">-</button>
+        </div>
         </div>
       </div>
-
-        <div id="clusterStatus" style="width:250px; border:1px;float:right; margin:30px; margin-top:10px;">
-          <h4>Cluster Status</h2>
-          <h5>Instance 1
-          <div id="clusterStatusInst1"></div></h5>
-          <h5>Instance 2
-          <div id="clusterStatusInst2"></div></h5>
-          <h5>Instance 3
-          <div id="clusterStatusInst3"></div></h5>
-          <h5>Instance 4
-          <div id="clusterStatusInst4"></div></h5>
-          <h5>Dispatcher
-          <div id="clusterStatusDisp"></div></h5>
+      <div class="panel panel-default ManageDispatcher">
+        <div class="panel-heading">
+          <h4 class="panel-title">Dispatcher</h4>
         </div>
+        <div class="panel-body">
+          <h5 class="col-md-6">Host</h5> 
+          <h5 class="col-md-2">Port</h5>
+          <div class="col-md-6">
+            <input id="host-dispatcher" class="form-control" value="{{dispatcher.host}}"></input>
+          </div>
+          <div class="col-md-2">
+            <input id="port-dispatcher" class="form-control" value="{{dispatcher.port}}"></input>
+          </div>
+        </div>
+      </div>
+      <div class="ManageButtonContainer col-md-12">
+          <button type="button" id="btn-startup" data-loading-text="Loading..." class="btn btn-primary">
+            Start Cluster
+          </button>
+           <button type="button" id="btn-kill-all" data-loading-text="Loading..." class="btn btn-primary">
+            Stop Cluster
+          </button>
+          <button type="button" id="btn-save" data-loading-text="Loading..." class="btn btn-primary">
+            Save Config
+          </button>
+      </div>
     </div>
   </div>
   

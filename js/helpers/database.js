@@ -12,7 +12,7 @@
 			}
 
 			return $.ajax({
-				url : hyryx.settings.database + '/jsonQuery/',
+				url : hyryx.settings.nodes[hyryx.settings.master].host + ":" + hyryx.settings.nodes[hyryx.settings.master].port + '/jsonQuery/',
 				type : 'POST',
 				dataType: 'json',
 				data : {
