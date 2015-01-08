@@ -56,7 +56,6 @@ window.addEventListener('load', function() {
 			"js/libs/d3.v3.js",
 			"js/libs/wildemitter.js",
 			"js/libs/mustache.js",
-			"js/libs/handlebars-v2.0.0.js"
 		],
 
 		// load server config

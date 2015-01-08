@@ -101,9 +101,22 @@
 			})
 		});
 
+		$.ajax({
+			method: "GET",
+			url: "SystemStats",
+			success: function(oResult){
+				success = oResult
+				console.log(oResult);
+			},
+			error: function(oResult){
+				error = oResult
+				console.log(oResult);
+			}
+
+		})
 
 
-	 //    $('#frame_clusterThroughputGraph').highcharts({
+	 //    $('#ClusterThroughput').highcharts({
 		// chart: {
   //                   type: 'areaspline',
   //                   animation: false,

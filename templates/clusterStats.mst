@@ -52,11 +52,34 @@
   
   <div id="clusterStatsScreen" hidden=true>
   <div class="area_frame">
-       <div id="frame_clusterThroughputGraph"></div>
-       <div id="delayAndLoad">
-          <div id="frame_replicationDelay"></div>
-          <div id="frame_serverLoad"></div>
-       </div>
+    <div class="panel panel-default ClusterStats">
+          <div class="panel-heading">
+            <h4 class="panel-title">Cluster</h4>
+          </div>
+          <div class="panel-body">
+            <div id="ClusterCPU" class="col-sm-3"></div>
+            <div id="ClusterMemory" class="col-sm-3"></div>
+            <div id="ClusterThroughput" class="col-sm-3"></div>
+          </div>
+    </div>
+    <div class="panel panel-default NodeStats">
+          <div class="panel-heading">
+            <h4 class="panel-title">Nodes</h4>
+          </div>
+          <div class="panel-body NodeStatsBody">
+          {{#nodes}}
+          <div class="panel panel-default NodePanel">
+            <div class="panel-heading">
+              <h5 class="panel-title NodePanelTitle">{{#master}}Master{{/master}}{{^master}}Slave{{/master}}</h5>
+              <span>{{host}}:{{port}}</span>
+            </div>
+            <div class="panel-body NodePanelBody">
+              other stuff
+            </div>
+          </div>
+          {{/nodes}}
+          </div>
+    </div>
   </div>
   </div>
 </div>

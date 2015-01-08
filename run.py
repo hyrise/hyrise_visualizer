@@ -107,6 +107,13 @@ class MyServerHandler(object):
         config = getConfig()
         return json.dumps(config)
 
+    @cherrypy.expose
+    def SystemStats(self):
+        config = getConfig();
+        payload = {'query': '{"operators": {"0": {"type": "SystemStats"} } }'}
+        r = requests.post("http://%s:%d/query/" % (config["nodes"][config["master"]]["host"], config["nodes"][config["master"]]["port"]), data=payload)
+        return r.text
+
   
 if __name__ == '__main__':
 

@@ -1,6 +1,14 @@
+h4 {
+	font-weight: bold;
+}
+
 h5 {
 	font-weight: bold;
 	text-align: center;
+}
+
+.panel-title h4{
+	font-size: 18px;
 }
 
 .ManageNodesTable{
@@ -20,4 +28,22 @@ h5 {
 }
 
 #clusterManagementScreen .panel-heading{
+}
+
+.NodeStatsBody{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.NodePanel{
+	padding: 0px 0px 0px 0px;
+	margin: 0px 10px 10px 10px;
+	flex: 1 0 auto;
+
+}
+.NodePanelTitle{
+	text-align: left;
+}
+.NodePanelBody{
+	display: flex;
 }

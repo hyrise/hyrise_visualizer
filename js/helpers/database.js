@@ -12,7 +12,8 @@
 			}
 
 			return $.ajax({
-				url : hyryx.settings.nodes[hyryx.settings.master].host + ":" + hyryx.settings.nodes[hyryx.settings.master].port + '/jsonQuery/',
+				url: "http://192.168.30.177:5000/jsonQuery/",
+				// url : hyryx.settings.nodes[hyryx.settings.master].host + ":" + hyryx.settings.nodes[hyryx.settings.master].port + '/jsonQuery/',
 				type : 'POST',
 				dataType: 'json',
 				data : {
