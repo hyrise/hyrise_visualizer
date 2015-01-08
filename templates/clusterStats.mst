@@ -74,7 +74,8 @@
               <span>{{host}}:{{port}}</span>
             </div>
             <div class="panel-body NodePanelBody">
-              other stuff
+              <progress id="progressBar-{{index}}" max="100" value ="0">
+              </progress>
             </div>
           </div>
           {{/nodes}}

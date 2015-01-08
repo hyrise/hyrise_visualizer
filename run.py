@@ -112,7 +112,25 @@ class MyServerHandler(object):
         config = getConfig();
         payload = {'query': '{"operators": {"0": {"type": "SystemStats"} } }'}
         r = requests.post("http://%s:%d/query/" % (config["nodes"][config["master"]]["host"], config["nodes"][config["master"]]["port"]), data=payload)
-        return r.text
+        result = json.loads(r.text)
+        stats = {'cpu':[], 'net':{}, 'mem':{}}
+        for row in result['rows']:
+            if row[0] == 'cpu':
+                value = (row[3]+row[4]+row[5])/float(row[3]+row[4]+row[5]+row[6])
+                print value
+                stats['cpu'].append({'id':row[1], 'time':row[2], 'value':value})
+            elif row[0] == 'network':
+                stats['net']['id'] = row[1]
+                stats['time'] = row[2]
+                stats['net']['received'] = row[3]
+                stats['net']['send'] = row[4]
+            elif row[0] == 'memory':
+                if row[1] == 'MemTotal':
+                    stats['mem']['total'] = row[3]
+                elif row[1] == 'MemFree':
+                    stats['mem']['free'] = row[3]
+        print stats
+        return json.dumps(stats)
 
   
 if __name__ == '__main__':

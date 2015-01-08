@@ -105,8 +105,9 @@
 			method: "GET",
 			url: "SystemStats",
 			success: function(oResult){
-				success = oResult
+				success = JSON.parse(oResult)
 				console.log(oResult);
+				$('#progressBar-0').attr("value",(success.mem.free/success.mem.total)*100);
 			},
 			error: function(oResult){
 				error = oResult
@@ -138,23 +139,23 @@
 		// 	    console.log('Set interval');
   //                           setInterval(function () {
 		// 		$.ajax({
-  //                                   method: "GET",
-  //                                   url: "QueryData",
-  //                                   success:function(response) {
-		// 			console.log("successful response from QueryData");
-		// 			var json = $.parseJSON(response);
-		// 			if(!json) return;
-		// 			var elapsed_time = json.data.timestamp - last_timestamp;
-		// 			if (!first) last_x_value += elapsed_time;
-		// 			first = false;
-		// 			last_timestamp = json.data.timestamp;
-		// 			console.log('Adding data point.');
-		// 			series_write.addPoint([last_x_value, Math.round((json.data.write-last_size_write)/elapsed_time)]);
-		// 			last_size_write = json.data.write;
-		// 			series_read.addPoint([last_x_value, Math.round((json.data.read-last_size_read)/elapsed_time)]);
-		// 			last_size_read = json.data.read;
-		// 			chart.redraw();
-  //                                   }
+  //                   method: "GET",
+  //                   url: "QueryData",
+  //                   success:function(response) {
+		// 				console.log("successful response from QueryData");
+		// 				var json = $.parseJSON(response);
+		// 				if(!json) return;
+		// 				var elapsed_time = json.data.timestamp - last_timestamp;
+		// 				if (!first) last_x_value += elapsed_time;
+		// 				first = false;
+		// 				last_timestamp = json.data.timestamp;
+		// 				console.log('Adding data point.');
+		// 				series_write.addPoint([last_x_value, Math.round((json.data.write-last_size_write)/elapsed_time)]);
+		// 				last_size_write = json.data.write;
+		// 				series_read.addPoint([last_x_value, Math.round((json.data.read-last_size_read)/elapsed_time)]);
+		// 				last_size_read = json.data.read;
+		// 				chart.redraw();
+  //                   }
 		// 		});
 		// 	    }, 500);
   //                       }
