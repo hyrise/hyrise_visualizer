@@ -197,7 +197,8 @@ window.addEventListener('load', function() {
 		load : [
 		    // page 3 components
 		    'js/ui/clusterStats.js',
-		    'js/ui/clusterNavigation.js'
+		    'js/ui/clusterNavigation.js',
+		    'js/ui/nodeStatsPanel.js'
 		],
 		complete : function() {
 			hyryx.manage.setup();

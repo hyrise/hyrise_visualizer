@@ -46,4 +46,48 @@ h5 {
 }
 .NodePanelBody{
 	display: flex;
+	flex-direction: column;
+	font-size: 12px;
+}
+
+.ProgressCPU{
+	flex: 1 0 auto;
+	height: 10px;
+	margin-bottom: 1px;
+}
+.ProgressDIV{
+	flex: 1 0 auto;
+	height: 10px;
+}
+
+.TextDiv{
+	margin-top: 10px;
+}
+
+.TextSpan{
+	float: right;
+
+}
+
+.progressbar {
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.membar {
+	fill: steelblue;
+}
+
+.cpubar {
+	fill: magenta;
+}
+
+.netrbar {
+	fill: darkcyan;
+}
+
+.netwbar {
+	fill: darkorange;
 }

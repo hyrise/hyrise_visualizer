@@ -1,6 +1,7 @@
 (function() {
 
     var clusterThroughputGraph;
+    var aNodes;
 
     // Extend the standard ui plugin
     hyryx.manage.ClusterStats = function() {
@@ -16,6 +17,8 @@
 			async: false,
 			success: function(oResult){
 				var oData = JSON.parse(oResult);
+				aNodes = oData.nodes;
+				console.log("Nodes set")
 
 				for(var i = 0; i < oData.nodes.length; i++){
 					oData.nodes[i].index = i;
@@ -101,20 +104,26 @@
 			})
 		});
 
-		$.ajax({
-			method: "GET",
-			url: "SystemStats",
-			success: function(oResult){
-				success = JSON.parse(oResult)
-				console.log(oResult);
-				$('#progressBar-0').attr("value",(success.mem.free/success.mem.total)*100);
-			},
-			error: function(oResult){
-				error = oResult
-				console.log(oResult);
-			}
 
-		})
+		// setInterval(function(){
+			$.ajax({
+				method: "GET",
+				url: "SystemStats",
+				success: function(oResult){
+					aData = JSON.parse(oResult)
+					for(var i = 0; i < aNodes.length; i++){
+						createNodeStatsPanel($("#PanelBody-"+i), aData[i], i)
+					}
+
+				},
+				error: function(oResult){
+					error = oResult
+					console.log(oResult);
+				}
+
+			});
+		// }, 1000);
+		
 
 
 	 //    $('#ClusterThroughput').highcharts({

@@ -50,7 +50,7 @@
     </div>
   </div>
   
-  <div id="clusterStatsScreen" hidden=true>
+  <div id="clusterStatsScreen">
   <div class="area_frame">
     <div class="panel panel-default ClusterStats">
           <div class="panel-heading">
@@ -68,14 +68,12 @@
           </div>
           <div class="panel-body NodeStatsBody">
           {{#nodes}}
-          <div class="panel panel-default NodePanel">
+          <div class="panel panel-default NodePanel col-md-5">
             <div class="panel-heading">
-              <h5 class="panel-title NodePanelTitle">{{#master}}Master{{/master}}{{^master}}Slave{{/master}}</h5>
+              <h5 class="panel-title NodePanelTitle">{{#master}}Master{{/master}}{{^master}}Replicate{{/master}}</h5>
               <span>{{host}}:{{port}}</span>
             </div>
-            <div class="panel-body NodePanelBody">
-              <progress id="progressBar-{{index}}" max="100" value ="0">
-              </progress>
+            <div id="PanelBody-{{index}}" class="panel-body NodePanelBody">
             </div>
           </div>
           {{/nodes}}
