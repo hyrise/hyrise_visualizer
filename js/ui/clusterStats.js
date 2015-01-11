@@ -104,13 +104,23 @@
 			})
 		});
 
-
-		// setInterval(function(){
+		var bFirst = true;
+		var aLast = [];
+		setInterval(function(){
 			$.ajax({
 				method: "GET",
 				url: "SystemStats",
 				success: function(oResult){
 					aData = JSON.parse(oResult)
+					if(!bFirst){
+						for (var i = 0; i < aData.length; i++) {
+							aData[i].time_last = aLast[i].time
+							aData[i].net.received_last = aLast[i].net.received;
+							aData[i].net.send_last = aLast[i].net.send;
+						};
+					}
+					bFirst = false;
+					aLast = aData;
 					for(var i = 0; i < aNodes.length; i++){
 						createNodeStatsPanel($("#PanelBody-"+i), aData[i], i)
 					}
@@ -122,7 +132,7 @@
 				}
 
 			});
-		// }, 1000);
+		}, 1000);
 		
 
 
