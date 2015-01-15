@@ -1,14 +1,14 @@
 (function() {
 
-    var clusterThroughputGraph;
-    var aNodes;
+	var clusterThroughputGraph;
+	var aNodes;
 
-    // Extend the standard ui plugin
-    hyryx.manage.ClusterStats = function() {
+	// Extend the standard ui plugin
+	hyryx.manage.ClusterStats = function() {
 	hyryx.screen.AbstractUITemplatePlugin.apply(this, arguments);
-    };
+	};
 
-    hyryx.manage.ClusterStats.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
+	hyryx.manage.ClusterStats.prototype = extend(hyryx.screen.AbstractUITemplatePlugin, {
 	render : function(callback) {
 
 		$.ajax({
@@ -27,23 +27,23 @@
 					}
 				}
 
-			    $.get('templates/clusterStats.mst', function(template) {
+				$.get('templates/clusterStats.mst', function(template) {
 				var rendered = $(Mustache.render(template, {
 					nodes: oData.nodes,
 					dispatcher: oData.dispatcher
 				}));
-			
+
 				callback(rendered);
-			    });
+				});
 			},
 			error: function(oResult){
 				console.log(oResult);
 			}
 		});
 	},
-	
-	
-		
+
+
+
 	init : function() {
 
 		$('#btn-startup').click(function(oEvent){
@@ -104,8 +104,10 @@
 			})
 		});
 
+		createCPUGraph($('#ClusterCPU'));
+
 		var bFirst = true;
-		var aLast = [];
+		var aHistory = [];
 		setInterval(function(){
 			$.ajax({
 				method: "GET",
@@ -114,16 +116,17 @@
 					aData = JSON.parse(oResult)
 					if(!bFirst){
 						for (var i = 0; i < aData.length; i++) {
-							aData[i].time_last = aLast[i].time
-							aData[i].net.received_last = aLast[i].net.received;
-							aData[i].net.send_last = aLast[i].net.send;
+							aData[i].time_last = aHistory[aHistory.length-1][i].time
+							aData[i].net.received_last = aHistory[aHistory.length-1][i].net.received;
+							aData[i].net.send_last = aHistory[aHistory.length-1][i].net.send;
 						};
 					}
 					bFirst = false;
-					aLast = aData;
+					aHistory.push(aData);
 					for(var i = 0; i < aNodes.length; i++){
 						createNodeStatsPanel($("#PanelBody-"+i), aData[i], i)
 					}
+					addCPUGraphPoint(aData);
 
 				},
 				error: function(oResult){
@@ -133,7 +136,7 @@
 
 			});
 		}, 1000);
-		
+
 
 
 	 //    $('#ClusterThroughput').highcharts({
@@ -147,7 +150,7 @@
   //                           // set up the updating of the chart each second
   //                           var series_write = this.series[1];
   //                           var series_read = this.series[0];
-			    
+
   //                           //, events = this.series[1];
 		// 	    var chart = this;
   //                           var last_size_read = 0;
@@ -264,7 +267,7 @@
 		// 			chart.series[0].setData([[0,0,json[0][0]],[1,0,json[0][1]], [2,0,json[0][2]],[3,0,json[0][3]],[4,0,json[0][4]],[5,0,json[0][5]],[6,0,json[0][6]],[7,0,json[0][7]],[0,1,json[1][0]],[1,1,json[1][1]], [2,1,json[1][2]],[3,1,json[1][3]],[4,1,json[1][4]],[5,1,json[1][5]],[6,1,json[1][6]],[7,1,json[1][7]],[0,2,json[2][0]],[1,2,json[2][1]], [2,2,json[2][2]],[3,2,json[2][3]],[4,2,json[2][4]],[5,2,json[2][5]],[6,2,json[2][6]],[7,2,json[2][7]],[0,3,json[3][0]],[1,3,json[3][1]], [2,3,json[3][2]],[3,3,json[3][3]],[4,3,json[3][4]],[5,3,json[3][5]],[6,3,json[3][6]],[7,3,json[3][7]]]);
 
 		// 		    }
-		// 		}); 
+		// 		});
 		// 	    }, 1000);
 		// 	}
 		//     }
@@ -291,7 +294,7 @@
   //                   categories: ['Node 1', 'Node 2', 'Node 3', 'Node 4'],
   //                   title: null
 		// },
-		
+
 		// colorAxis: {
   //                   min: 0,
   //                   max: 100,
@@ -313,13 +316,13 @@
 		// 	return this.point.value + '% load of <b>CPU ' + this.series.xAxis.categories[this.point.x] + '</b> on <b>' + this.series.yAxis.categories[this.point.y] + '</b>';
   //                   }
 		// },
-		
+
 		// series: [{
   //                   name: 'Load',
   //                   borderColor: 'silver',
   //                   borderWidth: 0.4,
   //                   data: [[0,0,0],[1,0,0], [2,0,0],[3,0,0],[4,0,0],[5,0,0],[6,0,0],[7,0,0],[0,1,0],[1,1,0], [2,1,0],[3,1,0],[4,1,0],[5,1,0],[6,1,0],[7,1,0],[0,2,0],[1,2,0], [2,2,0],[3,2,0],[4,2,0],[5,2,0],[6,2,0],[7,2,0],[0,3,0],[1,3,0], [2,3,0],[3,3,0],[4,3,0],[5,3,0],[6,3,0],[7,3,0]],
-		    
+
   //                   dataLabels: {
 		// 	enabled: false,
 		// 	color: 'black',
@@ -330,8 +333,8 @@
   //                   }
 		// }]
 	 //    });
-	    
-	    
+
+
 	 //    $('#frame_replicationDelay').highcharts({
 
 		// chart: {
@@ -347,9 +350,9 @@
 		//     },
 		//     plotBackgroundImage: null,
 		//     height: 120
-		    
+
 		// },
-		
+
 		// title: {
 		//     text: 'Replication Delay'
 		// },
@@ -375,7 +378,7 @@
 		// 	   size: 150
 		//        }
 		//       ],
-		
+
 		// yAxis: [{
 		//     min: 0,
 		//     max: hyryx.settings.cluster_management.delay_max,
@@ -452,7 +455,7 @@
 		// 	}
 		//     }
 		// },
-		
+
 
 		// series: [{
 		//     data: [0],
@@ -464,7 +467,7 @@
 		//     data: [0],
 		//     yAxis: 2
 		// }]
-		
+
 	 //    },
 
 	 //    // Let the music play
@@ -473,7 +476,7 @@
 		//     var r1 = chart.series[0].points[0];
 		//     var r2 = chart.series[1].points[0];
 		//     var r3 = chart.series[2].points[0];
-		    
+
 		//     $.ajax({
 		// 	method:"GET",
 		// 	url:"delay",
@@ -502,25 +505,25 @@
 		// 		lcid_replica3 = rows[2][2];
 		// 		lcid_master = rows[3][2];
 		// 	    }
-			    
-			    
+
+
 		// 	    v1 = lcid_master-lcid_replica1;
 		// 	    v2 = lcid_master-lcid_replica2;
 		// 	    v3 = lcid_master-lcid_replica3;
-			    
+
 		// 	    if (v1 > hyryx.settings.cluster_management.delay_max)
 		// 		v1 = hyryx.settings.cluster_management.delay_max;
 		// 	    if (v2 > hyryx.settings.cluster_management.delay_max)
 		// 		v2 = hyryx.settings.cluster_management.delay_max;
 		// 	    if (v3 > hyryx.settings.cluster_management.delay_max)
 		// 		v3 = hyryx.settings.cluster_management.delay_max;
-			    
+
 		// 	    if (workload_stopped) {
 		// 		v1 = 0;
 		// 		v2 = 0;
 		// 		v3 = 0;
 		// 	    }
-			    
+
 		// 	    r = chart.series[0].points[0];
 		// 	    r.update(v1, false);
 		// 	    r = chart.series[1].points[0];
@@ -533,5 +536,5 @@
 		// }, 1000);
 	 //    });
 	}
-    });
+	});
 })();

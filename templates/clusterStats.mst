@@ -6,7 +6,7 @@
           <h4 class="panel-title">Nodes</h4>
         </div>
         <div class="panel-body ManageNodesTable">
-          <h5 class="col-md-6">Host</h5> 
+          <h5 class="col-md-6">Host</h5>
           <h5 class="col-md-2">Port</h5>
           <h5 class="col-md-2">Master</h5>
           {{#nodes}}
@@ -14,7 +14,7 @@
               <div class="col-md-2"><input id="port-{{index}}" class="NodePort form-control" value="{{port}}"></input></div>
               <div class="col-md-2"><input id="master-{{index}}" value="{{index}}" type="radio" name="master" class="ManageMasterRadio" {{#master}}checked{{/master}}></input></div>
           {{/nodes}}
-        
+
         <div class="ManageNodesButtons col-md-12">
           <button type="button" id="btn-add" class="btn btn-primary">+</button>
           <button type="button" id="btn-add" class="btn btn-primary">-</button>
@@ -26,7 +26,7 @@
           <h4 class="panel-title">Dispatcher</h4>
         </div>
         <div class="panel-body">
-          <h5 class="col-md-6">Host</h5> 
+          <h5 class="col-md-6">Host</h5>
           <h5 class="col-md-2">Port</h5>
           <div class="col-md-6">
             <input id="host-dispatcher" class="form-control" value="{{dispatcher.host}}"></input>
@@ -49,8 +49,8 @@
       </div>
     </div>
   </div>
-  
-  <div id="clusterStatsScreen">
+
+  <div id="clusterStatsScreen" hidden=true>
   <div class="area_frame">
     <div class="panel panel-default ClusterStats">
           <div class="panel-heading">

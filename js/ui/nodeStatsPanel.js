@@ -88,7 +88,7 @@
         .attr("x", function(d) { return 0 })
         .attr("y", function(d) { return 0; })
         .attr("width", function(d) { return x(d); })
-        .attr("height", y.rangeBand());       
+        .attr("height", y.rangeBand());
     };
 
 })();
