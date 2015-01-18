@@ -118,7 +118,7 @@ class MyServerHandler(object):
             oStats = { 'id': idx, 'cpu':[], 'net':{}, 'mem':{}}
             for row in result['rows']:
                 if row[0] == 'cpu':
-                    value = (row[3]+row[4]+row[5])/float(row[3]+row[4]+row[5]+row[6])
+                    value = ((row[3]+row[4]+row[5])/float(row[3]+row[4]+row[5]+row[6]))*100 #Convert to %
                     oStats['cpu'].append({'id':row[1], 'value':value})
                 elif row[0] == 'network':
                     oStats['net']['id'] = row[1]

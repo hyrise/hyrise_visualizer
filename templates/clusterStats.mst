@@ -57,9 +57,9 @@
             <h4 class="panel-title">Cluster</h4>
           </div>
           <div class="panel-body">
-            <div id="ClusterCPU" class="col-sm-3"></div>
-            <div id="ClusterMemory" class="col-sm-3"></div>
-            <div id="ClusterThroughput" class="col-sm-3"></div>
+            <div id="ClusterCPU" class="col-sm-6"></div>
+            <!-- <div id="ClusterMemory" class="col-sm-3"></div> -->
+            <div id="ClusterThroughput" class="col-sm-6"></div>
           </div>
     </div>
     <div class="panel panel-default NodeStats">

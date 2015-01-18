@@ -2,19 +2,24 @@
 
     var aCPUData = [];
     var oChart;
+    var sTitle = "CPU";
 
     createCPUGraph = function(oDiv){
 
-      oDiv.attr("style","min-width: 310px; height: 200px; margin: 0 auto");
+      oDiv.attr("style","min-width: 365px; height: 200px; margin: 0 auto");
 
       oDiv.highcharts({
         chart: {
+            width: 365,
+            borderColor: "#ddd",
+            borderWidth: 1,
+            borderRadius: 4
         },
         credits: {
           enabled: false
         },
         title: {
-            text: 'CPU'
+            text: sTitle
         },
         xAxis: {
             type: 'linear',
@@ -23,14 +28,19 @@
             },
             min: 0,
             maxRange: 60,
+            tickWidth: 0
         },
         yAxis: {
             type: 'linear',
             labels: {
-              enabled: false
+              // enabled: false
+            },
+            title: {
+                enabled: false
             },
             min: 0,
-            max: 1
+            max: 100,
+            tickWidth: 0
         },
         legend: {
             enabled: false
@@ -44,13 +54,22 @@
                         [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
                     ]
                 },
-                // states: {
-                //     hover: {
-                //         lineWidth: 1
-                //     }
-                // },
-                threshold: null
+                states: {
+                    hover: {
+                        enabled: false,
+                        // lineWidth: 1
+                    }
+                },
+                threshold: null,
+                marker: {
+                    enabled:false
+                }
             }
+        },
+        tooltip: {
+            // enabled: false,
+            valueDecimals: 3,
+            valueSuffix: "%"
         },
 
         series: [{
@@ -79,7 +98,7 @@
 
       nAvg = (nAvg/ aData.length)
 
-
+      oChart.setTitle({text: nAvg.toFixed(3) + "% CPU"});   
       oChart.series[0].addPoint(nAvg);
     };
 

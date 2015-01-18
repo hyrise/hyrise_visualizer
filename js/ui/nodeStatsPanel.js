@@ -19,7 +19,7 @@
       for (var i = 0; i < oData.cpu.length; i++) {
         sId = "CPU-" + index + "-" + i;
         oDiv.append('<div id=' + sId +' class="ProgressCPU"/>');
-        createProgressBar(sId, oData.cpu[i].value, "cpubar",width);
+        createProgressBar(sId, oData.cpu[i].value/100, "cpubar",width);
       };
 
 
@@ -51,7 +51,7 @@
     };
 
     // sId - id of the Div the Progressbar is to be placed in
-    // nValue - decimal fillvalue
+    // nValue - fillvalue [0,1]
     // sClass - Styleclass the Bar gets
     // nWidth - width of the Parent
     createProgressBar = function(sId, nValue, sClass, nWidth){
