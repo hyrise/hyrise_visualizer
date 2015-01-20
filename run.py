@@ -31,7 +31,7 @@ class MyServerHandler(object):
         with open("index.html") as f:
             content = f.readlines()
             return content
-    
+
     @cherrypy.expose
     def delay(self):
         config = getConfig();
@@ -49,21 +49,21 @@ class MyServerHandler(object):
         config = getConfig();
         payload = {'data':0}
         r = requests.post("http://%s:%d/statistics" % (config["dispatcher"]["host"], config["dispatcher"]["port"]), data=payload, stream=True)
-        return '{"data":' + r.text + '}' 
+        return '{"data":' + r.text + '}'
 
     @cherrypy.expose
     def startserver(self):
-        call(["bash", "scripts/start.sh"])
+        call(["plink", "chemnitz", "-m", "scripts/start.sh"])
         return ""
 
     @cherrypy.expose
     def killmaster(self):
-        call(["bash", "scripts/killmaster.sh"])
+        call(["plink", "chemnitz", "-m", "scripts/killmaster.sh"])
         return ""
 
     @cherrypy.expose
     def killall(self):
-        call(["bash", "scripts/end.sh"])
+        call(["plink", "chemnitz", "-m", "scripts/end.sh"])
         return ""
 
     @cherrypy.expose
@@ -118,8 +118,7 @@ class MyServerHandler(object):
             oStats = { 'id': idx, 'cpu':[], 'net':{}, 'mem':{}}
             for row in result['rows']:
                 if row[0] == 'cpu':
-                    value = ((row[3]+row[4]+row[5])/float(row[3]+row[4]+row[5]+row[6]))*100 #Convert to %
-                    oStats['cpu'].append({'id':row[1], 'value':value})
+                    oStats['cpu'].append({'id':row[1], 'user':row[3], 'nice':row[4], 'system':row[5], 'idle':row[6]})
                 elif row[0] == 'network':
                     oStats['net']['id'] = row[1]
                     oStats['time'] = row[2]
@@ -134,11 +133,11 @@ class MyServerHandler(object):
 
         return json.dumps(aStats)
 
-  
+
 if __name__ == '__main__':
 
     random.seed()
-    
+
     conf = {
         '/': {'tools.staticdir.on': True, 'tools.staticdir.dir': os.path.abspath('./')},
         #"server.logToScreen" : False,
@@ -152,7 +151,7 @@ if __name__ == '__main__':
     cherrypy.config.update({ "server.logToScreen" : False })
     #cherrypy.config.update({'log.screen': False})
     # cherrypy.config.update({ "environment": "embedded" })
-        
+
     cherrypy.quickstart(MyServerHandler(), '/', conf)
 
     # print create_json_from_ab("Reads")

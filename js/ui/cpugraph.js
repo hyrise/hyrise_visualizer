@@ -1,8 +1,6 @@
 (function() {
 
-    var aCPUData = [];
     var oChart;
-    var sTitle = "CPU";
 
     createCPUGraph = function(oDiv){
 
@@ -10,6 +8,7 @@
 
       oDiv.highcharts({
         chart: {
+            type: "area",
             width: 365,
             borderColor: "#ddd",
             borderWidth: 1,
@@ -19,21 +18,19 @@
           enabled: false
         },
         title: {
-            text: sTitle
+            text: "CPU"
         },
         xAxis: {
             type: 'linear',
             labels:{
               enabled:false
             },
-            min: 0,
-            maxRange: 60,
             tickWidth: 0
         },
         yAxis: {
             type: 'linear',
             labels: {
-              // enabled: false
+              enabled: false
             },
             title: {
                 enabled: false
@@ -47,6 +44,7 @@
         },
         plotOptions: {
             area: {
+                stacking: "normal",
                 fillColor: {
                     linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
                     stops: [
@@ -73,33 +71,53 @@
         },
 
         series: [{
-            type: 'area',
-            name: 'CPU',
+            // type: 'area',
+            name: 'User',
             pointInterval: 1,
             pointStart: 0,
-            data: aCPUData
+            data: []
+        },
+        {
+            // type: 'area',
+            name: 'System',
+            pointInterval: 1,
+            pointStart: 0,
+            data: []
         }]
       });
 
     oChart= oDiv.highcharts();
     };
 
-    addCPUGraphPoint = function(aData){
+    addCPUGraphPoint = function(aData, aLast){
 
-      var oData,nSum= 0, nAvg= 0;
+      var user,system,value,oData, oLast;
+      var nSum = 0, nSumUser = 0, nSumSystem = 0;
+      var nAvg = 0, nAvgUser = 0, nAvgSystem = 0;
       for (var i = 0; i < aData.length; i++) {
-        oData = aData[i]
+        oData = aData[i];
+        oLast = aLast[i];
         nSum = 0;
         for (var j = 0; j < oData.cpu.length; j++) {
-          nSum += oData.cpu[j].value;
+          user = ((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice))/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
+          system = (oLast.cpu[j].system - oData.cpu[j].system)/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
+          value = ((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system))/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
+          nSumUser += user;
+          nSumSystem += system;
+          nSum += value;
         }
-        nAvg += (nSum / oData.cpu.length)
+        nAvgUser += nSumUser/ oData.cpu.length;
+        nAvgSystem += nSumSystem/ oData.cpu.length;
+        nAvg += nSum/ oData.cpu.length;
       };
 
-      nAvg = (nAvg/ aData.length)
+      nAvg = (nAvg / aData.length)*100
+      nAvgUser = (nAvgUser/ aData.length)*100 //convert to %
+      nAvgSystem = (nAvgSystem/ aData.length)*100
 
-      oChart.setTitle({text: nAvg.toFixed(3) + "% CPU"});   
-      oChart.series[0].addPoint(nAvg);
+      oChart.setTitle({text: nAvg.toFixed(3) + "% CPU"});
+      oChart.series[0].addPoint(nAvgUser);
+      oChart.series[1].addPoint(nAvgSystem);
     };
 
 

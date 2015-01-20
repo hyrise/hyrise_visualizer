@@ -107,7 +107,7 @@
 		createCPUGraph($('#ClusterCPU'));
 
 		var bFirst = true;
-		var aHistory = [];
+		var aLast = [];
 		setInterval(function(){
 			$.ajax({
 				method: "GET",
@@ -115,18 +115,14 @@
 				success: function(oResult){
 					aData = JSON.parse(oResult)
 					if(!bFirst){
-						for (var i = 0; i < aData.length; i++) {
-							aData[i].time_last = aHistory[aHistory.length-1][i].time
-							aData[i].net.received_last = aHistory[aHistory.length-1][i].net.received;
-							aData[i].net.send_last = aHistory[aHistory.length-1][i].net.send;
-						};
+						for(var i = 0; i < aNodes.length; i++){
+							createNodeStatsPanel($("#PanelBody-"+i), aData[i],aLast[i], i)
+						}
+						addCPUGraphPoint(aData,aLast);
 					}
 					bFirst = false;
-					aHistory.push(aData);
-					for(var i = 0; i < aNodes.length; i++){
-						createNodeStatsPanel($("#PanelBody-"+i), aData[i], i)
-					}
-					addCPUGraphPoint(aData);
+					aLast = aData;
+
 
 				},
 				error: function(oResult){

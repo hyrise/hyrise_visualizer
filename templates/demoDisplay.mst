@@ -4,7 +4,7 @@
       <div class="infoBox">
         <h4>Info</h4>
         <span>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices odio eget lacus dictum, nec feugiat arcu molestie. Integer sagittis, quam non efficitur ullamcorper, lacus erat imperdiet neque, nec ullamcorper ante lorem ac nulla. Quisque vel eros sed ligula rutrum dapibus. In arcu ipsum, aliquam vel sodales mollis, viverra non turpis. Sed vitae posuere ligula. Quisque sit amet sapien id nibh fermentum tristique et ut mauris. Curabitur mollis dui at faucibus bibendum. Nunc rutrum velit nec risus ullamcorper efficitur ut ut turpis. Morbi fringilla ante magna, a vulputate diam tempor in. Nunc vel libero placerat elit ullamcorper ullamcorper. Quisque malesuada lacus nisl, nec pretium nisi pulvinar eu. Vivamus velit urna, ultricies eu erat ac, fringilla placerat lacus.
+          Execute Select Statements.
         </span>
       </div>
       <div class="replicaButtons">
@@ -42,19 +42,9 @@
             Stop Workload
           </button><br>
       </div>
-      <div class="userSlider">
-            <p>
-              #Users writing: <input type="text" id="amount_write_user" readonly>
-            </p>
-              <div id="slider_write_user"></div>
-             <p>
-              #Users reading: <input type="text" id="amount_read_user" readonly>
-            </p>
-              <div id="slider_read_user"></div>
-      </div>
     </div>
   </div>
-  
+
   <div id="demo2Screen" hidden=true>
     <div class="area_frame">
       <div class="infoBox">
