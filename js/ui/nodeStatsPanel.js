@@ -1,7 +1,7 @@
 (function() {
 
     // fills the Panel Body with Content
-    createNodeStatsPanel = function(oDiv, oData, oLast, index){
+    createNodeStatsPanel = function(oDiv, oData, oLast, index, aUsedCPUs){
 
 
       oDiv[0].innerHTML = ""; //Delete previous content to update (pseudo redraw)
@@ -13,16 +13,20 @@
       var user,system;
       var aValue = [];
       for (var i = 0; i < oData.cpu.length; i++) {
-        aValue[i] = ((oLast.cpu[i].user - oData.cpu[i].user) + (oLast.cpu[i].nice - oData.cpu[i].nice) + (oLast.cpu[i].system - oData.cpu[i].system))/((oLast.cpu[i].user - oData.cpu[i].user) + (oLast.cpu[i].nice - oData.cpu[i].nice) + (oLast.cpu[i].system - oData.cpu[i].system) + (oLast.cpu[i].idle - oData.cpu[i].idle))
-        nSum += aValue[i];
+        if(aUsedCPUs.indexOf(i) !== -1){
+          aValue[i] = ((oLast.cpu[i].user - oData.cpu[i].user) + (oLast.cpu[i].nice - oData.cpu[i].nice) + (oLast.cpu[i].system - oData.cpu[i].system))/((oLast.cpu[i].user - oData.cpu[i].user) + (oLast.cpu[i].nice - oData.cpu[i].nice) + (oLast.cpu[i].system - oData.cpu[i].system) + (oLast.cpu[i].idle - oData.cpu[i].idle))
+          nSum += aValue[i];
+        }
       }
-      var nAvg = ((nSum / oData.cpu.length)*100).toFixed(3);
+      var nAvg = ((nSum / aUsedCPUs.length)*100).toFixed(3);
       var sAvg = "AVG: " + nAvg + "%";
       oDiv.append('<div><span>CPU</span><span class="TextSpan">' + sAvg + '</span></div>');
       for (var i = 0; i < oData.cpu.length; i++) {
-        sId = "CPU-" + index + "-" + i;
-        oDiv.append('<div id=' + sId +' class="ProgressCPU"/>');
-        createProgressBar(sId, aValue[i], "cpubar",width);
+        if(aUsedCPUs.indexOf(i) !== -1){
+          sId = "CPU-" + index + "-" + i;
+          oDiv.append('<div id=' + sId +' class="ProgressCPU"/>');
+          createProgressBar(sId, aValue[i], "cpubar",width);
+        }
       };
 
 

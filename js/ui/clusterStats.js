@@ -1,7 +1,7 @@
 (function() {
 
 	var clusterThroughputGraph;
-	var aNodes;
+	var aNodes, nUsedCPUs;
 
 	// Extend the standard ui plugin
 	hyryx.manage.ClusterStats = function() {
@@ -19,9 +19,12 @@
 				var oData = JSON.parse(oResult);
 				aNodes = oData.nodes;
 				console.log("Nodes set")
+				nUsedCPUs = 0;
 
 				for(var i = 0; i < oData.nodes.length; i++){
 					oData.nodes[i].index = i;
+					aNodes[i].usedCPUs = _.range(nUsedCPUs,nUsedCPUs + aNodes[i].cpu,1);
+					nUsedCPUs = nUsedCPUs + aNodes[i].cpu;
 					if(oData.master === i){
 						oData.nodes[i].master = true;
 					}
@@ -80,10 +83,12 @@
 
 			var aHosts = $(".NodeHost");
 			var aPorts = $(".NodePort");
+			var aCPUs = $(".NodeCPU");
 			for(var i = 0; i < aHosts.length; i++){
 				oData.nodes.push({
 					host: aHosts[i].value,
-					port: parseInt(aPorts[i].value)})
+					port: parseInt(aPorts[i].value),
+					cpu: parseInt(aCPUs[i].value)})
 			}
 
 			oData.dispatcher = {
@@ -116,9 +121,9 @@
 					aData = JSON.parse(oResult)
 					if(!bFirst){
 						for(var i = 0; i < aNodes.length; i++){
-							createNodeStatsPanel($("#PanelBody-"+i), aData[i],aLast[i], i)
+							createNodeStatsPanel($("#PanelBody-"+i), aData[i],aLast[i], i, aNodes[i].usedCPUs)
 						}
-						addCPUGraphPoint(aData,aLast);
+						addCPUGraphPoint(aData, aLast, nUsedCPUs);
 					}
 					bFirst = false;
 					aLast = aData;

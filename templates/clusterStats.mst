@@ -8,17 +8,19 @@
         <div class="panel-body ManageNodesTable">
           <h5 class="col-md-6">Host</h5>
           <h5 class="col-md-2">Port</h5>
+          <h5 class="col-md-1">CPUs</h5>
           <h5 class="col-md-2">Master</h5>
           {{#nodes}}
               <div class="col-md-6"><input id="host-{{index}}" class="NodeHost form-control" value="{{host}}"></input></div>
               <div class="col-md-2"><input id="port-{{index}}" class="NodePort form-control" value="{{port}}"></input></div>
+              <div class="col-md-1"><input id="cpu-{{index}}" class="NodeCPU form-control" value="{{cpu}}"></input></div>
               <div class="col-md-2"><input id="master-{{index}}" value="{{index}}" type="radio" name="master" class="ManageMasterRadio" {{#master}}checked{{/master}}></input></div>
           {{/nodes}}
 
-        <div class="ManageNodesButtons col-md-12">
+      <!--   <div class="ManageNodesButtons col-md-12">
           <button type="button" id="btn-add" class="btn btn-primary">+</button>
           <button type="button" id="btn-add" class="btn btn-primary">-</button>
-        </div>
+        </div> -->
         </div>
       </div>
       <div class="panel panel-default ManageDispatcher">

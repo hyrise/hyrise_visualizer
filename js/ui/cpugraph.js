@@ -89,7 +89,7 @@
     oChart= oDiv.highcharts();
     };
 
-    addCPUGraphPoint = function(aData, aLast){
+    addCPUGraphPoint = function(aData, aLast, nUsedCPUs){
 
       var user,system,value,oData, oLast;
       var nSum = 0, nSumUser = 0, nSumSystem = 0;
@@ -99,16 +99,18 @@
         oLast = aLast[i];
         nSum = 0;
         for (var j = 0; j < oData.cpu.length; j++) {
-          user = ((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice))/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
-          system = (oLast.cpu[j].system - oData.cpu[j].system)/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
-          value = ((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system))/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
-          nSumUser += user;
-          nSumSystem += system;
-          nSum += value;
+            if( j < nUsedCPUs){
+                user = ((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice))/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
+                system = (oLast.cpu[j].system - oData.cpu[j].system)/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
+                value = ((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system))/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
+                nSumUser += user;
+                nSumSystem += system;
+                nSum += value;
+            }
         }
-        nAvgUser += nSumUser/ oData.cpu.length;
-        nAvgSystem += nSumSystem/ oData.cpu.length;
-        nAvg += nSum/ oData.cpu.length;
+        nAvgUser += nSumUser/ nUsedCPUs;
+        nAvgSystem += nSumSystem/ nUsedCPUs;
+        nAvg += nSum/ nUsedCPUs;
       };
 
       nAvg = (nAvg / aData.length)*100
