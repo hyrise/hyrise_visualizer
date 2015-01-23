@@ -10,11 +10,16 @@
       // CPU
       var sId;
       var nSum = 0;
-      var user,system;
+      var dUser, dSystem, dNice, dIdle, dSum;
       var aValue = [];
       for (var i = 0; i < oData.cpu.length; i++) {
         if(aUsedCPUs.indexOf(i) !== -1){
-          aValue[i] = ((oLast.cpu[i].user - oData.cpu[i].user) + (oLast.cpu[i].nice - oData.cpu[i].nice) + (oLast.cpu[i].system - oData.cpu[i].system))/((oLast.cpu[i].user - oData.cpu[i].user) + (oLast.cpu[i].nice - oData.cpu[i].nice) + (oLast.cpu[i].system - oData.cpu[i].system) + (oLast.cpu[i].idle - oData.cpu[i].idle))
+          dUser = (oData.cpu[i].user - oLast.cpu[i].user);
+          dNice = (oData.cpu[i].nice - oLast.cpu[i].nice);
+          dSystem = (oData.cpu[i].system - oLast.cpu[i].system);
+          dIdle = (oData.cpu[i].idle - oLast.cpu[i].idle);
+          dSum = dUser + dNice + dSystem + dIdle;
+          aValue[i] = (dUser + dNice + dSystem)/dSum;
           nSum += aValue[i];
         }
       }

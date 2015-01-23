@@ -25,7 +25,7 @@
             labels:{
               enabled:false
             },
-            tickWidth: 0
+            tickWidth: 0,
         },
         yAxis: {
             type: 'linear',
@@ -45,27 +45,26 @@
         plotOptions: {
             area: {
                 stacking: "normal",
-                fillColor: {
-                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-                    stops: [
-                        [0, Highcharts.getOptions().colors[0]],
-                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                    ]
-                },
+                // fillColor: {
+                //     linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+                //     stops: [
+                //         [0, Highcharts.getOptions().colors[0]],
+                //         [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                //     ]
+                // },
                 states: {
                     hover: {
                         enabled: false,
                         // lineWidth: 1
                     }
                 },
-                threshold: null,
                 marker: {
                     enabled:false
                 }
             }
         },
         tooltip: {
-            // enabled: false,
+            shared: true,
             valueDecimals: 3,
             valueSuffix: "%"
         },
@@ -92,17 +91,25 @@
     addCPUGraphPoint = function(aData, aLast, nUsedCPUs){
 
       var user,system,value,oData, oLast;
-      var nSum = 0, nSumUser = 0, nSumSystem = 0;
+      var dUser, dSystem, dNice, dIdle, dSum;
+      var nSum, nSumUser, nSumSystem;
       var nAvg = 0, nAvgUser = 0, nAvgSystem = 0;
-      for (var i = 0; i < aData.length; i++) {
+      for (var i = 0; i < aData.length; i++) {  // Loop over every System
         oData = aData[i];
         oLast = aLast[i];
-        nSum = 0;
-        for (var j = 0; j < oData.cpu.length; j++) {
+        nSum = 0; nSumUser = 0; nSumSystem = 0;
+        for (var j = 0; j < oData.cpu.length; j++) { // Loop over every CPU
             if( j < nUsedCPUs){
-                user = ((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice))/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
-                system = (oLast.cpu[j].system - oData.cpu[j].system)/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
-                value = ((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system))/((oLast.cpu[j].user - oData.cpu[j].user) + (oLast.cpu[j].nice - oData.cpu[j].nice) + (oLast.cpu[j].system - oData.cpu[j].system) + (oLast.cpu[j].idle - oData.cpu[j].idle))
+                dUser = (oData.cpu[j].user - oLast.cpu[j].user);
+                dNice = (oData.cpu[j].nice - oLast.cpu[j].nice);
+                dSystem = (oData.cpu[j].system - oLast.cpu[j].system);
+                dIdle = (oData.cpu[j].idle - oLast.cpu[j].idle);
+                dSum = dUser + dNice + dSystem + dIdle;
+                
+                user = (dUser+dNice)/(dSum);
+                system = (dSystem)/(dSum);
+                value = (dUser+dNice+dSystem)/(dSum);
+
                 nSumUser += user;
                 nSumSystem += system;
                 nSum += value;
@@ -117,7 +124,18 @@
       nAvgUser = (nAvgUser/ aData.length)*100 //convert to %
       nAvgSystem = (nAvgSystem/ aData.length)*100
 
+      if(Math.abs(nAvg - nAvgUser - nAvgSystem) > 0.1){
+        console.log("wtf!")
+      }
+
       oChart.setTitle({text: nAvg.toFixed(3) + "% CPU"});
+
+      //Set Axis to show only last Minute
+      var nLength = oChart.series[0].points.length
+      if(nLength > 60){
+        oChart.xAxis[0].setExtremes(nLength-60, nLength);
+      }
+
       oChart.series[0].addPoint(nAvgUser);
       oChart.series[1].addPoint(nAvgSystem);
     };
