@@ -40,11 +40,6 @@ class MyServerHandler(object):
         return r.text
 
     @cherrypy.expose
-    def load(self):
-        l = psutil.cpu_percent(interval=0, percpu=True)
-        return """{"0": [%d], "1": [%d], "2": [%d], "3": [%d] }""" % (l[0], l[1], l[2], l[3])
-
-    @cherrypy.expose
     def QueryData(self):
         config = getConfig();
         payload = {'data':0}
@@ -53,27 +48,38 @@ class MyServerHandler(object):
 
     @cherrypy.expose
     def startserver(self):
-        call(["plink", "chemnitz", "-m", "scripts/start.sh"])
+        config = getConfig();
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/start.sh", str(config["nodes"][0]["cpu"]), str(config["nodes"][1]["cpu"]), str(config["nodes"][2]["cpu"]), str(config["nodes"][3]["cpu"])])
         return ""
 
     @cherrypy.expose
     def killmaster(self):
-        call(["plink", "chemnitz", "-m", "scripts/killmaster.sh"])
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/killmaster.sh"])
         return ""
 
     @cherrypy.expose
     def killall(self):
-        call(["plink", "chemnitz", "-m", "scripts/end.sh"])
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/end.sh"])
         return ""
 
     @cherrypy.expose
     def readworkload(self):
-        call(["bash", "scripts/workload_read.sh"])
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_read.sh"], "1")
         return ""
 
     @cherrypy.expose
     def writeworkload(self):
-        call(["bash", "scripts/workload_write.sh"])
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_write.sh"], "1")
+        return ""
+
+    @cherrypy.expose
+    def startworkload(self):
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_start.sh"], "1", "1")
+        return ""
+
+    @cherrypy.expose
+    def endworkload(self):
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_end.sh"])
         return ""
 
     @cherrypy.expose
@@ -112,26 +118,32 @@ class MyServerHandler(object):
         config = getConfig();
         payload = {'query': '{"operators": {"0": {"type": "SystemStats"} } }'}
         aStats = []
-        for idx, node in enumerate(config["nodes"]):
-            r = requests.post("http://%s:%d/query/" % (node["host"], node["port"]), data=payload)
-            result = json.loads(r.text)
-            oStats = { 'id': idx, 'cpu':[], 'net':{}, 'mem':{}}
-            for row in result['rows']:
-                if row[0] == 'cpu':
-                    oStats['cpu'].append({'id':row[1], 'user':row[3], 'nice':row[4], 'system':row[5], 'idle':row[6]})
-                elif row[0] == 'network':
-                    oStats['net']['id'] = row[1]
-                    oStats['time'] = row[2]
-                    oStats['net']['received'] = row[3]
-                    oStats['net']['send'] = row[4]
-                elif row[0] == 'memory':
-                    if row[1] == 'MemTotal':
-                        oStats['mem']['total'] = row[3]
-                    elif row[1] == 'MemFree':
-                        oStats['mem']['free'] = row[3]
-            aStats.append(oStats)
+        try:
+            for idx, node in enumerate(config["nodes"]):
+                r = requests.post("http://%s:%d/query/" % (node["host"], node["port"]), data=payload)
+                result = json.loads(r.text)
+                oStats = { 'id': idx, 'cpu':[], 'net':{}, 'mem':{}}
+                for row in result['rows']:
+                    if row[0] == 'cpu':
+                        oStats['cpu'].append({'id':row[1], 'user':row[3], 'nice':row[4], 'system':row[5], 'idle':row[6]})
+                    elif row[0] == 'network':
+                        oStats['net']['id'] = row[1]
+                        oStats['time'] = row[2]
+                        oStats['net']['received'] = row[3]
+                        oStats['net']['send'] = row[4]
+                    elif row[0] == 'memory':
+                        if row[1] == 'MemTotal':
+                            oStats['mem']['total'] = row[3]
+                        elif row[1] == 'MemFree':
+                            oStats['mem']['free'] = row[3]
+                aStats.append(oStats)
 
-        return json.dumps(aStats)
+            return json.dumps(aStats)
+        except Exception as e:
+            return str(e)
+
+
+        
 
 
 if __name__ == '__main__':

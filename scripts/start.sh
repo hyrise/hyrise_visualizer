@@ -19,10 +19,13 @@ cd ~/hyrise_nvm
 BINARY=~/hyrise_nvm/build/hyrise-server_release
 DISPATCHER=~/dispatcher/dispatcher
 DISPATCHPORT=6666
-SETUPQUERY=$cwd/insert_test.json
+SETUPQUERY=~/benchmark/visualizer2/insert_test.json
 PERSISTENCYDIR=$cwd/logs
 
-
+#calculate CPU offsets
+off1=$1
+off2=$((off1 + $2))
+off3=$((off2 + $3))
 
 echo "Starting Hyrise cluster with 1 master and 3 replica..."
 echo "Binary file is $BINARY"
@@ -41,7 +44,7 @@ done
 
 # start master
 echo "Starting master..."
-($BINARY -p 5000 -n 0 --corecount 1 --coreoffset 0 --commitWindow 1 --persistencyDirectory $PERSISTENCYDIR > $cwd/logs/log1.txt) &
+($BINARY -p 5000 -n 0 --corecount $1 --coreoffset 0 --commitWindow 1 --persistencyDirectory $PERSISTENCYDIR > $cwd/logs/log1.txt) &
 master_pid=$!
 echo $master_pid > $cwd/masterid.txt
 sleep 1
@@ -55,45 +58,28 @@ sleep 1
 
 # start replica 1-3
 echo "Starting replica 1..."
-($BINARY -p 5001 -n 1 --corecount 1 --coreoffset 1 --commitWindow 1 --persistencyDirectory $PERSISTENCYDIR > $cwd/logs/log2.txt) &
+($BINARY -p 5001 -n 1 --corecount $2 --coreoffset $off1 --commitWindow 1 --persistencyDirectory $PERSISTENCYDIR > $cwd/logs/log2.txt) &
 r1_pid=$!
 sleep 1
-#checkprocess $r1_pid
 
 echo "Executing $SETUPQUERY @ R1..."
 curl -X POST --data-urlencode "query@$SETUPQUERY" http://localhost:5001/jsonQuery
 
 echo "Starting replica 2..."
-($BINARY -p 5002 -n 2 --corecount 1 --coreoffset 2 --commitWindow 1 --persistencyDirectory $PERSISTENCYDIR > $cwd/logs/log3.txt)&
+($BINARY -p 5002 -n 2 --corecount $3 --coreoffset $off2 --commitWindow 1 --persistencyDirectory $PERSISTENCYDIR > $cwd/logs/log3.txt)&
 r2_pid=$!
 sleep 1
-#checkprocess $r2_pid
 
 echo "Executing $SETUPQUERY @ R2..."
 curl -X POST --data-urlencode "query@$SETUPQUERY" http://localhost:5002/jsonQuery
 
 echo "Starting replica 3..."
-($BINARY -p 5003 -n 3 --corecount 1 --coreoffset 3 --commitWindow 1 --persistencyDirectory $PERSISTENCYDIR > $cwd/logs/log4.txt)&
+($BINARY -p 5003 -n 3 --corecount $4 --coreoffset $off3 --commitWindow 1 --persistencyDirectory $PERSISTENCYDIR > $cwd/logs/log4.txt)&
 r3_pid=$!
 sleep 1
-#checkprocess $r2_pid
 
 echo "Executing $SETUPQUERY @ R3..."
 curl -X POST --data-urlencode "query@$SETUPQUERY" http://localhost:5003/jsonQuery
-
-#echo "Starting replica 3..."
-#($BINARY --port 5003 --persistencyDirectory ~ -n 3 --threads 1 --corecount 1 --coreoffset 6 > ~/benchmark/visualizer/log4.txt)&
-#r3_pid=$!
-#sleep 1
-#checkprocess $r3_pid
-
-# create table on replica 1-3
-
-#echo "Executing $SETUPQUERY @ R2..."
-#curl -X POST --data-urlencode "query@$SETUPQUERY" http://localhost:5002/jsonQuery
-
-#echo "Executing $SETUPQUERY @ R3..."
-#curl -X POST --data-urlencode "query@$SETUPQUERY" http://localhost:5003/jsonQuery
 
 
 echo "starting dispatcher on port $DISPATCHPORT..."
@@ -102,7 +88,4 @@ d_pid=$!
 sleep 1
 checkprocess $d_pid
 
-
 echo "All processes started."
-
-

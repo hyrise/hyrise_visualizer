@@ -101,7 +101,19 @@
 				url: "saveConfig",
 				data: {data: JSON.stringify(oData)},
 				success: function(oResult){
-					alert("success");
+					aNodes = oData.nodes;
+					console.log("Nodes set")
+					nUsedCPUs = 0;
+
+					for(var i = 0; i < oData.nodes.length; i++){
+						oData.nodes[i].index = i;
+						aNodes[i].usedCPUs = _.range(nUsedCPUs,nUsedCPUs + aNodes[i].cpu,1);
+						nUsedCPUs = nUsedCPUs + aNodes[i].cpu;
+						if(oData.master === i){
+							oData.nodes[i].master = true;
+						}
+					}
+
 				},
 				error: function(oResult){
 					alert("error")
@@ -118,15 +130,19 @@
 				method: "GET",
 				url: "SystemStats",
 				success: function(oResult){
-					aData = JSON.parse(oResult)
-					if(!bFirst){
-						for(var i = 0; i < aNodes.length; i++){
-							createNodeStatsPanel($("#PanelBody-"+i), aData[i],aLast[i], i, aNodes[i].usedCPUs)
+					try{
+						aData = JSON.parse(oResult)
+						if(!bFirst){
+							for(var i = 0; i < aNodes.length; i++){
+								createNodeStatsPanel($("#PanelBody-"+i), aData[i],aLast[i], i, aNodes[i].usedCPUs)
+							}
+							addCPUGraphPoint(aData, aLast, nUsedCPUs);
 						}
-						addCPUGraphPoint(aData, aLast, nUsedCPUs);
+						bFirst = false;
+						aLast = aData;
+					} catch (e) {
+						console.log(oResult);
 					}
-					bFirst = false;
-					aLast = aData;
 
 
 				},
