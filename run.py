@@ -43,8 +43,11 @@ class MyServerHandler(object):
     def QueryData(self):
         config = getConfig();
         payload = {'data':0}
-        r = requests.post("http://%s:%d/statistics" % (config["dispatcher"]["host"], config["dispatcher"]["port"]), data=payload, stream=True)
-        return '{"data":' + r.text + '}'
+        try:
+            r = requests.post("http://%s:%d/statistics" % (config["dispatcher"]["host"], config["dispatcher"]["port"]), data=payload, stream=True)
+            return '{"data":' + r.text + '}'
+        except Exception as e:
+            return str(e)
 
     @cherrypy.expose
     def startserver(self):
@@ -64,17 +67,17 @@ class MyServerHandler(object):
 
     @cherrypy.expose
     def readworkload(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_read.sh"], "1")
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_read.sh", "10"])
         return ""
 
     @cherrypy.expose
     def writeworkload(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_write.sh"], "1")
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_write.sh", "10"])
         return ""
 
     @cherrypy.expose
     def startworkload(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_start.sh"], "1", "1")
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_start.sh", "10", "10"])
         return ""
 
     @cherrypy.expose

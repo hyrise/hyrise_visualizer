@@ -17,6 +17,28 @@
 	
 		
 	init : function() {    
+
+		$('#btn-start-workload').click(function(oEvent){
+			$.ajax({
+				method: "GET",
+				url: "startworkload",
+				success: function(oResult){
+				},
+				error: function(oResult){
+				}
+			})
+		});
+
+		$('#btn-stop-workload').click(function(oEvent){
+			$.ajax({
+				method: "GET",
+				url: "endworkload",
+				success: function(oResult){
+				},
+				error: function(oResult){
+				}
+			})
+		});
 	}
 
     });

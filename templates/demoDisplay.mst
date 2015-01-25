@@ -21,19 +21,6 @@
             Kill Master
           </button>
       </div>
-      <div id="clusterStatus">
-        <h4>Cluster Status</h2>
-        <h5>Instance 1
-        <div id="clusterStatusInst1"></div></h5>
-        <h5>Instance 2
-        <div id="clusterStatusInst2"></div></h5>
-        <h5>Instance 3
-        <div id="clusterStatusInst3"></div></h5>
-        <h5>Instance 4
-        <div id="clusterStatusInst4"></div></h5>
-        <h5>Dispatcher
-        <div id="clusterStatusDisp"></div></h5>
-      </div>
          <div class="workloadButtons">
           <button type="button" id="btn-start-workload" data-loading-text="Loading..." class="btn btn-primary">
             Start Workload

@@ -53,11 +53,11 @@
       oDiv.append('<div class="TextDiv"><span class="MemorySpan">Network</span><span class="SendSpan">' + sSend + '</span><span class="ReveivedSpan">' + sReveiced + '</span></div>');
       sId = "Netreceive-" +index;
       oDiv.append('<div id="' + sId + '" class="ProgressDIV"/>');
-      createProgressBar(sId, (nReceived/1000), "netrbar",width);  // current rate in kB relative to 1 MB
+      createProgressBar(sId, (nReceived/10000), "netrbar",width);  // current rate in kB relative to 10 MB
 
       sId = "Netsend-" +index;
       oDiv.append('<div id="' + sId + '" class="ProgressDIV"/>');
-      createProgressBar(sId, (nSend/1000), "netsbar",width);      // current rate in kB relative to 1 MB
+      createProgressBar(sId, (nSend/10000), "netsbar",width);      // current rate in kB relative to 10 MB
     };
 
     // sId - id of the Div the Progressbar is to be placed in
