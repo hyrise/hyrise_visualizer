@@ -13,6 +13,8 @@ function checkprocess {
 rm ab_reads.log
 rm ab_writes.log
 
+cd ~/hyrise_nvm
+
 BINARY=~/hyrise_nvm/build/hyrise-server_release
 DISPATCHER=~/dispatcher/dispatcher
 DISPATCHPORT=6666
