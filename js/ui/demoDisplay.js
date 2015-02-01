@@ -39,6 +39,39 @@
 				}
 			})
 		});
+
+		$('#btn-one-replica').click(function(oEvent){
+			$.ajax({
+				method: "GET",
+				url: "useonereplica",
+				success: function(oResult){
+				},
+				error: function(oResult){
+				}
+			})
+		});
+
+		$('#btn-two-replica').click(function(oEvent){
+			$.ajax({
+				method: "GET",
+				url: "usetworeplica",
+				success: function(oResult){
+				},
+				error: function(oResult){
+				}
+			})
+		});
+
+		$('#btn-three-replica').click(function(oEvent){
+			$.ajax({
+				method: "GET",
+				url: "usethreereplica",
+				success: function(oResult){
+				},
+				error: function(oResult){
+				}
+			})
+		});
 	}
 
     });

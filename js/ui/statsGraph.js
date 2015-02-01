@@ -1,9 +1,9 @@
 (function() {
 
     // creates a 2 series (sSeries1, sSeries2) Graph in oDiv with Title sTitle and value Suffix sSuffig
-    createGraph = function(oDiv, sTitle, sSuffix, sSeries1, sSeries2, nMax){
+    createGraph = function(oDiv, sTitle, sSuffix, sSeries1, sSeries2, nMax, bStacking){
 
-      oDiv.attr("style","min-width: 365px; height: 200px; margin: 0 auto");
+      oDiv.attr("style","min-width: 365px; height: 150px; margin: 0 auto");
 
       oDiv.highcharts({
         chart: {
@@ -17,7 +17,9 @@
           enabled: false
         },
         title: {
-            text: sTitle
+            text: sTitle,
+            floating: true,
+            align: "left"
         },
         xAxis: {
             type: 'linear',
@@ -36,7 +38,9 @@
             },
             min: 0,
             max: nMax,
-            tickWidth: 0
+            tickWidth: 0,
+            gridLineWidth: 0,
+            minorGridLineWidth: 0,
         },
         legend: {
             // enabled: false
@@ -44,19 +48,12 @@
             layout: "vertical",
              labelFormatter: function() {
                 var nLastVal = this.yData[this.yData.length - 1] || 0;
-                return '<span style="color:' + this.color + '">' + this.name + ':</span> <b>' + nLastVal.toFixed(2) + sSuffix + '</b> </n>';
+                return '<span style="color:' + this.color + '">' + this.name + ':<br></span> <b>' + nLastVal.toFixed(2) + sSuffix + '</b> </n>';
             }
         },
         plotOptions: {
             area: {
-                stacking: "normal",
-                // fillColor: {
-                //     linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-                //     stops: [
-                //         [0, Highcharts.getOptions().colors[0]],
-                //         [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                //     ]
-                // },
+                stacking: bStacking? "normal" : null,
                 states: {
                     hover: {
                         enabled: false,
@@ -77,13 +74,27 @@
             name: sSeries1,
             pointInterval: 1,
             pointStart: 0,
-            data: []
+            data: [],
+            color: {
+                    linearGradient: { x1: 1, y1: 0, x2: 0, y2: 0},
+                    stops: [
+                        [0, 'rgba(177, 6, 58,1)'],
+                        [1, 'rgba(177, 6, 58,0)']
+                    ]
+            }
         },
         {
             name: sSeries2,
             pointInterval: 1,
             pointStart: 0,
-            data: []
+            data: [],
+            color: {
+                    linearGradient: { x1: 1, y1: 0, x2: 0, y2: 0},
+                    stops: [
+                        [0, 'rgba(246, 168, 0, 1)'],
+                        [1, 'rgba(246, 168, 0, 0)']
+                    ]
+            }
         }]
       });
 

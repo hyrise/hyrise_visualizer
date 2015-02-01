@@ -121,8 +121,8 @@
             })
         });
 
-        var oCPUGraph = createGraph($('#ClusterCPU'),"CPU","%","User","System",100);
-        var oQueryGraph = createGraph($('#ClusterThroughput'), "Throughput", "/s","Read","Write", null);
+        var oCPUGraph = createGraph($('#ClusterCPU'),"CPU","%","User","System",100,true);
+        var oQueryGraph = createGraph($('#ClusterThroughput'), "Throughput", "/s","Read","Write", null,false);
 
         var bFirst = [true,true];
         var aLast = [];

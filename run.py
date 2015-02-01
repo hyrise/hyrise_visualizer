@@ -77,7 +77,7 @@ class MyServerHandler(object):
 
     @cherrypy.expose
     def startworkload(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_start.sh", "10", "10"])
+        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_start.sh", "3", "3"])
         return ""
 
     @cherrypy.expose
