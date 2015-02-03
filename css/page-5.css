@@ -69,10 +69,10 @@ h5 {
 }
 .SendSpan{
 	float: right;
-	color: darkorange;
+	color: rgb(246,168,0);
 }.ReveivedSpan{
 	float: right;
-	color: darkcyan;
+	color: rgb(177, 6, 58);
 }
 
 .progressbar {
@@ -87,13 +87,18 @@ h5 {
 }
 
 .cpubar {
-	fill: magenta;
+	fill: rgb(246,168,0);
 }
 
 .netrbar {
-	fill: darkcyan;
+	fill: rgb(177, 6, 58);
 }
 
 .netsbar {
-	fill: darkorange;
+	fill: rgb(246,168,0);
+}
+
+.ClusterGraph {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }

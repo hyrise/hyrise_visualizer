@@ -57,7 +57,7 @@
 
       sId = "Netsend-" +index;
       oDiv.append('<div id="' + sId + '" class="ProgressDIV"/>');
-      createProgressBar(sId, (nSend/10000), "netsbar",width);      // current rate in kB relative to 10 MB
+      createProgressBar(sId, (nSend/1000), "netsbar",width);      // current rate in kB relative to 1 MB
     };
 
     // sId - id of the Div the Progressbar is to be placed in

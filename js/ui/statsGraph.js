@@ -1,14 +1,14 @@
 (function() {
 
     // creates a 2 series (sSeries1, sSeries2) Graph in oDiv with Title sTitle and value Suffix sSuffig
-    createGraph = function(oDiv, sTitle, sSuffix, sSeries1, sSeries2, nMax, bStacking){
+    createGraph = function(oDiv, sTitle, sSuffix, nMax){
 
-      oDiv.attr("style","min-width: 365px; height: 150px; margin: 0 auto");
+      oDiv.attr("style","min-width: 773px; height: 150px; margin: 10px auto 10px");
 
       oDiv.highcharts({
         chart: {
+            width: 773,
             type: "area",
-            width: 365,
             borderColor: "#ddd",
             borderWidth: 1,
             borderRadius: 4
@@ -19,7 +19,10 @@
         title: {
             text: sTitle,
             floating: true,
-            align: "left"
+            align: "left",
+            style: {
+                fontSize:"20px"
+            }
         },
         xAxis: {
             type: 'linear',
@@ -43,17 +46,20 @@
             minorGridLineWidth: 0,
         },
         legend: {
-            // enabled: false
             align: "right",
-            layout: "vertical",
+            verticalAlign: "middle",
+            itemStyle: {
+                fontSize: "30px"
+            },
+            symbolWidth: 0,
+            itemWidth: 200,
              labelFormatter: function() {
                 var nLastVal = this.yData[this.yData.length - 1] || 0;
-                return '<span style="color:' + this.color + '">' + this.name + ':<br></span> <b>' + nLastVal.toFixed(2) + sSuffix + '</b> </n>';
+                return '<b>' + nLastVal.toFixed(2) + sSuffix + '</b>';
             }
         },
         plotOptions: {
             area: {
-                stacking: bStacking? "normal" : null,
                 states: {
                     hover: {
                         enabled: false,
@@ -71,7 +77,7 @@
         },
 
         series: [{
-            name: sSeries1,
+            name: sTitle,
             pointInterval: 1,
             pointStart: 0,
             data: [],
@@ -82,35 +88,22 @@
                         [1, 'rgba(177, 6, 58,0)']
                     ]
             }
-        },
-        {
-            name: sSeries2,
-            pointInterval: 1,
-            pointStart: 0,
-            data: [],
-            color: {
-                    linearGradient: { x1: 1, y1: 0, x2: 0, y2: 0},
-                    stops: [
-                        [0, 'rgba(246, 168, 0, 1)'],
-                        [1, 'rgba(246, 168, 0, 0)']
-                    ]
-            }
         }]
       });
 
     return oDiv.highcharts();
     };
 
-    addGraphPoints = function(oChart, nPoint1, nPoint2){
+    addGraphPoints = function(oChart, nPoint1){
 
         //Set Axis to show only last Minute
         var bShift = oChart.series[0].points.length > 60;
         oChart.isDirtyLegend = true;
         oChart.series[0].legendItem = oChart.series[0].legendItem.destroy();
-        oChart.series[1].legendItem = oChart.series[1].legendItem.destroy();
+        // oChart.series[1].legendItem = oChart.series[1].legendItem.destroy();
 
         oChart.series[0].addPoint(nPoint1, true, bShift);
-        oChart.series[1].addPoint(nPoint2, true, bShift);
+        // oChart.series[1].addPoint(nPoint2, true, bShift);
     };
 
     // calculate new CPU Usage values from last 2 Datasets
@@ -131,7 +124,7 @@
                     dSystem = (oData.cpu[j].system - oLast.cpu[j].system);
                     dIdle = (oData.cpu[j].idle - oLast.cpu[j].idle);
                     dSum = dUser + dNice + dSystem + dIdle;
-                    
+
                     user = (dUser+dNice)/(dSum);
                     system = (dSystem)/(dSum);
                     value = (dUser+dNice+dSystem)/(dSum);

@@ -121,8 +121,9 @@
             })
         });
 
-        var oCPUGraph = createGraph($('#ClusterCPU'),"CPU","%","User","System",100,true);
-        var oQueryGraph = createGraph($('#ClusterThroughput'), "Throughput", "/s","Read","Write", null,false);
+        var oCPUGraph = createGraph($('#ClusterCPU'),"CPU","%",100);
+        var oReadGraph = createGraph($('#ClusterRead'), "Reads", "/s", null);
+        var oWriteGraph = createGraph($('#ClusterWrite'), "Writes", "/s",null);
 
         var bFirst = [true,true];
         var aLast = [];
@@ -139,7 +140,8 @@
                                 createNodeStatsPanel($("#PanelBody-"+i), aData[i],aLast[i], i, aNodes[i].usedCPUs)
                             }
                             var aCPUValues = calculateCPUUsage(aData, aLast, nUsedCPUs);
-                            addGraphPoints(oCPUGraph, aCPUValues[1], aCPUValues[2]);
+                            if(aCPUValues[0] > 100) alert("wtf " + aCPUValues[0]);
+                            addGraphPoints(oCPUGraph, aCPUValues[0]);
                         }
                         bFirst[0] = false;
                         aLast = aData;
@@ -166,7 +168,8 @@
                             var nElapsed = (oData.timestamp - oLast.timestamp);
                             var nRead = (oData.read - oLast.read)/nElapsed;
                             var nWrite = (oData.write - oLast.write)/nElapsed;
-                            addGraphPoints(oQueryGraph, nRead, nWrite);
+                            addGraphPoints(oReadGraph, nRead);
+                            addGraphPoints(oWriteGraph, nWrite);
                         }
                         bFirst[1] = false;
                         oLast = oData;
