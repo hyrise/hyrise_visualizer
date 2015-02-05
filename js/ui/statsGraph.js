@@ -4,6 +4,33 @@
     createGraph = function(oDiv, sTitle, sSuffix, nMax){
 
       oDiv.attr("style","min-width: 773px; height: 150px; margin: 10px auto 10px");
+      var fnFormatter, nLastVal, sLastVal;
+      var aRGB;
+      if(sTitle === "CPU"){
+        aRGB = [177,6,58];
+        fnFormatter = function() {
+            nLastVal = this.yData[this.yData.length - 1] || 0;
+            return '<b style="font-size: 30px">' + parseInt(nLastVal) + sSuffix + '</b>';
+        };
+      } else {
+        var sSuffixText;
+        if(sTitle === "Reads"){
+            aRGB = [222,98,7];
+            sSuffixText = "read queries/sec"
+        } else {
+            aRGB = [247,169,0];
+            sSuffixText = "write queries/sec"
+        }
+        fnFormatter = function() {
+            nLastVal = this.yData[this.yData.length - 1] || 0;
+            if(nLastVal >= 1000){
+                sLastVal = (nLastVal/1000).toFixed(1) + "k";
+            } else {
+                sLastVal = nLastVal.toFixed(1);
+            }
+            return '<b style="font-size: 30px">' + sLastVal + '</b><br>' + sSuffixText;
+        };
+      }
 
       oDiv.highcharts({
         chart: {
@@ -48,15 +75,13 @@
         legend: {
             align: "right",
             verticalAlign: "middle",
-            itemStyle: {
-                fontSize: "30px"
-            },
+            useHTML: true,
             symbolWidth: 0,
-            itemWidth: 200,
-             labelFormatter: function() {
-                var nLastVal = this.yData[this.yData.length - 1] || 0;
-                return '<b>' + nLastVal.toFixed(2) + sSuffix + '</b>';
-            }
+            itemWidth: 150,
+            itemStyle: {
+                "text-align": "center",
+            },
+            labelFormatter: fnFormatter
         },
         plotOptions: {
             area: {
@@ -84,8 +109,8 @@
             color: {
                     linearGradient: { x1: 1, y1: 0, x2: 0, y2: 0},
                     stops: [
-                        [0, 'rgba(177, 6, 58,1)'],
-                        [1, 'rgba(177, 6, 58,0)']
+                        [0, 'rgba(' + aRGB[0] + ',' + aRGB[1] + ',' + aRGB[2] + ',1)'],
+                        [1, 'rgba(' + aRGB[0] + ',' + aRGB[1] + ',' + aRGB[2] + ',0)']
                     ]
             }
         }]
@@ -100,10 +125,8 @@
         var bShift = oChart.series[0].points.length > 60;
         oChart.isDirtyLegend = true;
         oChart.series[0].legendItem = oChart.series[0].legendItem.destroy();
-        // oChart.series[1].legendItem = oChart.series[1].legendItem.destroy();
 
         oChart.series[0].addPoint(nPoint1, true, bShift);
-        // oChart.series[1].addPoint(nPoint2, true, bShift);
     };
 
     // calculate new CPU Usage values from last 2 Datasets

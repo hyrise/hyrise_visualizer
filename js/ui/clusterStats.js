@@ -50,27 +50,31 @@
     init : function() {
 
         $('#btn-startup').click(function(oEvent){
+            $('#loadingDiv').show();
             $.ajax({
                 method: "GET",
                 url: "startserver",
                 success: function(oResult){
-                    alert("success");
+                    $('#loadingDiv').hide();
                 },
                 error: function(oResult){
-                    alert("error")
+                    $('#loadingDiv').hide();
+                    alert("error");
                 }
             })
         });
 
         $('#btn-kill-all').click(function(oEvent){
+            $('#loadingDiv').show();
             $.ajax({
                 method: "GET",
                 url: "killall",
                 success: function(oResult){
-                    alert("success");
+                    $('#loadingDiv').hide();
                 },
                 error: function(oResult){
-                    alert("error")
+                    $('#loadingDiv').hide();
+                    alert("error");
                 }
             })
         });

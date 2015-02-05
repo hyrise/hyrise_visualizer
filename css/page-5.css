@@ -95,10 +95,29 @@ h5 {
 }
 
 .netsbar {
-	fill: rgb(246,168,0);
+	fill: rgb(246,169,0);
 }
 
 .ClusterGraph {
 	margin-top: 10px;
 	margin-bottom: 10px;
+}
+
+.spinner-div {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:1000;
+}
+
+.ajax-spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -32px; /* -1 * image width / 2 */
+    margin-top: -32px;  /* -1 * image height / 2 */
+    display: block;
+    background-color: transparent;
 }
