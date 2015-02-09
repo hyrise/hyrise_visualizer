@@ -17,9 +17,9 @@
           <button type="button" id="btn-three-replica" data-loading-text="Loading..." class="btn btn-primary">
             Use 3 Replica
           </button>
-          <button type="button" id="btn-kill-master" data-loading-text="Loading..." class="btn btn-primary">
+          <!-- <button type="button" id="btn-kill-master" data-loading-text="Loading..." class="btn btn-primary">
             Kill Master
-          </button>
+          </button> -->
       </div>
          <div class="workloadButtons">
           <button type="button" id="btn-start-workload" data-loading-text="Loading..." class="btn btn-primary">

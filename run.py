@@ -1,22 +1,16 @@
 #!/usr/bin/env python
-# import SimpleHTTPServer
-# import BaseHTTPServer
-# import SocketServer
 import json
 import os
-# import pandas as pd
-# import math
-# import numpy as np
-# from functools import partial
 import os.path, time
 import cherrypy
 import random
 from subprocess import call
 import requests
-import psutil
 
-import config
-
+if os.name == 'nt':
+    remote = "plink"
+else:
+    remote = "ssh"
 
 def getConfig():
     json_file = open('config.json')
@@ -52,37 +46,43 @@ class MyServerHandler(object):
     @cherrypy.expose
     def startserver(self):
         config = getConfig();
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/start.sh", str(config["nodes"][0]["cpu"]), str(config["nodes"][1]["cpu"]), str(config["nodes"][2]["cpu"]), str(config["nodes"][3]["cpu"])])
+        call([remote, config["nodes"][config["master"]]["host"], "hyrise_visualizer/scripts/start.sh", str(config["nodes"][0]["cpu"]), str(config["nodes"][1]["cpu"]), str(config["nodes"][2]["cpu"]), str(config["nodes"][3]["cpu"])])
         return ""
 
     @cherrypy.expose
     def killmaster(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/killmaster.sh"])
+        config = getConfig();
+        call([remote, config["nodes"][config["master"]]["host"], "hyrise_visualizer/scripts/killmaster.sh"])
         return ""
 
     @cherrypy.expose
     def killall(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/end.sh"])
+        config = getConfig();
+        call([remote, config["nodes"][config["master"]]["host"], "hyrise_visualizer/scripts/end.sh"])
         return ""
 
     @cherrypy.expose
     def readworkload(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_read.sh", "10"])
+        config = getConfig();
+        call([remote, config["nodes"][config["master"]]["host"], "hyrise_visualizer/scripts/workload_read.sh", "10"])
         return ""
 
     @cherrypy.expose
     def writeworkload(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_write.sh", "10"])
+        config = getConfig();
+        call([remote, config["nodes"][config["master"]]["host"], "hyrise_visualizer/scripts/workload_write.sh", "10"])
         return ""
 
     @cherrypy.expose
     def startworkload(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_start.sh", "3", "3"])
+        config = getConfig();
+        call([remote, config["nodes"][config["master"]]["host"], "hyrise_visualizer/scripts/workload_start.sh", "3", "3"])
         return ""
 
     @cherrypy.expose
     def endworkload(self):
-        call(["plink", "chemnitz", "hyrise_visualizer/scripts/workload_end.sh"])
+        config = getConfig();
+        call([remote, config["nodes"][config["master"]]["host"], "hyrise_visualizer/scripts/workload_end.sh"])
         return ""
 
     @cherrypy.expose
