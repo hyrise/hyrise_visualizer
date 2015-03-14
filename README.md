@@ -12,8 +12,10 @@ The named components reference repositories from the [Hyrise Organization](https
 
  1. Clone hyrise_nvm repository
  2. change settings.mk and build
+```
     Persistency:BUFFEREDLOGGER
     Replication:1
+```
  3. Clone dispatcher and built
  4. Clone hyrise_visualizer to get the scripts
  5. Clone benchmark and built Apache Benchmark Tool (ab)
