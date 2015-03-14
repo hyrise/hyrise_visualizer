@@ -18,7 +18,6 @@
             success: function(oResult){
                 var oData = JSON.parse(oResult);
                 aNodes = oData.nodes;
-                console.log("Nodes set")
                 nUsedCPUs = 0;
 
                 for(var i = 0; i < oData.nodes.length; i++){
@@ -106,7 +105,6 @@
                 data: {data: JSON.stringify(oData)},
                 success: function(oResult){
                     aNodes = oData.nodes;
-                    console.log("Nodes set")
                     nUsedCPUs = 0;
 
                     for(var i = 0; i < oData.nodes.length; i++){
@@ -144,7 +142,6 @@
                                 createNodeStatsPanel($("#PanelBody-"+i), aData[i],aLast[i], i, aNodes[i].usedCPUs)
                             }
                             var aCPUValues = calculateCPUUsage(aData, aLast, nUsedCPUs);
-                            if(aCPUValues[0] > 100) alert("wtf " + aCPUValues[0]);
                             addGraphPoints(oCPUGraph, aCPUValues[0]);
                         }
                         bFirst[0] = false;
