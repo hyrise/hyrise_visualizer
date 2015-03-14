@@ -12,10 +12,8 @@ The named components reference repositories from the [Hyrise Organization](https
 
  1. Clone hyrise_nvm repository
  2. change settings.mk and build
-
- 	Persistency:BUFFEREDLOGGER
-	Replication:1
-
+    Persistency:BUFFEREDLOGGER
+    Replication:1
  3. Clone dispatcher and built
  4. Clone hyrise_visualizer to get the scripts
  5. Clone benchmark and built Apache Benchmark Tool (ab)
@@ -33,7 +31,7 @@ The named components reference repositories from the [Hyrise Organization](https
  
  1. Save the public key in ~\.ssh\authorized_keys on the database server
  2. Make a connection from the web server to the database server using ssh with the private key
- 3. Save the session with the name of the database server host, e.g. chemnitz.eaalab.hpi.uni-potsdam.de
+ 3. Save the session with the database server host as name, e.g. chemnitz.eaalab.hpi.uni-potsdam.de
 
 ## Other
 
