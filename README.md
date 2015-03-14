@@ -10,15 +10,11 @@ The named components reference repositories from the [Hyrise Organization](https
 
 ###Database Server Setup
 
- 1. Clone hyrise_nvm repository
- 2. change settings.mk and build
-```
-    Persistency:BUFFEREDLOGGER
-    Replication:1
-```
- 3. Clone dispatcher and built
+ 1. Clone [hyrise_nvm](https://github.com/hyrise/hyrise_nvm), refer to their readme for general setup
+ 2. change settings.mk: `Persistency:BUFFEREDLOGGER`, `Replication:1` and build
+ 3. Clone dispatcher and build
  4. Clone hyrise_visualizer to get the scripts
- 5. Clone benchmark and built Apache Benchmark Tool (ab)
+ 5. Clone benchmark and build Apache Benchmark Tool (ab)
 
 ###Web Server Setup
 
