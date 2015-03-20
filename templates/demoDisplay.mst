@@ -1,0 +1,45 @@
+<div>
+  <div id="demo1Screen" hidden=true>
+    <div class="area_frame">
+      <div class="infoBox">
+        <h4>Info</h4>
+        <span>
+          Execute Select Statements.
+        </span>
+      </div>
+      <div class="replicaButtons">
+          <button type="button" id="btn-one-replica" data-loading-text="Loading..." class="btn btn-primary">
+            Use 1 Replica
+          </button>
+          <button type="button" id="btn-two-replica" data-loading-text="Loading..." class="btn btn-primary">
+            Use 2 Replica
+          </button>
+          <button type="button" id="btn-three-replica" data-loading-text="Loading..." class="btn btn-primary">
+            Use 3 Replica
+          </button>
+          <!-- <button type="button" id="btn-kill-master" data-loading-text="Loading..." class="btn btn-primary">
+            Kill Master
+          </button> -->
+      </div>
+         <div class="workloadButtons">
+          <button type="button" id="btn-start-workload" data-loading-text="Loading..." class="btn btn-primary">
+            Start Workload
+          </button>
+          <button type="button" id="btn-stop-workload" data-loading-text="Loading..." class="btn btn-primary">
+            Stop Workload
+          </button><br>
+      </div>
+    </div>
+  </div>
+
+  <div id="demo2Screen" hidden=true>
+    <div class="area_frame">
+      <div class="infoBox">
+        <h4>Info</h4>
+        <span>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices odio eget lacus dictum, nec feugiat arcu molestie. Integer sagittis, quam non efficitur ullamcorper, lacus erat imperdiet neque, nec ullamcorper ante lorem ac nulla. Quisque vel eros sed ligula rutrum dapibus. In arcu ipsum, aliquam vel sodales mollis, viverra non turpis. Sed vitae posuere ligula. Quisque sit amet sapien id nibh fermentum tristique et ut mauris. Curabitur mollis dui at faucibus bibendum. Nunc rutrum velit nec risus ullamcorper efficitur ut ut turpis. Morbi fringilla ante magna, a vulputate diam tempor in. Nunc vel libero placerat elit ullamcorper ullamcorper. Quisque malesuada lacus nisl, nec pretium nisi pulvinar eu. Vivamus velit urna, ultricies eu erat ac, fringilla placerat lacus.
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

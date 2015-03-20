@@ -1,0 +1,8 @@
+<div>
+	<div id='frame_clusterNavigation' class="col-md-{{width_clusterNavigation}}"></div>
+	<div id='frame_clusterStats' class="col-md-{{width_clusterStats}}"></div>
+
+    <div id="loadingDiv" class="spinner-div" hidden=true>
+        <img src="img/ajax-loader.gif" class="ajax-spinner">
+    </div>
+</div>

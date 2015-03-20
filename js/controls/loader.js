@@ -51,9 +51,11 @@ window.addEventListener('load', function() {
 			"js/libs/jquery-ui.js",
 			"js/libs/bootstrap.js",
 			"js/libs/highcharts.js",
+		        "js/libs/highcharts-more.js",
+		        "js/libs/heatmap.js",
 			"js/libs/d3.v3.js",
 			"js/libs/wildemitter.js",
-			"js/libs/mustache.js"
+			"js/libs/mustache.js",
 		],
 
 		// load server config
@@ -144,7 +146,10 @@ window.addEventListener('load', function() {
 
 			'js/pages/1-explore.js',
 			'js/pages/2-debug.js',
+            'js/pages/3-manage.js',
 			'js/pages/4-editor.js',
+			'js/pages/5-demos.js',
+			'js/pages/6-sql.js',
 
 
 			'js/ui/abstractPlugin.js',
@@ -187,6 +192,21 @@ window.addEventListener('load', function() {
 		}
 	}]);
 
+	// loading stage #3
+	Modernizr.load([{
+		load : [
+		    // page 3 components
+		    'js/ui/clusterStats.js',
+		    'js/ui/clusterNavigation.js',
+		    'js/ui/nodeStatsPanel.js',
+		    'js/ui/statsGraph.js',
+		],
+		complete : function() {
+			hyryx.manage.setup();
+		}
+	}]);
+
+
     // loading stage #4
     Modernizr.load([{
         load : [
@@ -210,4 +230,27 @@ window.addEventListener('load', function() {
             hyryx.editor.setup();
         }
     }]);
+
+    // loading stage #5
+	Modernizr.load([{
+		load : [
+		    // page 5 components
+		    'js/ui/demoDisplay.js',
+		    'js/ui/demoNavigation.js'
+		],
+		complete : function() {
+			hyryx.demos.setup();
+		}
+	}]);
+	// loading stage #6
+	Modernizr.load([{
+		load : [
+		    // page 6 components
+		    'js/ui/sqlParser.js',
+		    'js/ui/hyrise_sql_connector.js',
+		],
+		complete : function() {
+			hyryx.sql.setup();
+		}
+	}]);
 }, false);

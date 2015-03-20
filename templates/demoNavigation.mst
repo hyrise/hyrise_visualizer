@@ -1,0 +1,7 @@
+<div class="area_frame">
+     <div class="demo_navigation_buttons_list">
+	<h3>Demo List</h3>
+	<button type="button" id="btn-demo1" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto; margin-top:30px; width:100%">Replication Demo</button>
+	<button type="button" id="btn-demo2" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px auto; width:100%">Other Demo</button>
+    </div>
+</div>

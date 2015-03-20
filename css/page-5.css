@@ -1,0 +1,123 @@
+h4 {
+	font-weight: bold;
+}
+
+h5 {
+	font-weight: bold;
+	text-align: center;
+}
+
+.panel-title h4{
+	font-size: 18px;
+}
+
+.ManageNodesTable{
+	width: 100%;
+}
+.ManageNodesTable div{
+	text-align: center;
+	margin-top: 10px;
+}
+
+.ManageNodesTable .ManageNodesButtons{
+	margin-top: 15px;
+	text-align: left;
+}
+.ManageButtonContainer{
+	margin: 50px 0px 0px 0px;
+}
+
+#clusterManagementScreen .panel-heading{
+}
+
+.NodeStatsBody{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.NodePanel{
+	padding: 0px 0px 0px 0px;
+	margin: 0px 10px 10px 10px;
+	flex: 1 0 auto;
+
+}
+.NodePanelTitle{
+	text-align: left;
+}
+.NodePanelBody{
+	display: flex;
+	flex-direction: column;
+	font-size: 12px;
+}
+
+.ProgressCPU{
+	flex: 1 0 auto;
+	height: 10px;
+	margin-bottom: 1px;
+}
+.ProgressDIV{
+	flex: 1 0 auto;
+	height: 10px;
+}
+
+.TextDiv{
+	margin-top: 10px;
+}
+
+.TextSpan{
+	float: right;
+}
+.SendSpan{
+	float: right;
+	color: rgb(246,168,0);
+}.ReveivedSpan{
+	float: right;
+	color: rgb(177, 6, 58);
+}
+
+.progressbar {
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.membar {
+	fill: steelblue;
+}
+
+.cpubar {
+	fill: rgb(246,168,0);
+}
+
+.netrbar {
+	fill: rgb(177, 6, 58);
+}
+
+.netsbar {
+	fill: rgb(246,169,0);
+}
+
+.ClusterGraph {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.spinner-div {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:1000;
+}
+
+.ajax-spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -32px; /* -1 * image width / 2 */
+    margin-top: -32px;  /* -1 * image height / 2 */
+    display: block;
+    background-color: transparent;
+}

@@ -1,0 +1,42 @@
+#demo1Screen .area_frame{
+	display:flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+.replicaButtons{
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;;
+}
+.workloadButtons{
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: column;
+	margin-right: 50px;
+}
+.userSlider{
+	flex: 1 1 100%;
+	margin-top: 50px;
+}
+#demo1Screen button{
+	flex: 0 0 auto;
+	min-width: 120px;
+	margin: 5px 0px 5px 0px;
+	width: auto;
+}
+#clusterStatus {
+	width:250px;
+	flex:0 0 auto;
+}
+.userSlider input{
+	border:0;
+	color:#f6931f;
+	font-weight:bold;
+}
+.infoBox{
+	margin-bottom: 30px;
+}
+.area_frame h4 {
+	text-align: center
+}

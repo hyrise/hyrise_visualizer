@@ -12,12 +12,16 @@
 			}
 
 			return $.ajax({
-				url : hyryx.settings.database + '/jsonQuery/',
+				url: "http://192.168.30.177:5000/jsonQuery/",
+				// url : hyryx.settings.nodes[hyryx.settings.master].host + ":" + hyryx.settings.nodes[hyryx.settings.master].port + '/jsonQuery/',
 				type : 'POST',
 				dataType: 'json',
 				data : {
 					query: JSON.stringify(query),
 					limit: 0
+				},
+				success: function(oResult){
+					console.log(oResult);
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown ) {
 				console.log('Could not execute query: ' + textStatus + errorThrown);
